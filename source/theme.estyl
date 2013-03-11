@@ -1,0 +1,7 @@
+// FlipBook
+@import 'nib'
+
+global-reset()
+
+body
+  font-family "Helvetica Neue", Helvetica, Sans-Serif

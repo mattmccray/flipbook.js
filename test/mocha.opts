@@ -1,0 +1,6 @@
+--ignore-leaks
+--compilers coffee:coffee-script
+--reporter spec
+--require coffee-script
+--require test/helpers.coffee
+--colors

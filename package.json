@@ -1,0 +1,64 @@
+{
+  "name": "FlipBook",
+  "version": "1.0.0-13",
+  "license": "",
+  "description": "",
+  "author": "",
+  "assembot": {
+    "options": {
+      "header": "/* FlipBook v{%- package.version -%} */",
+      "addHeader": true,
+      "minify": 0,
+      "ident": "require",
+      "autoLoad": null,
+      "replaceTokens": true,
+      "plugins": [
+        "./lib/increment-version"
+      ],
+      "coffee": {
+        "bare": true
+      },
+      "http": {
+        "port": 8080,
+        "paths": {
+          "/": "./public",
+          "/components": "./components"
+        }
+      }
+    },
+    "targets": {
+      "public/flipbook.js": {
+        "source": "./source",
+        "ident": "flipbook",
+        "autoLoad": "main",
+        "debug": true,
+        "test": false,
+        "exclude": "test/*"
+      },
+      "flipbook.js": {
+        "source": "./source",
+        "ident": "flipbook",
+        "autoLoad": "main",
+        "debug": false,
+        "test": false,
+        "exclude": "test/*"
+      },
+      "test/flipbook.debug.js": {
+        "source": "./source",
+        "ident": "flipbook",
+        "debug": true,
+        "test": true,
+        "autoLoad": "test/main"
+      }
+    }
+  },
+  "devDependencies": {
+    "assembot": "*",
+    "coffee-script": "*",
+    "mocha": "*",
+    "chai": "*"
+  },
+  "dependencies": {
+    "semver": "~1.1.4"
+  }
+}
