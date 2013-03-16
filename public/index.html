@@ -9,17 +9,47 @@
         width: 960px;
         margin: 50px auto !important;
       }
+      .flipbook {
+        margin: 0 auto;
+      }
     </style>
   </head>
   <body>
     <!-- <h3>Testing FlipBook Viewer</h3> -->
 
-    <div data-flipbook="pages:12,title:Test Comic 1"></div>
+    <div 
+      data-flipbook-pages="12" 
+      data-flipbook-path="media/comics/#.jpg" 
+      data-flipbook-copyright="Created by and copyright &copy; Mast, Geoffo &amp; Balak" 
+      data-flipbook-title="PAX ARENA" 
+      data-flipbook-options="">
+      Loading...
+    </div>
+
+    
 
   <p>&nbsp;</p>
 
+    <div style="width: 250px; float: right">
+      <div data-flipbook="pages:8,path:media/comics/#.jpg,title:Test Comic 3"></div>
+
+  <p>&nbsp;</p>
+
+    <div 
+      data-flipbook-pages="8" 
+      data-flipbook-path="http://www.zoodotcom.com/media/minicomics/tmnt/tmnt-spy-game-#.png" 
+      data-flipbook-title="TMNT: Spy Game" 
+      data-flipbook-copyright="Created by Matt McCray, no rights reserved really. The turtle's aren't mine. Also, please to don't sue me." 
+      data-flipbook-options="">
+      ZdC Presents...
+    </div>
+
+
+    </div>
+
+
     <div style="width: 550px;">
-      <div data-flipbook="pages:12,title:Test Comic 2,copyright:&copy; 2013"></div>
+      <div data-flipbook="pages:49,path:media/comics2/comic-paxarena-eng###.jpg,title:Test Comic 2,copyright:&copy; 2013,startAt:65"></div>
     </div>
   </body>
   <script src="flipbook.js"></script>

@@ -1,4 +1,6 @@
+env= require 'env'
 uid= require 'util/uid'
+pad= require 'util/number/pad'
 log= require('util/log').prefix('controller:')
 events= require 'cog/events'
 CogView= require 'cog/view'
@@ -6,29 +8,38 @@ CogView= require 'cog/view'
 nextKeys= [39, 32]
 prevKeys= [37]
 
+build_url= (pattern, idx)->
+  #hack!
+  pattern= pattern.replace('####', pad(idx, 4))
+  pattern= pattern.replace('###', pad(idx, 3))
+  pattern= pattern.replace('##', pad(idx, 2))
+  pattern= pattern.replace('#', idx)
+
+
 class Viewer extends CogView
 
   className: 'flipbook'
 
   template: require('./template')
 
-  events:
-    'click .nextPage': 'nextPage'
-    'click .prevPage': 'prevPage'
-    'focus': 'didFocus'
-    'blur': 'didBlur'
-
   outlets:
     stack: '.screen-stack'
+    nextBtn: '.nextPage'
+    prevBtn: '.prevPage'
+    progressBar: '.progress'
 
   initialize: ->
-    @screenCount= parseInt(@model.pages)
+    @screenCount= @model.pages
     @current= 0
     @ready= no
     @active= no
     @atEnd= no
     # Allows for focus and blur events
     @elem.attr 'tabindex', -1
+    if env.mobile
+      @elem.addClass 'isMobile'
+    else
+      @elem.addClass 'isDesktop'
 
   onKeyInput: (e)=>
     return unless @ready and @active
@@ -38,10 +49,6 @@ class Viewer extends CogView
     else if e.which in prevKeys
       @prevPage(e)
       false
-
-  onDomActive: ->
-    if @options.autofocus
-      @elem.focus()
 
   didTap: (e)=>
     return if @atEnd
@@ -59,8 +66,15 @@ class Viewer extends CogView
   didBlur: (e)=>
     @active= no
 
+  didClickProgress: (e)=>
+    e?.preventDefault?()
+    log.info "Clicked!", e.target
+    idx= $(e.target).data('idx')
+    log.info "NavigateTo", idx
+
   nextPage: (e)=>
     e?.preventDefault?()
+    return unless @ready
     if @current is @screenCount - 1
       if @atEnd
         @hideCurrent()
@@ -78,6 +92,7 @@ class Viewer extends CogView
 
   prevPage: (e)=>
     e?.preventDefault?()
+    return unless @ready
     if @atEnd
       @stack.find('.the-end').hide()
       @atEnd= no
@@ -89,6 +104,10 @@ class Viewer extends CogView
 
   loadCheck: ->
     if @loadCount is @screenCount
+      if @errorCount > 0
+        @stack.find('.screen').hide()
+        @stack.append("<div class='errors'>There were errors loading the images, please refresh your browser!</div>").show()
+        return
       @showCurrent()
       @imageH= height= @stack.show().find('img').height()
       @imageW= @stack.find('img').width()
@@ -99,6 +118,7 @@ class Viewer extends CogView
       @stack
         .css(height:height, opacity:0)
         .animate(opacity:1)
+      @fixProgressBarSizes()
       @ready= yes
       # @screenCount= @stack.find('.screen').length
 
@@ -109,9 +129,12 @@ class Viewer extends CogView
     @loadCheck()
 
   imageDidError: (e)=>
-    log.info "ERROR"
+    log.info "ERROR Loading image", e.target
     @loadCount += 1
+    @errorCount += 1
     $(e.target).removeClass('loading').addClass('error')
+    idx= $(e.target).data('idx')
+    @elem.find("span[data-idx=#{ idx }]").removeClass('loading').addClass('error').attr('title', "Error loading: #{ e?.target?.src }")
     @loadCheck()
 
   showCurrent: ->
@@ -124,8 +147,12 @@ class Viewer extends CogView
 
   getData: ->
     screens= []
-    for i in [1..@screenCount]
-      screens.push src:"media/comics/#{i}.jpg"
+    from= @model.startAt
+    to= @model.startAt + (@screenCount - 1)
+    for i in [from..to]
+      mdl= src:build_url(@model.path, i)
+      # log.info "ViewModel", mdl
+      screens.push mdl
     data= @model
     data.screens= screens
     data.id= @id
@@ -133,19 +160,43 @@ class Viewer extends CogView
 
   onRender: ->
     @loadCount= 0
+    @errorCount= 0
+    # Hook up events!!
     @elem
       .find('img')
       .on( 'load', @imageDidLoad )
       .on( 'error', @imageDidError )
-    $(document).on 'keydown', @onKeyInput
-    if Hammer?
-      Hammer(@elem.get(0))
+      .end()
+      .on('focus', @didFocus)
+      .on('blur', @didBlur)
+    
+    if env.mobile
+      Hammer(@stack.get(0))
         .on('swipeleft', @nextPage)
         .on('swiperight', @prevPage)
         .on('tap', @didTap)
+      Hammer(@nextBtn.get(0))
+        .on('tap', @nextPage)
+      Hammer(@prevBtn.get(0))
+        .on('tap', @prevPage)
     else
-      @elem.on 'click', '.screen', @didTap
+      @elem
+        .on('click', '.nextPage', @nextPage)
+        .on('click', '.prevPage', @prevPage)
+        .on('click', '.screen', @didTap)
+        .on('click', '.progress span', @didClickProgress)
+      $(document).on 'keydown', @onKeyInput
 
+  fixProgressBarSizes: ->
+    w= @progressBar.width()
+    iw= w / @screenCount
+    log.info "Setting progress bar width to", iw
+    @progressBar.find('span').width("#{iw}px")
+
+  onDomActive: ->
+    if @options.autofocus
+      @elem.focus()
+    @fixProgressBarSizes()
 
 
 module.exports= Viewer
