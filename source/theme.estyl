@@ -16,7 +16,12 @@
     outline: 0
     border: 0
     color: #000
-    
+
+    /*  
+    &.inactive
+      header, footer
+        opacity: 0.5
+    */
 
   header
     background silver
@@ -78,44 +83,52 @@
       padding 2px
       overflow: ellipsis
 
+    ph= 14px
     &.pager
+      position: relative
       border-radius bottom 4px
       padding 3px
       height: 28px
       line-height: 28px
-      position: relative
   
       .progress
-        height: 25px
         display block
+        height: 28px
         margin 0 33px
-        background: #BBB
-        border-radius: 6px
-        whitespace: nowrap
-        text-align: left
-        border: 1px solid gray
-        /* overflow: hidden*/
-        span
-          float: left
-          height: 25px
-          width: 25px
-          margin: 0
+        position: relative
+
+        &.errors
+          .bar.background
+            visibility: hidden
+
+        .bar
+          border-radius: left 6px
+          position: absolute
+          height: ph
+          top: (ph / 2px)
           overflow: hidden
-          text-align: center
-          background: rgba(255,0,0,0.2)
-          color: rgba(0,0,0,0)
-          &:first-child
-            border-radius: left 6px
-          &:last-child
-            border-radius: right 6px
-        .loading
-          background-color #999
-        .loaded
-          background-color #DDD
-        .error
-          background-color red
-        .current
-          background-color #EEE
+
+          &.done
+            border-radius: 6px
+            width: 100%
+          
+          &.background
+            border-radius: 6px
+            background #AAA
+            width: 100%
+
+          &.loading
+            background-color: #BBB
+            width: 1%
+            height: (ph - 4)
+            top: ((ph + 4) / 2px)
+
+          &.location
+            background-color: #DDD
+            background-color: #ccc
+            width: 0%
+            height: (ph - 2)
+            top: ((ph + 2) / 2px)
 
       .button
         width: 30px

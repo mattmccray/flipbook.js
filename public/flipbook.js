@@ -1,4 +1,4 @@
-/* FlipBook v1.0.0-52 */
+/* FlipBook v1.0.0-53 */
 (function(/*! Stitched by Assembot !*/) {
   /* 
     The commonjs code below was based on @sstephenson's stitch.
@@ -524,14 +524,18 @@ api.define(function() {
   var results;
   results = [];
   $('[data-flipbook-pages]').each(function(i, item) {
-    var model;
+    var att, model, name, _i, _len, _ref;
     i = $(item);
-    model = {
-      pages: i.data('flipbook-pages'),
-      title: i.data('flipbook-title'),
-      copyright: i.data('flipbook-copyright'),
-      path: i.data('flipbook-path')
-    };
+    model = {};
+    _ref = item.attributes;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      att = _ref[_i];
+      name = String(att.nodeName);
+      if (name.indexOf('data-flipbook-') === 0) {
+        name = name.replace('data-flipbook-', '');
+        model[name] = att.nodeValue;
+      }
+    }
     return results.push({
       item: item,
       model: model
@@ -542,7 +546,7 @@ api.define(function() {
 
 },
 "theme": function(exports, require, module) {
-var node = null, css = ".flipbook div,\n.flipbook span,\n.flipbook object,\n.flipbook iframe,\n.flipbook h1,\n.flipbook h2,\n.flipbook h3,\n.flipbook h4,\n.flipbook h5,\n.flipbook h6,\n.flipbook p,\n.flipbook pre,\n.flipbook a,\n.flipbook abbr,\n.flipbook acronym,\n.flipbook address,\n.flipbook code,\n.flipbook del,\n.flipbook dfn,\n.flipbook em,\n.flipbook img,\n.flipbook dl,\n.flipbook dt,\n.flipbook dd,\n.flipbook ol,\n.flipbook ul,\n.flipbook li,\n.flipbook fieldset,\n.flipbook form,\n.flipbook label,\n.flipbook legend,\n.flipbook caption,\n.flipbook tbody,\n.flipbook tfoot,\n.flipbook thead,\n.flipbook tr {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  outline: 0;\n  font-weight: inherit;\n  font-style: inherit;\n  font-family: inherit;\n  font-size: 100%;\n  vertical-align: baseline;\n}\n.flipbook table {\n  border-collapse: separate;\n  border-spacing: 0;\n  vertical-align: middle;\n}\n.flipbook caption,\n.flipbook th,\n.flipbook td {\n  text-align: left;\n  font-weight: normal;\n  vertical-align: middle;\n}\n.flipbook a img {\n  border: none;\n}\n.flipbook {\n  font-family: \"Helvetica Neue\", Helvetica, Sans-Serif;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  width: 100%;\n  max-width: 100%;\n  cursor: default;\n  color: #555;\n}\n.flipbook:focus {\n  outline: 0;\n  border: 0;\n  color: #000;\n}\n.flipbook header {\n  background: #c0c0c0;\n  -webkit-border-top-left-radius: 4px;\n  border-top-left-radius: 4px;\n  -webkit-border-top-right-radius: 4px;\n  border-top-right-radius: 4px;\n  margin: 0 4px;\n  padding: 5px;\n  z-index: 5;\n  white-space: nowrap;\n  overflow: hidden;\n  -o-text-overflow: ellipsis;\n  text-overflow: ellipsis;\n}\n.flipbook .screen-stack {\n  position: relative;\n  overflow: hidden;\n  width: 100%;\n  max-width: 100%;\n  -webkit-box-shadow: 0px 2px 9px #777;\n  box-shadow: 0px 2px 9px #777;\n  z-index: 10;\n}\n.flipbook .screen-stack .errors {\n  padding: 25px;\n  text-align: center;\n}\n.flipbook .screen-stack .screen {\n  position: absolute;\n  top: 0;\n  left: 0;\n  max-width: 100%;\n}\n.flipbook .screen-stack .screen img {\n  max-width: 100%;\n}\n.flipbook .screen-stack .screen.the-end {\n  display: none;\n  height: 100%;\n  background: rgba(0,0,0,0.7);\n  color: #fff;\n  width: 100%;\n  position: relative;\n}\n.flipbook .screen-stack .screen.the-end .button {\n  position: absolute;\n  top: 10px;\n  right: 10px;\n  bottom: 10px;\n  width: 45%;\n  border: 3px dashed #fff;\n  -webkit-border-radius: 15px;\n  border-radius: 15px;\n}\n.flipbook footer {\n  background: #ccc;\n  margin: 0 4px;\n  text-align: center;\n  z-index: 5;\n/*height: 44px */\n}\n.flipbook footer.copyright {\n  background: #bbb;\n  border-bottom: 1px solid #ddd;\n  font-size: 75%;\n  padding: 2px;\n  white-space: nowrap;\n  overflow: hidden;\n  -o-text-overflow: ellipsis;\n  text-overflow: ellipsis;\n}\n.flipbook footer.pager {\n  -webkit-border-bottom-left-radius: 4px;\n  border-bottom-left-radius: 4px;\n  -webkit-border-bottom-right-radius: 4px;\n  border-bottom-right-radius: 4px;\n  padding: 3px;\n  height: 28px;\n  line-height: 28px;\n  position: relative;\n}\n.flipbook footer.pager .progress {\n  height: 25px;\n  display: block;\n  margin: 0 33px;\n  background: #bbb;\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  white-space: nowrap;\n  text-align: left;\n  border: 1px solid #808080;\n/* overflow: hidden*/\n}\n.flipbook footer.pager .progress span {\n  float: left;\n  height: 25px;\n  width: 25px;\n  margin: 0;\n  overflow: hidden;\n  text-align: center;\n  background: rgba(255,0,0,0.2);\n  color: rgba(0,0,0,0);\n}\n.flipbook footer.pager .progress span:first-child {\n  -webkit-border-top-left-radius: 6px;\n  border-top-left-radius: 6px;\n  -webkit-border-bottom-left-radius: 6px;\n  border-bottom-left-radius: 6px;\n}\n.flipbook footer.pager .progress span:last-child {\n  -webkit-border-top-right-radius: 6px;\n  border-top-right-radius: 6px;\n  -webkit-border-bottom-right-radius: 6px;\n  border-bottom-right-radius: 6px;\n}\n.flipbook footer.pager .progress .loading {\n  background-color: #999;\n}\n.flipbook footer.pager .progress .loaded {\n  background-color: #ddd;\n}\n.flipbook footer.pager .progress .error {\n  background-color: #f00;\n}\n.flipbook footer.pager .progress .current {\n  background-color: #eee;\n}\n.flipbook footer.pager .button {\n  width: 30px;\n  height: 28px;\n  overflow: hidden;\n  cursor: pointer;\n  font-size: 135%;\n  -webkit-border-radius: 4px;\n  border-radius: 4px;\n}\n.flipbook footer.pager .button.nextPage {\n  position: absolute;\n  top: 3px;\n  right: 3px;\n}\n.flipbook footer.pager .button.prevPage {\n  position: absolute;\n  top: 3px;\n  left: 3px;\n}\n.flipbook.isDesktop .button:hover {\n  background: #fff;\n}\n";
+var node = null, css = ".flipbook div,\n.flipbook span,\n.flipbook object,\n.flipbook iframe,\n.flipbook h1,\n.flipbook h2,\n.flipbook h3,\n.flipbook h4,\n.flipbook h5,\n.flipbook h6,\n.flipbook p,\n.flipbook pre,\n.flipbook a,\n.flipbook abbr,\n.flipbook acronym,\n.flipbook address,\n.flipbook code,\n.flipbook del,\n.flipbook dfn,\n.flipbook em,\n.flipbook img,\n.flipbook dl,\n.flipbook dt,\n.flipbook dd,\n.flipbook ol,\n.flipbook ul,\n.flipbook li,\n.flipbook fieldset,\n.flipbook form,\n.flipbook label,\n.flipbook legend,\n.flipbook caption,\n.flipbook tbody,\n.flipbook tfoot,\n.flipbook thead,\n.flipbook tr {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  outline: 0;\n  font-weight: inherit;\n  font-style: inherit;\n  font-family: inherit;\n  font-size: 100%;\n  vertical-align: baseline;\n}\n.flipbook table {\n  border-collapse: separate;\n  border-spacing: 0;\n  vertical-align: middle;\n}\n.flipbook caption,\n.flipbook th,\n.flipbook td {\n  text-align: left;\n  font-weight: normal;\n  vertical-align: middle;\n}\n.flipbook a img {\n  border: none;\n}\n.flipbook {\n  font-family: \"Helvetica Neue\", Helvetica, Sans-Serif;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  width: 100%;\n  max-width: 100%;\n  cursor: default;\n  color: #555;\n}\n.flipbook:focus {\n  outline: 0;\n  border: 0;\n  color: #000;\n/*  \n    &.inactive\n      header, footer\n        opacity: 0.5\n    */\n}\n.flipbook header {\n  background: #c0c0c0;\n  -webkit-border-top-left-radius: 4px;\n  border-top-left-radius: 4px;\n  -webkit-border-top-right-radius: 4px;\n  border-top-right-radius: 4px;\n  margin: 0 4px;\n  padding: 5px;\n  z-index: 5;\n  white-space: nowrap;\n  overflow: hidden;\n  -o-text-overflow: ellipsis;\n  text-overflow: ellipsis;\n}\n.flipbook .screen-stack {\n  position: relative;\n  overflow: hidden;\n  width: 100%;\n  max-width: 100%;\n  -webkit-box-shadow: 0px 2px 9px #777;\n  box-shadow: 0px 2px 9px #777;\n  z-index: 10;\n}\n.flipbook .screen-stack .errors {\n  padding: 25px;\n  text-align: center;\n}\n.flipbook .screen-stack .screen {\n  position: absolute;\n  top: 0;\n  left: 0;\n  max-width: 100%;\n}\n.flipbook .screen-stack .screen img {\n  max-width: 100%;\n}\n.flipbook .screen-stack .screen.the-end {\n  display: none;\n  height: 100%;\n  background: rgba(0,0,0,0.7);\n  color: #fff;\n  width: 100%;\n  position: relative;\n}\n.flipbook .screen-stack .screen.the-end .button {\n  position: absolute;\n  top: 10px;\n  right: 10px;\n  bottom: 10px;\n  width: 45%;\n  border: 3px dashed #fff;\n  -webkit-border-radius: 15px;\n  border-radius: 15px;\n}\n.flipbook footer {\n  background: #ccc;\n  margin: 0 4px;\n  text-align: center;\n  z-index: 5;\n/*height: 44px */\n}\n.flipbook footer.copyright {\n  background: #bbb;\n  border-bottom: 1px solid #ddd;\n  font-size: 75%;\n  padding: 2px;\n  white-space: nowrap;\n  overflow: hidden;\n  -o-text-overflow: ellipsis;\n  text-overflow: ellipsis;\n}\n.flipbook footer.pager {\n  position: relative;\n  -webkit-border-bottom-left-radius: 4px;\n  border-bottom-left-radius: 4px;\n  -webkit-border-bottom-right-radius: 4px;\n  border-bottom-right-radius: 4px;\n  padding: 3px;\n  height: 28px;\n  line-height: 28px;\n}\n.flipbook footer.pager .progress {\n  display: block;\n  height: 28px;\n  margin: 0 33px;\n  position: relative;\n}\n.flipbook footer.pager .progress.errors .bar.background {\n  visibility: hidden;\n}\n.flipbook footer.pager .progress .bar {\n  -webkit-border-top-left-radius: 6px;\n  border-top-left-radius: 6px;\n  -webkit-border-bottom-left-radius: 6px;\n  border-bottom-left-radius: 6px;\n  position: absolute;\n  height: 14px;\n  top: 7px;\n  overflow: hidden;\n}\n.flipbook footer.pager .progress .bar.done {\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  width: 100%;\n}\n.flipbook footer.pager .progress .bar.background {\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  background: #aaa;\n  width: 100%;\n}\n.flipbook footer.pager .progress .bar.loading {\n  background-color: #bbb;\n  width: 1%;\n  height: 10px;\n  top: 9px;\n}\n.flipbook footer.pager .progress .bar.location {\n  background-color: #ddd;\n  background-color: #ccc;\n  width: 0%;\n  height: 12px;\n  top: 8px;\n}\n.flipbook footer.pager .button {\n  width: 30px;\n  height: 28px;\n  overflow: hidden;\n  cursor: pointer;\n  font-size: 135%;\n  -webkit-border-radius: 4px;\n  border-radius: 4px;\n}\n.flipbook footer.pager .button.nextPage {\n  position: absolute;\n  top: 3px;\n  right: 3px;\n}\n.flipbook footer.pager .button.prevPage {\n  position: absolute;\n  top: 3px;\n  left: 3px;\n}\n.flipbook.isDesktop .button:hover {\n  background: #fff;\n}\n";
 module.exports= {
   content: css,
   isActive: function(){ return node != null; },
@@ -846,7 +850,7 @@ fixupTypes = function(o) {
   if (typeof o.pages === 'string') {
     o.pages = parseInt(o.pages, 10);
   }
-  return o.startAt = o.startAt != null ? typeof o.startAt === 'string' ? parseInt(o.startAt, 10) : void 0 : 1;
+  return o.start = o.start != null ? typeof o.start === 'string' ? parseInt(o.start, 10) : void 0 : 1;
 };
 
 module.exports = validator = function(options) {
@@ -872,11 +876,11 @@ validator.errors = function() {
 },
 "version": function(exports, require, module) {
 
-module.exports = "1.0.0-52";
+module.exports = "1.0.0-53";
 
 },
 "viewer/controller": function(exports, require, module) {
-var CogView, Viewer, build_url, env, events, log, nextKeys, pad, prevKeys, uid,
+var CogView, Viewer, build_url, env, events, keyListener, log, nextKeys, pad, preloader, prevKeys, uid,
   _this = this,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
@@ -892,11 +896,25 @@ log = require('util/log').prefix('controller:');
 
 events = require('cog/events');
 
+preloader = require('./preloader');
+
 CogView = require('cog/view');
 
-nextKeys = [39, 32];
-
-prevKeys = [37];
+keyListener = {
+  ready: false,
+  init: function() {
+    if (this.ready || env.mobile) {
+      return;
+    }
+    $(document).on('keydown', this.onKeyInput);
+    return this.ready = true;
+  },
+  onKeyInput: function(e) {
+    if (Viewer.active != null) {
+      return Viewer.active.onKeyInput(e);
+    }
+  }
+};
 
 build_url = function(pattern, idx) {
   pattern = pattern.replace('####', pad(idx, 4));
@@ -905,26 +923,27 @@ build_url = function(pattern, idx) {
   return pattern = pattern.replace('#', idx);
 };
 
+nextKeys = [39, 32];
+
+prevKeys = [37];
+
 Viewer = (function(_super) {
 
   __extends(Viewer, _super);
 
   function Viewer() {
     var _this = this;
-    this.imageDidError = function(e) {
-      return Viewer.prototype.imageDidError.apply(_this, arguments);
+    this.onLoadError = function(e) {
+      return Viewer.prototype.onLoadError.apply(_this, arguments);
     };
-    this.imageDidLoad = function(e) {
-      return Viewer.prototype.imageDidLoad.apply(_this, arguments);
+    this.onLoad = function() {
+      return Viewer.prototype.onLoad.apply(_this, arguments);
     };
     this.prevPage = function(e) {
       return Viewer.prototype.prevPage.apply(_this, arguments);
     };
     this.nextPage = function(e) {
       return Viewer.prototype.nextPage.apply(_this, arguments);
-    };
-    this.didClickProgress = function(e) {
-      return Viewer.prototype.didClickProgress.apply(_this, arguments);
     };
     this.didBlur = function(e) {
       return Viewer.prototype.didBlur.apply(_this, arguments);
@@ -941,6 +960,8 @@ Viewer = (function(_super) {
     return Viewer.__super__.constructor.apply(this, arguments);
   }
 
+  Viewer.active = null;
+
   Viewer.prototype.className = 'flipbook';
 
   Viewer.prototype.template = require('./template');
@@ -949,7 +970,9 @@ Viewer = (function(_super) {
     stack: '.screen-stack',
     nextBtn: '.nextPage',
     prevBtn: '.prevPage',
-    progressBar: '.progress'
+    progressBar: '.progress',
+    locationBar: '.progress .location',
+    loadingBar: '.progress .loading'
   };
 
   Viewer.prototype.initialize = function() {
@@ -959,11 +982,13 @@ Viewer = (function(_super) {
     this.active = false;
     this.atEnd = false;
     this.elem.attr('tabindex', -1);
+    this.elem.addClass('inactive');
     if (env.mobile) {
-      return this.elem.addClass('isMobile');
+      this.elem.addClass('isMobile');
     } else {
-      return this.elem.addClass('isDesktop');
+      this.elem.addClass('isDesktop');
     }
+    return keyListener.init();
   };
 
   Viewer.prototype.onKeyInput = function(e) {
@@ -998,23 +1023,17 @@ Viewer = (function(_super) {
   };
 
   Viewer.prototype.didFocus = function(e) {
-    return this.active = true;
+    this.active = true;
+    this.elem.removeClass('inactive').addClass('active');
+    return Viewer.active = this;
   };
 
   Viewer.prototype.didBlur = function(e) {
-    return this.active = false;
-  };
-
-  Viewer.prototype.didClickProgress = function(e) {
-    var idx;
-    if (e != null) {
-      if (typeof e.preventDefault === "function") {
-        e.preventDefault();
-      }
+    this.active = false;
+    this.elem.removeClass('active').addClass('inactive');
+    if (Viewer.active === this) {
+      return Viewer.active = null;
     }
-    log.info("Clicked!", e.target);
-    idx = $(e.target).data('idx');
-    return log.info("NavigateTo", idx);
   };
 
   Viewer.prototype.nextPage = function(e) {
@@ -1066,67 +1085,59 @@ Viewer = (function(_super) {
     return this.showCurrent();
   };
 
-  Viewer.prototype.loadCheck = function() {
+  Viewer.prototype.onLoad = function() {
     var height;
-    if (this.loadCount === this.screenCount) {
-      if (this.errorCount > 0) {
-        this.stack.find('.screen').hide();
-        this.stack.append("<div class='errors'>There were errors loading the images, please refresh your browser!</div>").show();
-        return;
-      }
-      this.showCurrent();
-      this.imageH = height = this.stack.show().find('img').height();
-      this.imageW = this.stack.find('img').width();
-      this.stack.find('.screen').hide();
-      this.showCurrent();
-      this.elem.css({
-        width: this.imageW
-      });
-      this.stack.css({
-        height: height,
-        opacity: 0
-      }).animate({
-        opacity: 1
-      });
-      this.fixProgressBarSizes();
-      return this.ready = true;
-    }
+    this.loadingBar.addClass('done');
+    this.locationBar.show();
+    this.showCurrent();
+    this.imageH = height = this.stack.show().find('img').height();
+    this.imageW = this.stack.find('img').width();
+    this.stack.find('.screen').hide();
+    this.showCurrent();
+    this.elem.css({
+      width: this.imageW
+    });
+    this.stack.css({
+      opacity: 0
+    }).animate({
+      height: height,
+      opacity: 1
+    });
+    return this.ready = true;
   };
 
-  Viewer.prototype.imageDidLoad = function(e) {
-    var idx;
-    this.loadCount += 1;
-    idx = $(e.target).data('idx');
-    this.elem.find("span[data-idx=" + idx + "]").removeClass('loading').addClass('loaded');
-    return this.loadCheck();
-  };
-
-  Viewer.prototype.imageDidError = function(e) {
-    var idx, _ref;
+  Viewer.prototype.onLoadError = function(e) {
+    var err;
     log.info("ERROR Loading image", e.target);
-    this.loadCount += 1;
-    this.errorCount += 1;
-    $(e.target).removeClass('loading').addClass('error');
-    idx = $(e.target).data('idx');
-    this.elem.find("span[data-idx=" + idx + "]").removeClass('loading').addClass('error').attr('title', "Error loading: " + (e != null ? (_ref = e.target) != null ? _ref.src : void 0 : void 0));
-    return this.loadCheck();
+    this.progressBar.addClass('errors');
+    this.loadingBar.hide();
+    this.stack.find('img').remove();
+    err = $("<div class='errors'>There were errors loading the images, please refresh your browser!</div>").hide();
+    this.stack.append(err).show();
+    return err.slideDown();
   };
 
   Viewer.prototype.showCurrent = function() {
+    var percent;
     $(this.stack.find('.screen').get(this.current)).show();
-    return this.elem.find("span[data-idx=" + this.current + "]").addClass('current');
+    percent = Math.ceil((this.current + 1) / this.screenCount * 100);
+    this.locationBar.width("" + percent + "%");
+    if (percent >= 100) {
+      return this.locationBar.addClass('done');
+    } else {
+      return this.locationBar.removeClass('done');
+    }
   };
 
   Viewer.prototype.hideCurrent = function() {
-    $(this.stack.find('.screen').get(this.current)).hide();
-    return this.elem.find("span[data-idx=" + this.current + "]").removeClass('current');
+    return $(this.stack.find('.screen').get(this.current)).hide();
   };
 
   Viewer.prototype.getData = function() {
     var data, from, i, mdl, screens, to, _i;
     screens = [];
-    from = this.model.startAt;
-    to = this.model.startAt + (this.screenCount - 1);
+    from = this.model.start;
+    to = this.model.start + (this.screenCount - 1);
     for (i = _i = from; from <= to ? _i <= to : _i >= to; i = from <= to ? ++_i : --_i) {
       mdl = {
         src: build_url(this.model.path, i)
@@ -1140,32 +1151,34 @@ Viewer = (function(_super) {
   };
 
   Viewer.prototype.onRender = function() {
-    this.loadCount = 0;
-    this.errorCount = 0;
-    this.elem.find('img').on('load', this.imageDidLoad).on('error', this.imageDidError).end().on('focus', this.didFocus).on('blur', this.didBlur);
+    var _this = this;
+    preloader(this.elem).onError(this.onLoadError).onLoad(this.onLoad).onProgress(function(percent) {
+      _this.loadingBar.width("" + percent + "%");
+      if (percent >= 100) {
+        return _this.loadingBar.addClass('done');
+      }
+    }).start();
+    this.locationBar.hide();
+    this.elem.on('focus', this.didFocus).on('blur', this.didBlur);
     if (env.mobile) {
-      Hammer(this.stack.get(0)).on('swipeleft', this.nextPage).on('swiperight', this.prevPage).on('tap', this.didTap);
-      Hammer(this.nextBtn.get(0)).on('tap', this.nextPage);
-      return Hammer(this.prevBtn.get(0)).on('tap', this.prevPage);
+      Hammer(this.stack.get(0), {
+        prevent_default: true
+      }).on('swipeleft', this.nextPage).on('swiperight', this.prevPage).on('tap', this.didTap);
+      Hammer(this.nextBtn.get(0), {
+        prevent_default: true
+      }).on('tap', this.nextPage);
+      return Hammer(this.prevBtn.get(0), {
+        prevent_default: true
+      }).on('tap', this.prevPage);
     } else {
-      this.elem.on('click', '.nextPage', this.nextPage).on('click', '.prevPage', this.prevPage).on('click', '.screen', this.didTap).on('click', '.progress span', this.didClickProgress);
-      return $(document).on('keydown', this.onKeyInput);
+      return this.elem.on('click', '.nextPage', this.nextPage).on('click', '.prevPage', this.prevPage).on('click', '.screen', this.didTap);
     }
-  };
-
-  Viewer.prototype.fixProgressBarSizes = function() {
-    var iw, w;
-    w = this.progressBar.width();
-    iw = w / this.screenCount;
-    log.info("Setting progress bar width to", iw);
-    return this.progressBar.find('span').width("" + iw + "px");
   };
 
   Viewer.prototype.onDomActive = function() {
     if (this.options.autofocus) {
-      this.elem.focus();
+      return this.elem.focus();
     }
-    return this.fixProgressBarSizes();
   };
 
   return Viewer;
@@ -1173,6 +1186,84 @@ Viewer = (function(_super) {
 })(CogView);
 
 module.exports = Viewer;
+
+},
+"viewer/preloader": function(exports, require, module) {
+var Preloader, log,
+  _this = this;
+
+log = require('util/log').prefix('preloader:');
+
+Preloader = (function() {
+
+  function Preloader(root) {
+    var _this = this;
+    this.didError = function(e) {
+      return Preloader.prototype.didError.apply(_this, arguments);
+    };
+    this.didLoad = function(e) {
+      return Preloader.prototype.didLoad.apply(_this, arguments);
+    };
+    this.elem = $(root);
+  }
+
+  Preloader.prototype.onError = function(errorCallback) {
+    this.errorCallback = errorCallback;
+    return this;
+  };
+
+  Preloader.prototype.onProgress = function(progressCallback) {
+    this.progressCallback = progressCallback;
+    return this;
+  };
+
+  Preloader.prototype.onLoad = function(loadCallback) {
+    this.loadCallback = loadCallback;
+    return this;
+  };
+
+  Preloader.prototype.start = function() {
+    var images;
+    images = this.elem.find('img');
+    this.total = images.length;
+    this.count = 0;
+    images.on('error', this.didError).on('load', this.didLoad);
+    return this;
+  };
+
+  Preloader.prototype.didLoad = function(e) {
+    var percent;
+    this.count += 1;
+    percent = Math.floor((this.count / this.total) * 100);
+    if (typeof this.progressCallback === "function") {
+      this.progressCallback(percent);
+    }
+    if (this.count === this.total) {
+      if (typeof this.progressCallback === "function") {
+        this.progressCallback(100);
+      }
+      this.elem.find('img').off();
+      delete this.elem;
+      return typeof this.loadCallback === "function" ? this.loadCallback(e) : void 0;
+    }
+  };
+
+  Preloader.prototype.didError = function(e) {
+    if (typeof this.progressCallback === "function") {
+      this.progressCallback(100);
+    }
+    this.elem.find('img').off();
+    delete this.elem;
+    return typeof this.errorCallback === "function" ? this.errorCallback(e) : void 0;
+  };
+
+  return Preloader;
+
+})();
+
+module.exports = function(root) {
+  return new Preloader(root);
+};
 
 },
 "viewer/template": function(exports, require, module) {
@@ -1215,7 +1306,7 @@ module.exports= function(__obj) {
   }
   (function() {
     (function() {
-      var i, screen, _i, _j, _len, _len1, _ref, _ref1;
+      var i, screen, _i, _len, _ref;
     
       __out.push('<header>');
     
@@ -1226,14 +1317,12 @@ module.exports= function(__obj) {
       _ref = this.screens;
       for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
         screen = _ref[i];
-        __out.push(' \n<div class="screen"><img data-idx="');
-        __out.push(__sanitize(i));
-        __out.push('" src="');
+        __out.push(' \n<div class="screen"><img src="');
         __out.push(__sanitize(screen.src));
         __out.push('"/></div> \n');
       }
     
-      __out.push(' \n<div class="screen the-end">\n    <div class="button">Restart from beginning.</div>\n  </div> \n</div> \n');
+      __out.push(' \n<div class="screen the-end">\n    <div class="button">Restart from beginning.</div>\n  </div>\n</div> \n');
     
       if (this.copyright != null) {
         __out.push(' \n<footer class="copyright">\n  ');
@@ -1241,17 +1330,7 @@ module.exports= function(__obj) {
         __out.push('\n</footer> \n');
       }
     
-      __out.push(' \n<footer class="pager"> \n<div class="prevPage button">&lsaquo;</div> \n<div class="progress"> \n');
-    
-      _ref1 = this.screens;
-      for (i = _j = 0, _len1 = _ref1.length; _j < _len1; i = ++_j) {
-        screen = _ref1[i];
-        __out.push('\n    <span data-idx="');
-        __out.push(__sanitize(i));
-        __out.push('" class="loading"> &middot; </span>\n');
-      }
-    
-      __out.push(' \n</div> \n<div class="nextPage button">&rsaquo;</div> \n</footer>');
+      __out.push(' \n<footer class="pager"> \n<div class="prevPage button">&lsaquo;</div> \n<div class="progress">\n  <div class="bar background">&nbsp;</div>\n  <div class="bar loading done">&nbsp;</div>\n  <div class="bar location">&nbsp;</div>\n</div> \n<div class="nextPage button">&rsaquo;</div> \n</footer>');
     
     }).call(this);
     
