@@ -3,9 +3,12 @@
 env= require 'env'
 log= require('util/log').prefix('main:')
 ensure= require 'util/ensure'
-# cog= require 'cog'
-require('theme').activate()
+scanner= require 'scanner'
+validate= require 'validator'
+
 Viewer= require 'viewer/controller'
+
+require('theme').activate()
 
 hammertime= ->
   if env.mobile
@@ -24,14 +27,16 @@ init= ->
   log.info "FlipBook v#{ env.version }"
   log.info "ENV", env
   log.info "Ready."
-  $('[data-flipbook]').each (i,item)->
-    data= $(item).data('flipbook')
-    model={}
-    for seg in data.split(',')
-      [key, value]= seg.split(':')
-      model[$.trim(key)]= $.trim(value)    
-    (new Viewer model:model).appendTo( $(item) )
-  # Focus
+  flipbooks= scanner.run()
+
+  for {item, model} in flipbooks
+    if validate(model)
+      view= new Viewer model:model
+      view.appendTo( $(item).empty() )
+    else
+      log.info "! Invalid model:", validate.errors(), model
+
+  # Focus first book
   $('.flipbook').get(0)?.focus()
 
 if env.debug and env.mobile

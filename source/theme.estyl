@@ -24,6 +24,7 @@
     margin 0 4px 
     padding 5px
     z-index: 5
+    overflow: ellipsis
 
   .screen-stack
     position: relative
@@ -32,6 +33,10 @@
     max-width: 100%
     box-shadow: 0px 2px 9px #777
     z-index: 10
+
+    .errors
+      padding: 25px
+      text-align: center
 
     .screen
       position: absolute
@@ -71,6 +76,8 @@
       border-bottom 1px solid #DDD
       font-size 75%
       padding 2px
+      overflow: ellipsis
+
     &.pager
       border-radius bottom 4px
       padding 3px
@@ -79,19 +86,36 @@
       position: relative
   
       .progress
-        height: 28px
+        height: 25px
         display block
         margin 0 33px
         background: #BBB
         border-radius: 6px
+        whitespace: nowrap
+        text-align: left
+        border: 1px solid gray
+        /* overflow: hidden*/
+        span
+          display: inline-block
+          height: 25px
+          width: 25px
+          margin: 0
+          overflow: hidden
+          text-align: center
+          background: rgba(255,0,0,0.2)
+          color: rgba(0,0,0,0)
+          &:first-child
+            border-radius: left 6px
+          &:last-child
+            border-radius: right 6px
         .loading
-          color #999
+          background-color #999
         .loaded
-          color #DDD
+          background-color #DDD
         .error
-          color red
+          background-color red
         .current
-          color black
+          background-color #EEE
 
       .button
         width: 30px
@@ -100,9 +124,12 @@
         cursor: pointer
         font-size: 135%
         border-radius: 4px
-        &:hover
-          background: white
         &.nextPage
           absolute: top 3px right 3px
         &.prevPage
           absolute: top 3px left 3px
+
+  &.isDesktop
+    .button
+      &:hover
+        background: white

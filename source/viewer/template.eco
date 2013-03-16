@@ -1,25 +1,22 @@
-<header>
-  <%= @title %>
-</header>
-<div class="screen-stack">
-<% for screen,i in @screens: %>
-  <div class="screen"><img data-idx="<%= i %>" src="<%= screen.src %>"/></div>
-<% end %>
-  <div class="screen the-end">
+<header><%= @title %></header><!-- 
+--><div class="screen-stack"><% for screen,i in @screens: %><!-- 
+--><div class="screen"><img data-idx="<%= i %>" src="<%= screen.src %>"/></div><!-- 
+--><% end %><!-- 
+--><div class="screen the-end">
     <div class="button">Restart from beginning.</div>
-  </div>
-</div>
-<% if @copyright?: %>
-<footer class="copyright">
+  </div><!-- 
+--></div><!-- 
+--><% if @copyright?: %><!-- 
+--><footer class="copyright">
   <%= @copyright %>
-</footer>
-<% end %>
-<footer class="pager">
-  <div class="prevPage button">&lsaquo;</div>
-  <div class="progress">
-<% for screen,i in @screens: %>
-    <span data-idx="<%= i %>" class="loading"> &middot; </span>
-<% end %>
-  </div>
-  <div class="nextPage button">&rsaquo;</div>
-</footer>
+</footer><!-- 
+--><% end %><!-- 
+--><footer class="pager"><!-- 
+--><div class="prevPage button">&lsaquo;</div><!-- 
+--><div class="progress"><!-- 
+--><% for screen,i in @screens: %><!--
+    --><span data-idx="<%= i %>" class="loading"> &middot; </span><!--
+--><% end %><!-- 
+--></div><!-- 
+--><div class="nextPage button">&rsaquo;</div><!-- 
+--></footer>
