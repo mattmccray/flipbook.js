@@ -1,0 +1,22 @@
+{
+  "name": "type",
+  "description": "Simple js component that is an enhanced typeof function. Reliably returns object types, and node types for modern browsers.",
+  "version": "0.0.0",
+  "keywords": [],
+  "license": "MIT",
+  "dependencies": {},
+  "main": "./type.js",
+  "scripts": [
+    "type.js"
+  ],
+  "repo": "elucidata/type",
+  "gitHead": "e8bc7052f3e0f7b83c126007b664433ebb669a16",
+  "readme": "# type\n\nSimple js component that is an enhanced typeof function. Reliably returns object types, and element types for modern browsers.\n\n```javascript\ntype(null)\n// => \"null\"\ntype(window.undefinedProperty)\n// => \"undefined\"\ntype(\"test\")\n// => \"string\"\ntype(new String)\n// => \"string\"\ntype(1)\n// => \"number\"\ntype(new Number)\n// => \"number\"\ntype(true)\n// => \"boolean\"\ntype(new Boolean)\n// => \"boolean\"\ntype(/test/)\n// => \"regexp\"\ntype(new RegExp)\n// => \"regexp\"\ntype(new Date)\n// => \"date\"\ntype(['test'])\n// => \"array\"\ntype(new Array)\n// => \"array\"\ntype({'test':'test'})\n// => \"object\"\ntype(new Object)\n// => \"object\"\ntype(document)\n// => \"document\"\ntype(document.querySelectorAll('*'))\n// => \"nodelist\"\ntype(document.body)\n// => \"bodyelement\"\ntype(document.createElement('div'))\n// => \"divelement\"\n```",
+  "readmeFilename": "readme.md",
+  "_id": "type@1.0.0",
+  "commit": "e8bc7052f3e0f7b83c126007b664433ebb669a16",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/elucidata/type.git"
+  }
+}

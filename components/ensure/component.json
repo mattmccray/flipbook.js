@@ -1,0 +1,26 @@
+{
+  "name": "ensure",
+  "description": "Ensure a page has the libraries you need, or load 'em from a CDN.",
+  "version": "0.0.0",
+  "keywords": [
+    "library",
+    "cdn",
+    "loader"
+  ],
+  "license": "MIT",
+  "dependencies": {},
+  "main": "./ensure.js",
+  "scripts": [
+    "ensure.js"
+  ],
+  "repo": "elucidata/ensure",
+  "gitHead": "216ccbee981a2e0ebe6c890083a26bfa429b67df",
+  "readme": "# Ensure\n\nTakes the simplest approach to ensure a page has the libraries you need, or loads 'em from a CDN. Good for use in components, or embedded scripts.\n\n```javascript\nensure('jquery', function(err){\n  if(err) throw err;\n\n  // jQuery is ready, do something with it.\n})\n```\n\n```javascript\nensure('jquery', 'underscore', 'backbone', function(err){\n  if(err) throw err;\n\n  // It's all loaded, go for it!\n})\n```\n\nComes with support for:\n\n- AngularJS\n- Backbone\n- Hammer\n- jQuery\n- jQuery UI\n- Underscore\n- WebFont\n- Zepto\n\nFor libraries not built in, just pass in a function that returns a url string if the script needs to be loaded. (shown in coffeescript)\n\n```coffeescript\nblam= -> blam ? \"//darthapo.github.com/blam.js/blam.min.js\"\n\nensure 'jquery', blam, (err)->\n  throw err if err?\n```\n\n\n\n",
+  "readmeFilename": "README.md",
+  "_id": "ensure@1.0.0",
+  "commit": "216ccbee981a2e0ebe6c890083a26bfa429b67df",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/elucidata/ensure.git"
+  }
+}

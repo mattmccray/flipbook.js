@@ -1,4 +1,3 @@
-
 module.exports= (obj)->
   for source in Array::slice.call(arguments, 1)
     if source

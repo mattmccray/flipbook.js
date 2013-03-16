@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "elucidata/ensure": "*",
+    "elucidata/type": "*"
+  }
+}

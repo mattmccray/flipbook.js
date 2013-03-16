@@ -4,9 +4,21 @@
     <meta charset="utf-8" />
     <title>FlipBook</title>
     <!-- <link rel="stylesheet" type="text/css" href="flipbook.css"> -->
+    <style>
+      body {
+        width: 960px;
+        margin: 50px auto !important;
+      }
+    </style>
   </head>
   <body>
-    Loading...
+    <!-- <h3>Testing FlipBook Viewer</h3> -->
+
+    <div data-flipbook="pages:12,title:Test Comic 1"></div>
+
+    <div style="width: 450px;">
+      <div data-flipbook="pages:12,title:Test Comic 2"></div>
+    </div>
   </body>
   <script src="flipbook.js"></script>
 </html>
