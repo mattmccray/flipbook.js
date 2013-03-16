@@ -3,29 +3,105 @@
 
 .flipbook
   nested-reset()
+.flipbook
   font-family "Helvetica Neue", Helvetica, Sans-Serif
   user-select: none
   width: 100%
+  max-width: 100%
+  cursor: default
+  color: #555
+
+  &:focus
+    outline: 0
+    border: 0
+    color: #000
+    
+
+  header
+    background silver
+    border-radius top 4px
+    margin 0 4px 
+    padding 5px
+    z-index: 5
 
   .screen-stack
     position: relative
     overflow: hidden
     width: 100%
+    max-width: 100%
+    box-shadow: 0px 2px 9px #777
+    z-index: 10
 
     .screen
       position: absolute
       top: 0
       left: 0
+      max-width: 100%
 
       img
         max-width: 100%
 
-  .progress
-    .loading
-      color #F0F0F0
-    .loaded
-      color #DDD
-    .error
-      color red
-    .current
-      color black
+      &.the-end
+        display: none
+        height: 100%
+        background: rgba(0,0,0,0.7)
+        color: white
+        width: 100%
+        position: relative
+
+        .button
+          position: absolute
+          top 10px 
+          right 10px 
+          bottom 10px
+          width: 45%
+          border: 3px dashed white
+          border-radius: 15px
+
+
+  footer
+    background #CCC
+    margin 0 4px 
+    text-align: center
+    z-index: 5
+    /*height: 44px */
+    &.copyright
+      background #BBB
+      border-bottom 1px solid #DDD
+      font-size 75%
+      padding 2px
+    &.pager
+      border-radius bottom 4px
+      padding 3px
+      height: 28px
+      line-height: 28px
+      position: relative
+  
+      .progress
+        height: 28px
+        display block
+        margin 0 33px
+        background: #BBB
+        border-radius: 6px
+        .loading
+          color #F0F0F0
+        .loaded
+          color #DDD
+        .error
+          color red
+        .current
+          color black
+
+      .button
+        width: 30px
+        height: 28px
+        overflow: hidden
+        cursor: pointer
+        font-size: 135%
+        border-radius: 4px
+        &:hover
+          background: white
+        &.nextPage
+          absolute: top 3px right 3px
+        &.prevPage
+          absolute: top 3px left 3px
