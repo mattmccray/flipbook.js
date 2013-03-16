@@ -27,12 +27,13 @@ class Viewer extends CogView
     @ready= no
     @active= no
     @atEnd= no
+    # Allows for focus and blur events
     @elem.attr 'tabindex', -1
 
   onKeyInput: (e)=>
     return unless @ready and @active
     if e.which in nextKeys
-      @nextPage(e)
+      @nextPage(e) if not @atEnd
       false
     else if e.which in prevKeys
       @prevPage(e)
