@@ -3,6 +3,7 @@
 
 .flipbook
   nested-reset()
+
 .flipbook
   font-family "Helvetica Neue", Helvetica, Sans-Serif
   user-select: none
@@ -84,7 +85,7 @@
         background: #BBB
         border-radius: 6px
         .loading
-          color #F0F0F0
+          color #999
         .loaded
           color #DDD
         .error

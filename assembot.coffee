@@ -12,7 +12,16 @@ module.exports=
       header: "/* FlipBook v{%- package.version -%} */"
       addHeader: yes
       replaceTokens: yes
-      plugins: [ "./lib/increment-version" ]
+      plugins: [ 
+        "./lib/increment-version" 
+        "./lib/server-latency"
+      ]
+      http:
+        latency:
+          enabled: yes
+          max: 1000
+          rules:
+            ".(jpg|png|jpeg)": -100
     
     targets:
       "public/flipbook.js":
