@@ -2,51 +2,9 @@ uid= require 'util/uid'
 log= require('util/log').prefix('controller:')
 events= require 'cog/events'
 CogView= require 'cog/view'
-class BaseView
-  constructor: (@options={})->
-    @id= uid('view-')
-    @elem= @options.elem
-    # @assignOutlets()
-    @initialize?()
-
-  assignEvents: ->
-    for evt, callback of @events
-      eparts= evt.split ' '
-      if eparts.length > 1
-        evt= eparts.shift()
-        sel= eparts.join(' ')
-        @elem.on evt, sel, @[callback]
-      else
-        @elem.on evt, @[callback]
-    @
-
-  unassignEvents: ->
-    for evt, callback of @events
-      eparts= evt.split ' '
-      if eparts.length > 1
-        evt= eparts.shift()
-        sel= eparts.join(' ')
-        @elem.off evt, sel, @[callback]
-      else
-        @elem.off evt, @[callback]
-    @
-
-  assignOutlets: ->
-    @ui={}
-    for outlet, sel of @outlets
-      @ui[outlet]= @elem.find sel
-      @[outlet]= @elem.find sel
-    @
-
-  unassignOutlets: ->
-    for outlet,elem of @ui
-      delete @ui[outlet]
-    @
 
 nextKeys= [39, 32]
 prevKeys= [37]
-
-
 
 class Viewer extends CogView
 
@@ -57,7 +15,8 @@ class Viewer extends CogView
   events:
     'click .nextPage': 'nextPage'
     'click .prevPage': 'prevPage'
-    'click .screen img': 'prevPage'
+    'focus': 'didFocus'
+    'blur': 'didBlur'
 
   outlets:
     stack: '.screen-stack'
@@ -66,9 +25,12 @@ class Viewer extends CogView
     @screenCount= parseInt(@model.pages)
     @current= 0
     @ready= no
+    @active= no
+    @atEnd= no
+    @elem.attr 'tabindex', -1
 
   onKeyInput: (e)=>
-    return unless @ready
+    return unless @ready and @active
     if e.which in nextKeys
       @nextPage(e)
       false
@@ -76,15 +38,49 @@ class Viewer extends CogView
       @prevPage(e)
       false
 
+  onDomActive: ->
+    if @options.autofocus
+      @elem.focus()
+
+  didTap: (e)=>
+    return if @atEnd
+    e.preventDefault()
+    x= e.offsetX ? e.clientX ? e.gesture?.center.pageX
+    if x < (@imageW / 2)
+      @prevPage()
+    else
+      @nextPage()
+    false
+
+  didFocus: (e)=>
+    @active= yes
+
+  didBlur: (e)=>
+    @active= no
+
   nextPage: (e)=>
     e?.preventDefault?()
-    return if @current is @screenCount - 1
+    if @current is @screenCount - 1
+      if @atEnd
+        @hideCurrent()
+        @current = 0
+        @showCurrent()
+        @atEnd= no
+        @stack.find('.the-end').hide()
+      else
+        @stack.find('.the-end').show()
+        @atEnd= yes
+      return 
     @hideCurrent()
     @current += 1
     @showCurrent()
 
   prevPage: (e)=>
     e?.preventDefault?()
+    if @atEnd
+      @stack.find('.the-end').hide()
+      @atEnd= no
+      return
     return if @current is 0
     @hideCurrent()
     @current -= 1
@@ -93,14 +89,17 @@ class Viewer extends CogView
   loadCheck: ->
     if @loadCount is @screenCount
       @showCurrent()
-      height= @stack.show().find('img').height()
+      @imageH= height= @stack.show().find('img').height()
+      @imageW= @stack.find('img').width()
       @stack.find('.screen').hide()
       @showCurrent()
+      @elem.css width:@imageW
       # log.info "resizing to", height
       @stack
-        .css(opacity:0)
-        .animate(height:height, opacity:1)
+        .css(height:height, opacity:0)
+        .animate(opacity:1)
       @ready= yes
+      # @screenCount= @stack.find('.screen').length
 
   imageDidLoad: (e)=>
     @loadCount += 1
@@ -138,6 +137,13 @@ class Viewer extends CogView
       .on( 'load', @imageDidLoad )
       .on( 'error', @imageDidError )
     $(document).on 'keydown', @onKeyInput
+    if Hammer?
+      Hammer(@elem.get(0))
+        .on('swipeleft', @nextPage)
+        .on('swiperight', @prevPage)
+        .on('tap', @didTap)
+    else
+      @elem.on 'click', '.screen', @didTap
 
 
 

@@ -29,9 +29,12 @@ init= ->
     model={}
     for seg in data.split(',')
       [key, value]= seg.split(':')
-      model[$.trim(key)]= $.trim(value)
-    
-    v= (new Viewer model:model).render()
+      model[$.trim(key)]= $.trim(value)    
+    (new Viewer model:model).appendTo( $(item) )
+  # Focus
+  $('.flipbook').get(0)?.focus()
 
-    $(item).empty().append(v.elem)
-
+if env.debug and env.mobile
+  ensure 'firebug', (err)->
+    window.onerror= (err)->
+      log.info "ERROR!", err

@@ -74,6 +74,11 @@ class View
   getData: ->
     @model.toJSON?() ? @model
 
+  appendTo: (elem)->
+    @render()
+    elem.append(@elem)
+    @onDomActive?()
+
   addView: (outlet, view)->
   replaceView: @::addView
 
