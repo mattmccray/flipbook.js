@@ -96,7 +96,7 @@
         border: 1px solid gray
         /* overflow: hidden*/
         span
-          display: inline-block
+          float: left
           height: 25px
           width: 25px
           margin: 0

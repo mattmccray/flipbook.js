@@ -1,4 +1,4 @@
-/* FlipBook v1.0.0-51 */
+/* FlipBook v1.0.0-52 */
 (function(/*! Stitched by Assembot !*/) {
   /* 
     The commonjs code below was based on @sstephenson's stitch.
@@ -542,7 +542,7 @@ api.define(function() {
 
 },
 "theme": function(exports, require, module) {
-var node = null, css = ".flipbook div,\n.flipbook span,\n.flipbook object,\n.flipbook iframe,\n.flipbook h1,\n.flipbook h2,\n.flipbook h3,\n.flipbook h4,\n.flipbook h5,\n.flipbook h6,\n.flipbook p,\n.flipbook pre,\n.flipbook a,\n.flipbook abbr,\n.flipbook acronym,\n.flipbook address,\n.flipbook code,\n.flipbook del,\n.flipbook dfn,\n.flipbook em,\n.flipbook img,\n.flipbook dl,\n.flipbook dt,\n.flipbook dd,\n.flipbook ol,\n.flipbook ul,\n.flipbook li,\n.flipbook fieldset,\n.flipbook form,\n.flipbook label,\n.flipbook legend,\n.flipbook caption,\n.flipbook tbody,\n.flipbook tfoot,\n.flipbook thead,\n.flipbook tr {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  outline: 0;\n  font-weight: inherit;\n  font-style: inherit;\n  font-family: inherit;\n  font-size: 100%;\n  vertical-align: baseline;\n}\n.flipbook table {\n  border-collapse: separate;\n  border-spacing: 0;\n  vertical-align: middle;\n}\n.flipbook caption,\n.flipbook th,\n.flipbook td {\n  text-align: left;\n  font-weight: normal;\n  vertical-align: middle;\n}\n.flipbook a img {\n  border: none;\n}\n.flipbook {\n  font-family: \"Helvetica Neue\", Helvetica, Sans-Serif;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  width: 100%;\n  max-width: 100%;\n  cursor: default;\n  color: #555;\n}\n.flipbook:focus {\n  outline: 0;\n  border: 0;\n  color: #000;\n}\n.flipbook header {\n  background: #c0c0c0;\n  -webkit-border-top-left-radius: 4px;\n  border-top-left-radius: 4px;\n  -webkit-border-top-right-radius: 4px;\n  border-top-right-radius: 4px;\n  margin: 0 4px;\n  padding: 5px;\n  z-index: 5;\n  white-space: nowrap;\n  overflow: hidden;\n  -o-text-overflow: ellipsis;\n  text-overflow: ellipsis;\n}\n.flipbook .screen-stack {\n  position: relative;\n  overflow: hidden;\n  width: 100%;\n  max-width: 100%;\n  -webkit-box-shadow: 0px 2px 9px #777;\n  box-shadow: 0px 2px 9px #777;\n  z-index: 10;\n}\n.flipbook .screen-stack .errors {\n  padding: 25px;\n  text-align: center;\n}\n.flipbook .screen-stack .screen {\n  position: absolute;\n  top: 0;\n  left: 0;\n  max-width: 100%;\n}\n.flipbook .screen-stack .screen img {\n  max-width: 100%;\n}\n.flipbook .screen-stack .screen.the-end {\n  display: none;\n  height: 100%;\n  background: rgba(0,0,0,0.7);\n  color: #fff;\n  width: 100%;\n  position: relative;\n}\n.flipbook .screen-stack .screen.the-end .button {\n  position: absolute;\n  top: 10px;\n  right: 10px;\n  bottom: 10px;\n  width: 45%;\n  border: 3px dashed #fff;\n  -webkit-border-radius: 15px;\n  border-radius: 15px;\n}\n.flipbook footer {\n  background: #ccc;\n  margin: 0 4px;\n  text-align: center;\n  z-index: 5;\n/*height: 44px */\n}\n.flipbook footer.copyright {\n  background: #bbb;\n  border-bottom: 1px solid #ddd;\n  font-size: 75%;\n  padding: 2px;\n  white-space: nowrap;\n  overflow: hidden;\n  -o-text-overflow: ellipsis;\n  text-overflow: ellipsis;\n}\n.flipbook footer.pager {\n  -webkit-border-bottom-left-radius: 4px;\n  border-bottom-left-radius: 4px;\n  -webkit-border-bottom-right-radius: 4px;\n  border-bottom-right-radius: 4px;\n  padding: 3px;\n  height: 28px;\n  line-height: 28px;\n  position: relative;\n}\n.flipbook footer.pager .progress {\n  height: 25px;\n  display: block;\n  margin: 0 33px;\n  background: #bbb;\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  white-space: nowrap;\n  text-align: left;\n  border: 1px solid #808080;\n/* overflow: hidden*/\n}\n.flipbook footer.pager .progress span {\n  display: inline-block;\n  height: 25px;\n  width: 25px;\n  margin: 0;\n  overflow: hidden;\n  text-align: center;\n  background: rgba(255,0,0,0.2);\n  color: rgba(0,0,0,0);\n}\n.flipbook footer.pager .progress span:first-child {\n  -webkit-border-top-left-radius: 6px;\n  border-top-left-radius: 6px;\n  -webkit-border-bottom-left-radius: 6px;\n  border-bottom-left-radius: 6px;\n}\n.flipbook footer.pager .progress span:last-child {\n  -webkit-border-top-right-radius: 6px;\n  border-top-right-radius: 6px;\n  -webkit-border-bottom-right-radius: 6px;\n  border-bottom-right-radius: 6px;\n}\n.flipbook footer.pager .progress .loading {\n  background-color: #999;\n}\n.flipbook footer.pager .progress .loaded {\n  background-color: #ddd;\n}\n.flipbook footer.pager .progress .error {\n  background-color: #f00;\n}\n.flipbook footer.pager .progress .current {\n  background-color: #eee;\n}\n.flipbook footer.pager .button {\n  width: 30px;\n  height: 28px;\n  overflow: hidden;\n  cursor: pointer;\n  font-size: 135%;\n  -webkit-border-radius: 4px;\n  border-radius: 4px;\n}\n.flipbook footer.pager .button.nextPage {\n  position: absolute;\n  top: 3px;\n  right: 3px;\n}\n.flipbook footer.pager .button.prevPage {\n  position: absolute;\n  top: 3px;\n  left: 3px;\n}\n.flipbook.isDesktop .button:hover {\n  background: #fff;\n}\n";
+var node = null, css = ".flipbook div,\n.flipbook span,\n.flipbook object,\n.flipbook iframe,\n.flipbook h1,\n.flipbook h2,\n.flipbook h3,\n.flipbook h4,\n.flipbook h5,\n.flipbook h6,\n.flipbook p,\n.flipbook pre,\n.flipbook a,\n.flipbook abbr,\n.flipbook acronym,\n.flipbook address,\n.flipbook code,\n.flipbook del,\n.flipbook dfn,\n.flipbook em,\n.flipbook img,\n.flipbook dl,\n.flipbook dt,\n.flipbook dd,\n.flipbook ol,\n.flipbook ul,\n.flipbook li,\n.flipbook fieldset,\n.flipbook form,\n.flipbook label,\n.flipbook legend,\n.flipbook caption,\n.flipbook tbody,\n.flipbook tfoot,\n.flipbook thead,\n.flipbook tr {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  outline: 0;\n  font-weight: inherit;\n  font-style: inherit;\n  font-family: inherit;\n  font-size: 100%;\n  vertical-align: baseline;\n}\n.flipbook table {\n  border-collapse: separate;\n  border-spacing: 0;\n  vertical-align: middle;\n}\n.flipbook caption,\n.flipbook th,\n.flipbook td {\n  text-align: left;\n  font-weight: normal;\n  vertical-align: middle;\n}\n.flipbook a img {\n  border: none;\n}\n.flipbook {\n  font-family: \"Helvetica Neue\", Helvetica, Sans-Serif;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  width: 100%;\n  max-width: 100%;\n  cursor: default;\n  color: #555;\n}\n.flipbook:focus {\n  outline: 0;\n  border: 0;\n  color: #000;\n}\n.flipbook header {\n  background: #c0c0c0;\n  -webkit-border-top-left-radius: 4px;\n  border-top-left-radius: 4px;\n  -webkit-border-top-right-radius: 4px;\n  border-top-right-radius: 4px;\n  margin: 0 4px;\n  padding: 5px;\n  z-index: 5;\n  white-space: nowrap;\n  overflow: hidden;\n  -o-text-overflow: ellipsis;\n  text-overflow: ellipsis;\n}\n.flipbook .screen-stack {\n  position: relative;\n  overflow: hidden;\n  width: 100%;\n  max-width: 100%;\n  -webkit-box-shadow: 0px 2px 9px #777;\n  box-shadow: 0px 2px 9px #777;\n  z-index: 10;\n}\n.flipbook .screen-stack .errors {\n  padding: 25px;\n  text-align: center;\n}\n.flipbook .screen-stack .screen {\n  position: absolute;\n  top: 0;\n  left: 0;\n  max-width: 100%;\n}\n.flipbook .screen-stack .screen img {\n  max-width: 100%;\n}\n.flipbook .screen-stack .screen.the-end {\n  display: none;\n  height: 100%;\n  background: rgba(0,0,0,0.7);\n  color: #fff;\n  width: 100%;\n  position: relative;\n}\n.flipbook .screen-stack .screen.the-end .button {\n  position: absolute;\n  top: 10px;\n  right: 10px;\n  bottom: 10px;\n  width: 45%;\n  border: 3px dashed #fff;\n  -webkit-border-radius: 15px;\n  border-radius: 15px;\n}\n.flipbook footer {\n  background: #ccc;\n  margin: 0 4px;\n  text-align: center;\n  z-index: 5;\n/*height: 44px */\n}\n.flipbook footer.copyright {\n  background: #bbb;\n  border-bottom: 1px solid #ddd;\n  font-size: 75%;\n  padding: 2px;\n  white-space: nowrap;\n  overflow: hidden;\n  -o-text-overflow: ellipsis;\n  text-overflow: ellipsis;\n}\n.flipbook footer.pager {\n  -webkit-border-bottom-left-radius: 4px;\n  border-bottom-left-radius: 4px;\n  -webkit-border-bottom-right-radius: 4px;\n  border-bottom-right-radius: 4px;\n  padding: 3px;\n  height: 28px;\n  line-height: 28px;\n  position: relative;\n}\n.flipbook footer.pager .progress {\n  height: 25px;\n  display: block;\n  margin: 0 33px;\n  background: #bbb;\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  white-space: nowrap;\n  text-align: left;\n  border: 1px solid #808080;\n/* overflow: hidden*/\n}\n.flipbook footer.pager .progress span {\n  float: left;\n  height: 25px;\n  width: 25px;\n  margin: 0;\n  overflow: hidden;\n  text-align: center;\n  background: rgba(255,0,0,0.2);\n  color: rgba(0,0,0,0);\n}\n.flipbook footer.pager .progress span:first-child {\n  -webkit-border-top-left-radius: 6px;\n  border-top-left-radius: 6px;\n  -webkit-border-bottom-left-radius: 6px;\n  border-bottom-left-radius: 6px;\n}\n.flipbook footer.pager .progress span:last-child {\n  -webkit-border-top-right-radius: 6px;\n  border-top-right-radius: 6px;\n  -webkit-border-bottom-right-radius: 6px;\n  border-bottom-right-radius: 6px;\n}\n.flipbook footer.pager .progress .loading {\n  background-color: #999;\n}\n.flipbook footer.pager .progress .loaded {\n  background-color: #ddd;\n}\n.flipbook footer.pager .progress .error {\n  background-color: #f00;\n}\n.flipbook footer.pager .progress .current {\n  background-color: #eee;\n}\n.flipbook footer.pager .button {\n  width: 30px;\n  height: 28px;\n  overflow: hidden;\n  cursor: pointer;\n  font-size: 135%;\n  -webkit-border-radius: 4px;\n  border-radius: 4px;\n}\n.flipbook footer.pager .button.nextPage {\n  position: absolute;\n  top: 3px;\n  right: 3px;\n}\n.flipbook footer.pager .button.prevPage {\n  position: absolute;\n  top: 3px;\n  left: 3px;\n}\n.flipbook.isDesktop .button:hover {\n  background: #fff;\n}\n";
 module.exports= {
   content: css,
   isActive: function(){ return node != null; },
@@ -872,7 +872,7 @@ validator.errors = function() {
 },
 "version": function(exports, require, module) {
 
-module.exports = "1.0.0-51";
+module.exports = "1.0.0-52";
 
 },
 "viewer/controller": function(exports, require, module) {
@@ -1221,37 +1221,37 @@ module.exports= function(__obj) {
     
       __out.push(__sanitize(this.title));
     
-      __out.push('</header><!-- \n--><div class="screen-stack">');
+      __out.push('</header> \n<div class="screen-stack">');
     
       _ref = this.screens;
       for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
         screen = _ref[i];
-        __out.push('<!-- \n--><div class="screen"><img data-idx="');
+        __out.push(' \n<div class="screen"><img data-idx="');
         __out.push(__sanitize(i));
         __out.push('" src="');
         __out.push(__sanitize(screen.src));
-        __out.push('"/></div><!-- \n-->');
+        __out.push('"/></div> \n');
       }
     
-      __out.push('<!-- \n--><div class="screen the-end">\n    <div class="button">Restart from beginning.</div>\n  </div><!-- \n--></div><!-- \n-->');
+      __out.push(' \n<div class="screen the-end">\n    <div class="button">Restart from beginning.</div>\n  </div> \n</div> \n');
     
       if (this.copyright != null) {
-        __out.push('<!-- \n--><footer class="copyright">\n  ');
+        __out.push(' \n<footer class="copyright">\n  ');
         __out.push(__sanitize(this.copyright));
-        __out.push('\n</footer><!-- \n-->');
+        __out.push('\n</footer> \n');
       }
     
-      __out.push('<!-- \n--><footer class="pager"><!-- \n--><div class="prevPage button">&lsaquo;</div><!-- \n--><div class="progress"><!-- \n-->');
+      __out.push(' \n<footer class="pager"> \n<div class="prevPage button">&lsaquo;</div> \n<div class="progress"> \n');
     
       _ref1 = this.screens;
       for (i = _j = 0, _len1 = _ref1.length; _j < _len1; i = ++_j) {
         screen = _ref1[i];
-        __out.push('<!--\n    --><span data-idx="');
+        __out.push('\n    <span data-idx="');
         __out.push(__sanitize(i));
-        __out.push('" class="loading"> &middot; </span><!--\n-->');
+        __out.push('" class="loading"> &middot; </span>\n');
       }
     
-      __out.push('<!-- \n--></div><!-- \n--><div class="nextPage button">&rsaquo;</div><!-- \n--></footer>');
+      __out.push(' \n</div> \n<div class="nextPage button">&rsaquo;</div> \n</footer>');
     
     }).call(this);
     
