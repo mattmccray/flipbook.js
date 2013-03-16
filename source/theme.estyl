@@ -1,7 +1,31 @@
 // FlipBook
 @import 'nib'
 
-global-reset()
-
-body
+.flipbook
+  nested-reset()
   font-family "Helvetica Neue", Helvetica, Sans-Serif
+  user-select: none
+  width: 100%
+
+  .screen-stack
+    position: relative
+    overflow: hidden
+    width: 100%
+
+    .screen
+      position: absolute
+      top: 0
+      left: 0
+
+      img
+        max-width: 100%
+
+  .progress
+    .loading
+      color #F0F0F0
+    .loaded
+      color #DDD
+    .error
+      color red
+    .current
+      color black

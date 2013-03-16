@@ -1,3 +1,4 @@
+type= require './type'
 
 module.exports= defaults= (obj)->
   for source in Array::slice.call(arguments, 1)

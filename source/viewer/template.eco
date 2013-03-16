@@ -1,0 +1,17 @@
+<header>
+  <%= @title %>
+</header>
+<div class="screen-stack">
+<% for screen,i in @screens: %>
+  <div class="screen"><img data-idx="<%= i %>" src="<%= screen.src %>"/></div>
+<% end %>
+</div>
+<footer>
+  <div class="prevPage">&laquo;</div>
+  <div class="progress">
+<% for screen,i in @screens: %>
+    <span data-idx="<%= i %>" class="loading"> &middot; </span>
+<% end %>
+  </div>
+  <div class="nextPage">&raquo;</div>
+</footer>

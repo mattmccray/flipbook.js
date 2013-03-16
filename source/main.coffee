@@ -1,17 +1,37 @@
 # FlipBook main
 
+env= require 'env'
 log= require('util/log').prefix('main:')
 ensure= require 'util/ensure'
-
+# cog= require 'cog'
 require('theme').activate()
+Viewer= require 'viewer/controller'
 
-ensure 'jquery', (err)->
+hammertime= ->
+  if env.mobile
+    log.info "It's hammer time."
+    ensure.libs.hammer()
+  else
+    log.info "Please hammer, dont' hurt 'em."
+    null
+
+ensure 'jquery', hammertime, (err)->
   throw err if err?
-
-  log.info "jQuery is ready!"
   $ init
 
 init= ->
-  log.info "Log level is", log.level()
+  log.level(2) if env.debug
+  log.info "FlipBook v#{ env.version }"
+  log.info "ENV", env
   log.info "Ready."
-  document.body.innerHTML= "Ready."
+  $('[data-flipbook]').each (i,item)->
+    data= $(item).data('flipbook')
+    model={}
+    for seg in data.split(',')
+      [key, value]= seg.split(':')
+      model[$.trim(key)]= $.trim(value)
+    
+    v= (new Viewer model:model).render()
+
+    $(item).empty().append(v.elem)
+

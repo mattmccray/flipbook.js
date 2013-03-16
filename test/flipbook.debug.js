@@ -1,4 +1,4 @@
-/* FlipBook v1.0.0-12 */
+/* FlipBook v1.0.0-22 */
 (function(/*! Stitched by Assembot !*/) {
   /* 
     The commonjs code below was based on @sstephenson's stitch.
@@ -77,8 +77,20 @@
 
 
 },
+"env": function(exports, require, module) {
+
+module.exports = {
+  version: require('version'),
+  debug: true,
+  test: true,
+  mobile: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/) != null
+};
+
+},
 "main": function(exports, require, module) {
-var ensure, init, log;
+var ensure, env, init, log;
+
+env = require('env');
 
 log = require('util/log').prefix('main:');
 
@@ -90,19 +102,22 @@ ensure('jquery', function(err) {
   if (err != null) {
     throw err;
   }
-  log.info("jQuery is ready!");
   return $(init);
 });
 
 init = function() {
-  log.info("Log level is", log.level());
+  if (env.debug) {
+    log.level(2);
+  }
+  log.info("FlipBook v" + env.version);
+  log.info("ENV", env);
   log.info("Ready.");
   return document.body.innerHTML = "Ready.";
 };
 
 },
 "theme": function(exports, require, module) {
-var node = null, css = "html,\nbody,\ndiv,\nspan,\napplet,\nobject,\niframe,\nh1,\nh2,\nh3,\nh4,\nh5,\nh6,\np,\nblockquote,\npre,\na,\nabbr,\nacronym,\naddress,\nbig,\ncite,\ncode,\ndel,\ndfn,\nem,\nimg,\nins,\nkbd,\nq,\ns,\nsamp,\nsmall,\nstrike,\nstrong,\nsub,\nsup,\ntt,\nvar,\ndl,\ndt,\ndd,\nol,\nul,\nli,\nfieldset,\nform,\nlabel,\nlegend,\ntable,\ncaption,\ntbody,\ntfoot,\nthead,\ntr,\nth,\ntd {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  outline: 0;\n  font-weight: inherit;\n  font-style: inherit;\n  font-family: inherit;\n  font-size: 100%;\n  vertical-align: baseline;\n}\nbody {\n  line-height: 1;\n  color: #000;\n  background: #fff;\n}\nol,\nul {\n  list-style: none;\n}\ntable {\n  border-collapse: separate;\n  border-spacing: 0;\n  vertical-align: middle;\n}\ncaption,\nth,\ntd {\n  text-align: left;\n  font-weight: normal;\n  vertical-align: middle;\n}\na img {\n  border: none;\n}\nbody {\n  font-family: \"Helvetica Neue\", Helvetica, Sans-Serif;\n}\n";
+var node = null, css = ".font-book {\n  font-family: \"Helvetica Neue\", Helvetica, Sans-Serif;\n}\n.font-book div,\n.font-book span,\n.font-book object,\n.font-book iframe,\n.font-book h1,\n.font-book h2,\n.font-book h3,\n.font-book h4,\n.font-book h5,\n.font-book h6,\n.font-book p,\n.font-book pre,\n.font-book a,\n.font-book abbr,\n.font-book acronym,\n.font-book address,\n.font-book code,\n.font-book del,\n.font-book dfn,\n.font-book em,\n.font-book img,\n.font-book dl,\n.font-book dt,\n.font-book dd,\n.font-book ol,\n.font-book ul,\n.font-book li,\n.font-book fieldset,\n.font-book form,\n.font-book label,\n.font-book legend,\n.font-book caption,\n.font-book tbody,\n.font-book tfoot,\n.font-book thead,\n.font-book tr {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  outline: 0;\n  font-weight: inherit;\n  font-style: inherit;\n  font-family: inherit;\n  font-size: 100%;\n  vertical-align: baseline;\n}\n.font-book table {\n  border-collapse: separate;\n  border-spacing: 0;\n  vertical-align: middle;\n}\n.font-book caption,\n.font-book th,\n.font-book td {\n  text-align: left;\n  font-weight: normal;\n  vertical-align: middle;\n}\n.font-book a img {\n  border: none;\n}\n";
 module.exports= {
   content: css,
   isActive: function(){ return node != null; },
@@ -123,8 +138,47 @@ module.exports= {
   }
 };
 },
+"util/array/make": function(exports, require, module) {
+
+module.exports = function(args) {
+  return Array.prototype.slice.call(args, 0);
+};
+
+},
+"util/array/without": function(exports, require, module) {
+var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+module.exports = function(source, target) {
+  var item, _i, _len, _results;
+  _results = [];
+  for (_i = 0, _len = source.length; _i < _len; _i++) {
+    item = source[_i];
+    if (__indexOf.call(target, item) < 0) {
+      _results.push(item);
+    }
+  }
+  return _results;
+};
+
+},
+"util/blank": function(exports, require, module) {
+
+module.exports = function(value) {
+  var key;
+  if (!value) {
+    return true;
+  }
+  for (key in value) {
+    return false;
+  }
+  return true;
+};
+
+},
 "util/defaults": function(exports, require, module) {
-var defaults;
+var defaults, type;
+
+type = require('./type');
 
 module.exports = defaults = function(obj) {
   var key, source, value, _i, _len, _ref;
@@ -215,6 +269,7 @@ load_script = function(name, callback) {
   }
   url = def.url;
   script = document.createElement('script');
+  script.type = "text/javascript";
   if (loader.defer) {
     script.defer = true;
   }
@@ -228,6 +283,12 @@ load_script = function(name, callback) {
     return callback(new Error("Could not load external resource: " + name + " from " + url));
   };
   script.src = "" + protocol + url;
+  script.onreadystatechange = function() {
+    if (script.readyState === 'loaded' || script.readyState === 'complete') {
+      script.onreadystatechange = null;
+      return callback(null);
+    }
+  };
   document.getElementsByTagName('HTML')[0].appendChild(script);
   return script;
 };
@@ -236,7 +297,6 @@ loader = function() {
   var callback, libs, load_handler, nextLib;
   libs = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
   log.debug("loading", libs);
-  log.debug(libs.slice(-1));
   callback = typeof libs.slice(-1)[0] === 'function' ? libs.pop() : function(err) {
     if (err != null) {
       throw err;
@@ -265,6 +325,198 @@ loader.async = true;
 loader.defer = false;
 
 module.exports = loader;
+
+},
+"util/events": function(exports, require, module) {
+var Events, Listener,
+  __slice = [].slice;
+
+Events = (function() {
+
+  function Events() {}
+
+  Events.mixin = function(target) {
+    var fn, name, _ref;
+    _ref = this.prototype;
+    for (name in _ref) {
+      fn = _ref[name];
+      target[name] = fn;
+    }
+    return this;
+  };
+
+  Events.prototype.emit = function() {
+    var args, event, listener, _i, _len, _ref, _ref1;
+    event = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    if (!((_ref = this._events) != null ? _ref[event] : void 0)) {
+      return false;
+    }
+    _ref1 = this._events[event];
+    for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+      listener = _ref1[_i];
+      listener.apply(null, args);
+    }
+    return true;
+  };
+
+  Events.prototype.trigger = Events.prototype.emit;
+
+  Events.prototype.fire = Events.prototype.emit;
+
+  Events.prototype.addListener = function(event, listener) {
+    var _base, _ref, _ref1;
+    this.emit('newListener', event, listener);
+    ((_ref = (_base = ((_ref1 = this._events) != null ? _ref1 : this._events = {}))[event]) != null ? _ref : _base[event] = []).push(listener);
+    return this;
+  };
+
+  Events.prototype.on = Events.prototype.addListener;
+
+  Events.prototype.once = function(event, listener) {
+    var fn,
+      _this = this;
+    fn = function() {
+      _this.removeListener(event, fn);
+      return listener.apply(null, arguments);
+    };
+    this.on(event, fn);
+    return this;
+  };
+
+  Events.prototype.removeListener = function(event, listener) {
+    var l, _ref;
+    if (!((_ref = this._events) != null ? _ref[event] : void 0)) {
+      return this;
+    }
+    this._events[event] = (function() {
+      var _i, _len, _ref1, _results;
+      _ref1 = this._events[event];
+      _results = [];
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        l = _ref1[_i];
+        if (l !== listener) {
+          _results.push(l);
+        }
+      }
+      return _results;
+    }).call(this);
+    return this;
+  };
+
+  Events.prototype.off = Events.prototype.removeListener;
+
+  Events.prototype.removeAllListeners = function(event) {
+    if (this._events != null) {
+      delete this._events[event];
+    }
+    return this;
+  };
+
+  Events.prototype.listeners = function(event) {
+    var _ref;
+    if ((_ref = this._events) != null ? _ref[event] : void 0) {
+      return this.events[event];
+    } else {
+      return [];
+    }
+  };
+
+  return Events;
+
+})();
+
+Listener = (function() {
+
+  function Listener() {}
+
+  Listener.mixin = function(target) {
+    var fn, name, _ref;
+    _ref = this.prototype;
+    for (name in _ref) {
+      fn = _ref[name];
+      target[name] = fn;
+    }
+    return this;
+  };
+
+  Listener.prototype.listenTo = function(emitter, event, callback) {
+    var id, _base, _ref, _ref1, _ref2;
+    if (!((emitter != null) && (event != null) && (callback != null))) {
+      return this;
+    }
+    id = ((_ref = emitter._emitterId) != null ? _ref : emitter._emitterId = uid());
+    if ((_ref1 = (_base = ((_ref2 = this._emitterBindings) != null ? _ref2 : this._emitterBindings = {}))[id]) == null) {
+      _base[id] = [];
+    }
+    this._emitterBindings[id].push({
+      target: emitter,
+      message: event,
+      action: callback
+    });
+    emitter.on(event, callback);
+    return this;
+  };
+
+  Listener.prototype.stopListening = function(emitter, event, callback) {
+    var action, binding, bindings, id, message, removed, target, _i, _j, _len, _len1, _ref;
+    if (this._emitterBindings == null) {
+      return this;
+    }
+    if (emitter === null) {
+      _ref = this._emitterBindings;
+      for (id in _ref) {
+        binding = _ref[id];
+        target = binding.target, message = binding.message, action = binding.action;
+        target.off(message, action);
+      }
+      this._emitterBindings = {};
+    } else {
+      bindings = this._emitterBindings[emitter._emitterId];
+      if (binding == null) {
+        return this;
+      }
+      removed = [];
+      if (event === null) {
+        while (binding = bindings.pop()) {
+          target = binding.target, message = binding.message, action = binding.action;
+          target.off(message, action);
+        }
+      } else if (callback === null) {
+        for (_i = 0, _len = bindings.length; _i < _len; _i++) {
+          binding = bindings[_i];
+          if (!(binding.message === event)) {
+            continue;
+          }
+          target = binding.target, message = binding.message, action = binding.action;
+          target.off(message, action);
+          removed.push(binding);
+        }
+      } else {
+        for (_j = 0, _len1 = bindings.length; _j < _len1; _j++) {
+          binding = bindings[_j];
+          if (!(binding.message === event && binding.action === callback)) {
+            continue;
+          }
+          target = binding.target, message = binding.message, action = binding.action;
+          target.off(message, action);
+          removed.push(binding);
+        }
+      }
+      if (removed.length > 0) {
+        this._emitterBindings[emitter._emitterId] = arrayWithout(bindings, removed);
+      }
+    }
+    return this;
+  };
+
+  return Listener;
+
+})();
+
+module.exports = {
+  Events: Events,
+  Listener: Listener
+};
 
 },
 "util/extend": function(exports, require, module) {
@@ -448,9 +700,22 @@ module.exports = (function() {
 })();
 
 },
+"util/uid": function(exports, require, module) {
+var counter;
+
+counter = 1;
+
+module.exports = function(prefix) {
+  if (prefix == null) {
+    prefix = '';
+  }
+  return prefix + (++counter);
+};
+
+},
 "version": function(exports, require, module) {
 
-module.exports = "1.0.0-12";
+module.exports = "1.0.0-22";
 
 }});
 flipbook('test/main');
