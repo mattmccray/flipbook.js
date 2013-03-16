@@ -5,8 +5,8 @@ errors= []
 
 fixupTypes= (o)->
   o.pages= parseInt(o.pages, 10) if typeof o.pages is 'string'
-  o.startAt= if o.startAt?
-      parseInt(o.startAt, 10) if typeof o.startAt is 'string'
+  o.start= if o.start?
+      parseInt(o.start, 10) if typeof o.start is 'string'
     else
       1
 

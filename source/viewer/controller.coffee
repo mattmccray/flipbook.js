@@ -3,10 +3,23 @@ uid= require 'util/uid'
 pad= require 'util/number/pad'
 log= require('util/log').prefix('controller:')
 events= require 'cog/events'
+preloader= require './preloader'
+
 CogView= require 'cog/view'
 
-nextKeys= [39, 32]
-prevKeys= [37]
+keyListener=
+  ready: no
+
+  init: ->
+    return if @ready or env.mobile
+    $(document).on 'keydown', @onKeyInput
+    @ready= yes
+
+  onKeyInput: (e)->
+    if Viewer.active?
+      return Viewer.active.onKeyInput(e)
+
+
 
 build_url= (pattern, idx)->
   #hack!
@@ -16,7 +29,12 @@ build_url= (pattern, idx)->
   pattern= pattern.replace('#', idx)
 
 
+nextKeys= [39, 32]
+prevKeys= [37]
+
 class Viewer extends CogView
+
+  @active= null
 
   className: 'flipbook'
 
@@ -27,6 +45,9 @@ class Viewer extends CogView
     nextBtn: '.nextPage'
     prevBtn: '.prevPage'
     progressBar: '.progress'
+    locationBar: '.progress .location'
+    loadingBar: '.progress .loading'
+
 
   initialize: ->
     @screenCount= @model.pages
@@ -36,10 +57,12 @@ class Viewer extends CogView
     @atEnd= no
     # Allows for focus and blur events
     @elem.attr 'tabindex', -1
+    @elem.addClass 'inactive'
     if env.mobile
       @elem.addClass 'isMobile'
     else
       @elem.addClass 'isDesktop'
+    keyListener.init()
 
   onKeyInput: (e)=>
     return unless @ready and @active
@@ -62,15 +85,14 @@ class Viewer extends CogView
 
   didFocus: (e)=>
     @active= yes
+    @elem.removeClass('inactive').addClass 'active'
+    Viewer.active= this
 
   didBlur: (e)=>
     @active= no
+    @elem.removeClass('active').addClass 'inactive'
+    Viewer.active= null if Viewer.active is this
 
-  didClickProgress: (e)=>
-    e?.preventDefault?()
-    log.info "Clicked!", e.target
-    idx= $(e.target).data('idx')
-    log.info "NavigateTo", idx
 
   nextPage: (e)=>
     e?.preventDefault?()
@@ -102,53 +124,47 @@ class Viewer extends CogView
     @current -= 1
     @showCurrent()
 
-  loadCheck: ->
-    if @loadCount is @screenCount
-      if @errorCount > 0
-        @stack.find('.screen').hide()
-        @stack.append("<div class='errors'>There were errors loading the images, please refresh your browser!</div>").show()
-        return
-      @showCurrent()
-      @imageH= height= @stack.show().find('img').height()
-      @imageW= @stack.find('img').width()
-      @stack.find('.screen').hide()
-      @showCurrent()
-      @elem.css width:@imageW
-      # log.info "resizing to", height
-      @stack
-        .css(height:height, opacity:0)
-        .animate(opacity:1)
-      @fixProgressBarSizes()
-      @ready= yes
-      # @screenCount= @stack.find('.screen').length
+  onLoad: =>
+    @loadingBar.addClass('done')
+    @locationBar.show()
+    @showCurrent()
+    @imageH= height= @stack.show().find('img').height()
+    @imageW= @stack.find('img').width()
+    @stack.find('.screen').hide()
+    @showCurrent()
+    @elem.css width:@imageW
+    @stack
+      .css(opacity:0)
+      .animate(height:height, opacity:1)
+    @ready= yes
 
-  imageDidLoad: (e)=>
-    @loadCount += 1
-    idx= $(e.target).data('idx')
-    @elem.find("span[data-idx=#{ idx }]").removeClass('loading').addClass('loaded')
-    @loadCheck()
-
-  imageDidError: (e)=>
+  onLoadError: (e)=>
     log.info "ERROR Loading image", e.target
-    @loadCount += 1
-    @errorCount += 1
-    $(e.target).removeClass('loading').addClass('error')
-    idx= $(e.target).data('idx')
-    @elem.find("span[data-idx=#{ idx }]").removeClass('loading').addClass('error').attr('title', "Error loading: #{ e?.target?.src }")
-    @loadCheck()
+    @progressBar.addClass('errors')
+    @loadingBar.hide()
+    @stack.find('img').remove()
+    err= $("<div class='errors'>There were errors loading the images, please refresh your browser!</div>").hide()
+    @stack.append(err).show()
+    err.slideDown()
 
   showCurrent: ->
     $(@stack.find('.screen').get(@current)).show()
-    @elem.find("span[data-idx=#{ @current }]").addClass 'current'
+    percent= Math.ceil( (@current + 1) / @screenCount * 100 )
+    # log.info "%", percent
+    @locationBar.width "#{percent}%"
+    if percent >= 100
+      @locationBar.addClass('done')
+    else
+      @locationBar.removeClass('done')
+    # @elem.find("span[data-idx=#{ @current }]").addClass 'current'
 
   hideCurrent: ->
     $(@stack.find('.screen').get(@current)).hide()
-    @elem.find("span[data-idx=#{ @current }]").removeClass 'current'
 
   getData: ->
     screens= []
-    from= @model.startAt
-    to= @model.startAt + (@screenCount - 1)
+    from= @model.start
+    to= @model.start + (@screenCount - 1)
     for i in [from..to]
       mdl= src:build_url(@model.path, i)
       # log.info "ViewModel", mdl
@@ -159,44 +175,39 @@ class Viewer extends CogView
     data
 
   onRender: ->
-    @loadCount= 0
-    @errorCount= 0
+    preloader(@elem)
+      .onError(@onLoadError)
+      .onLoad(@onLoad)
+      .onProgress((percent)=> 
+        @loadingBar.width "#{percent}%"
+        @loadingBar.addClass('done') if percent >= 100
+        )
+      .start()
+
     # Hook up events!!
+    @locationBar.hide()
     @elem
-      .find('img')
-      .on( 'load', @imageDidLoad )
-      .on( 'error', @imageDidError )
-      .end()
       .on('focus', @didFocus)
       .on('blur', @didBlur)
     
     if env.mobile
-      Hammer(@stack.get(0))
+      Hammer(@stack.get(0), prevent_default:yes)
         .on('swipeleft', @nextPage)
         .on('swiperight', @prevPage)
         .on('tap', @didTap)
-      Hammer(@nextBtn.get(0))
+      Hammer(@nextBtn.get(0), prevent_default:yes)
         .on('tap', @nextPage)
-      Hammer(@prevBtn.get(0))
+      Hammer(@prevBtn.get(0), prevent_default:yes)
         .on('tap', @prevPage)
     else
       @elem
         .on('click', '.nextPage', @nextPage)
         .on('click', '.prevPage', @prevPage)
         .on('click', '.screen', @didTap)
-        .on('click', '.progress span', @didClickProgress)
-      $(document).on 'keydown', @onKeyInput
-
-  fixProgressBarSizes: ->
-    w= @progressBar.width()
-    iw= w / @screenCount
-    log.info "Setting progress bar width to", iw
-    @progressBar.find('span').width("#{iw}px")
 
   onDomActive: ->
     if @options.autofocus
       @elem.focus()
-    @fixProgressBarSizes()
 
 
 module.exports= Viewer

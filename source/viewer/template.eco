@@ -1,10 +1,10 @@
 <header><%= @title %></header> 
 <div class="screen-stack"><% for screen,i in @screens: %> 
-<div class="screen"><img data-idx="<%= i %>" src="<%= screen.src %>"/></div> 
+<div class="screen"><img src="<%= screen.src %>"/></div> 
 <% end %> 
 <div class="screen the-end">
     <div class="button">Restart from beginning.</div>
-  </div> 
+  </div>
 </div> 
 <% if @copyright?: %> 
 <footer class="copyright">
@@ -13,10 +13,10 @@
 <% end %> 
 <footer class="pager"> 
 <div class="prevPage button">&lsaquo;</div> 
-<div class="progress"> 
-<% for screen,i in @screens: %>
-    <span data-idx="<%= i %>" class="loading"> &middot; </span>
-<% end %> 
+<div class="progress">
+  <div class="bar background">&nbsp;</div>
+  <div class="bar loading done">&nbsp;</div>
+  <div class="bar location">&nbsp;</div>
 </div> 
 <div class="nextPage button">&rsaquo;</div> 
 </footer>

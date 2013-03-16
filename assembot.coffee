@@ -26,7 +26,7 @@ module.exports=
           enabled: yes
           max: 1000
           rules:
-            ".(jpg|png|jpeg)": 100
+            ".(jpg|png|jpeg)": -100
     
     targets:
       "public/flipbook.js":
