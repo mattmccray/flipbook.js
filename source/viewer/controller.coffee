@@ -95,7 +95,6 @@ class Viewer extends CogView
     @current = idx
     @showCurrent()
 
-
   didTap: (e)=>
     return if @atEnd
     e?.preventDefault?()
@@ -113,7 +112,8 @@ class Viewer extends CogView
     x= getX(e)
     p= (x / @progressWidth)
     page= Math.floor p * @screenCount
-    page= @screenCount - 1 if page is @screenCount
+    page= @screenCount - 1 if page > @screenCount
+    page= 0 if page < 0
     # log.info "SCRUBBER AT", x, p, page, '/', @screenCount
     @navigateTo page
 
@@ -121,23 +121,19 @@ class Viewer extends CogView
     return unless @ready
     @progressBar
       .on('mousemove', @didTapScrubber)
-    @pagerArea
+    @elem
       .on('mouseleave', @stopScrubbing)
     $(document)
       .on('mouseup', @stopScrubbing)
-    # $(window).mouseleave((e)->
-    #   log.info("OUTTA DIS WIN!", e)
-    # )
     @didTapScrubber(e)
   
   stopScrubbing: (e)=>
     @progressBar
       .off('mousemove', @didTapScrubber)
-    @pagerArea
+    @elem
       .off('mouseleave', @stopScrubbing)
     $(document)
       .off('mouseup', @stopScrubbing)
-    # @didTapScrubber(e)
 
   didDragScrubber: (e)=>
     # x= getX e
