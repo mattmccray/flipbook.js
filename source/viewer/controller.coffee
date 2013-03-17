@@ -101,12 +101,13 @@ class Viewer extends CogView
       if @atEnd
         @hideCurrent()
         @current = 0
-        @showCurrent()
         @atEnd= no
         @stack.find('.the-end').hide()
+        @showCurrent()
       else
         @stack.find('.the-end').show()
         @atEnd= yes
+        @nextBtn.toggleClass('disabled', (@atEnd)) 
       return 
     @hideCurrent()
     @current += 1
@@ -118,6 +119,7 @@ class Viewer extends CogView
     if @atEnd
       @stack.find('.the-end').hide()
       @atEnd= no
+      @nextBtn.toggleClass('disabled', (@atEnd)) 
       return
     return if @current is 0
     @hideCurrent()
@@ -125,6 +127,7 @@ class Viewer extends CogView
     @showCurrent()
 
   onLoad: =>
+    @nextBtn.removeClass('disabled')
     @loadingBar.addClass('done')
     @locationBar.show()
     @showCurrent()
@@ -150,13 +153,11 @@ class Viewer extends CogView
   showCurrent: ->
     $(@stack.find('.screen').get(@current)).show()
     percent= Math.ceil( (@current + 1) / @screenCount * 100 )
-    # log.info "%", percent
     @locationBar.width "#{percent}%"
-    if percent >= 100
-      @locationBar.addClass('done')
-    else
-      @locationBar.removeClass('done')
-    # @elem.find("span[data-idx=#{ @current }]").addClass 'current'
+    @locationBar.toggleClass 'done', (percent >= 100)
+    @prevBtn.toggleClass('disabled', (@current is 0)) 
+    @nextBtn.toggleClass('disabled', (@atEnd)) 
+
 
   hideCurrent: ->
     $(@stack.find('.screen').get(@current)).hide()
@@ -183,7 +184,8 @@ class Viewer extends CogView
         @loadingBar.addClass('done') if percent >= 100
         )
       .start()
-
+    @nextBtn.addClass('disabled')
+    @prevBtn.addClass('disabled')
     # Hook up events!!
     @locationBar.hide()
     @elem
