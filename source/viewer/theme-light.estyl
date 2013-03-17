@@ -1,0 +1,80 @@
+@import 'nib'
+
+.flipbook.theme-light
+  font-family "Helvetica Neue", Helvetica, Sans-Serif
+  color: #555
+
+  &:focus
+    color: #000
+
+    /*  
+    &.inactive
+      header, footer
+        opacity: 0.5
+    */
+
+  header
+    background silver
+    border-radius top 4px
+    margin 0 4px 
+    padding 5px
+
+  .screen-stack
+    box-shadow: 0px 2px 9px #777
+
+    .errors
+      padding: 25px
+      text-align: center
+      // border: 1px solid red
+      border: 0
+
+    .screen
+
+      &.the-end
+        background: rgba(0,0,0,0.7)
+        color: white
+        text-align center
+
+
+  footer
+    background #CCC
+    margin 0 4px 
+
+    &.copyright
+      background #BBB
+      border-bottom 1px solid #DDD
+
+    &.pager
+      border-radius bottom 4px
+  
+      .progress
+
+        .bar
+          border-radius: left 6px
+
+          &.done
+            border-radius: 6px
+          
+          &.background
+            border-radius: 6px
+            background #AAA
+
+          &.loading
+            background-color: #BBB
+
+          &.location
+            background-color: #ccc
+
+      .button
+        border-radius: 4px
+        &.disabled
+          opacity: 0.3
+
+  &.isDesktop
+    .button
+      &:hover
+        background: white
+      &.disabled
+        &:hover
+          background: none
+

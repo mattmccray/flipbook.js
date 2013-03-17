@@ -9,6 +9,7 @@ fixupTypes= (o)->
       parseInt(o.start, 10) if typeof o.start is 'string'
     else
       1
+  o.theme ?= 'default'
 
 
 module.exports= validator= (options)->

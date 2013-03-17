@@ -1,4 +1,7 @@
-<header><span><%= @title %></span></header>
+<header>
+  <div class="zoom button"><span>&#10132;</span></div>
+  <h3><%= @title %></h3>
+</header>
 <div class="screen-stack"><% for screen,i in @screens: %> 
 <div class="screen"><img src="<%= screen.src %>"/></div> 
 <% end %> 
@@ -9,6 +12,10 @@
           <span class="icon">&#8634;</span>
           <label>Restart from<br/>beginning.</label>
         </div>    
+        <!-- <div class="restart">
+          <span class="icon">&#10162;</span>
+          <label>Resume<br/>reading.</label>
+        </div>     -->
       </div>
     </div>
   </div>
