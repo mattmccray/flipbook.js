@@ -133,8 +133,18 @@
           top: (pagerHeight / 2px)
           overflow: hidden
 
+          span
+            background: rgba(255,255,255,0.1)
+            display: block
+            float: right
+            height: pagerHeight
+            overflow: hidden
+            width: 1px
+
           &.done
-            width: 100%
+            width: 100% !important
+            span
+              display: none
           
           &.background
             background #AAA
@@ -155,13 +165,19 @@
       .button
         width: 30px
         height: 28px
+        line-height: 28px
         overflow: hidden
         cursor: pointer
-        font-size: 135%
+        font-size: 195%
+        span
+          display: block
+
         &.nextPage
           absolute: top 3px right 3px
         &.prevPage
           absolute: top 3px left 3px
+          span
+            transform: rotate(180deg)
         &.disabled
           opacity: 0.3
           cursor: default

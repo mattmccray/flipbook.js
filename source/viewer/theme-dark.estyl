@@ -60,6 +60,7 @@
         .bar
           border-radius: left 6px
 
+
           &.done
             border-radius: 6px
             border: 0
@@ -69,12 +70,17 @@
             background #000
 
           &.loading
-            background-color: #1F1F1F
+            background-color: #3F3F3F
+            
+            &.done
+              background-color: #1a1a1a
 
           &.location
             background-color: #444
             border-right: 1px solid #000
             background: linear-gradient(top, #444, #333)
+            span
+              background-color: #000
 
       .button
         border-radius: 4px

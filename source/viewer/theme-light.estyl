@@ -1,11 +1,14 @@
 @import 'nib'
 
+borderCol= #CCC
+
 .flipbook.theme-light
   font-family "Helvetica Neue", Helvetica, Sans-Serif
   color: #555
   background: #FFF
   box-shadow: 0px 1px 4px #AAA
-
+  border-radius 3px
+  
   &:focus
     color: #000
 
@@ -16,14 +19,17 @@
     */
 
   header
-    border 1px solid #DDD
+    border 1px solid borderCol
     background none
     padding 5px
     z-index 20
     background: linear-gradient(top, #FFF, #F0F0F0)
+    border-radius top 3px
+
     h3
       padding-left 5px
     .zoom
+      border: 1px solid transparent
       border-radius: 4px
 
   .screen-stack
@@ -51,8 +57,9 @@
       background: linear-gradient(top, #E0E0E0, #EFEFEF)
   
     &.pager
-      border 1px solid #DDD
+      border 1px solid borderCol
       background: linear-gradient(top, #FFF, #F0F0F0)
+      border-radius bottom 3px
   
       .progress
 
@@ -78,13 +85,15 @@
 
       .button
         border-radius: 4px
+        border: 1px solid transparent
         &.disabled
           opacity: 0.3
 
   &.isDesktop
     .button
       &:hover
-        background: #EEE
+        background: #FFF
+        border: 1px solid #CCC
       &.disabled
         &:hover
           background: none

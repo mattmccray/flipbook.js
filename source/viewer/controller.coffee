@@ -217,7 +217,7 @@ class Viewer extends CogView
 
   showCurrent: ->
     $(@stack.find('.screen').get(@current)).show()
-    percent= Math.ceil( (@current + 1) / @screenCount * 100 )
+    percent= Math.min Math.ceil( (@current + 1) / @screenCount * 100 ), 100
     @locationBar.width "#{percent}%"
     @locationBar.toggleClass 'done', (percent >= 100)
     @prevBtn.toggleClass('disabled', (@current is 0)) 
