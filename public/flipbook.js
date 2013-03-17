@@ -1,3 +1,1537 @@
-/* FlipBook v1.0.0-66 */
-(function(){if(!this.flipbook){var e={},t={},n=function(t){var n=[],t=t||"";for(var o in e)0===o.indexOf(t)&&n.push(o);return n},o=function(a,s){var l,p=r(s,a),d=t[p];if(d)return d.exports;if(!(l=e[p]||e[p=r(p,"./index")]))throw"module '"+a+"' not found";d={id:p,exports:{}};try{t[p]=d;var u=function(e){return o(e,i(p))};return u.modules=n,l(d.exports,u,d),d.exports}catch(f){throw delete t[p],f}},r=function(e,t){var n,o,r=[];n=/^\.\.?(\/|$)/.test(t)?[e,t].join("/").split("/"):t.split("/");for(var i=0,a=n.length;a>i;i++)o=n[i],".."==o?r.pop():"."!=o&&""!=o&&r.push(o);return r.join("/")},i=function(e){return e.split("/").slice(0,-1).join("/")};this.flipbook=function(e){return o(e,"")},this.flipbook.define=function(t){for(var n in t)e[n]=t[n]},this.flipbook.modules=n}return this.flipbook.define}).call(this)({"cog/events":function(e,t,n){var o,r=[].slice;o=function(){function e(){}return e.mixin=function(){var e,t,n,o,i,a,s;for(o=arguments.length>=1?r.call(arguments,0):[],i=0,a=o.length;a>i;i++){n=o[i],s=this.prototype;for(t in s)e=s[t],n[t]=e}return this},e.prototype.emit=function(){var e,t,n,o,i,a,s;if(t=arguments[0],e=arguments.length>=2?r.call(arguments,1):[],!(null!=(a=this._events)?a[t]:void 0))return!1;for(s=this._events[t],o=0,i=s.length;i>o;o++)n=s[o],n.apply(null,e);return!0},e.prototype.trigger=e.prototype.emit,e.prototype.fire=e.prototype.emit,e.prototype.addListener=function(e,t){var n,o,r;return this.emit("newListener",e,t),(null!=(o=(n=null!=(r=this._events)?r:this._events={})[e])?o:n[e]=[]).push(t),this},e.prototype.on=e.prototype.addListener,e.prototype.once=function(e,t){var n,o=this;return n=function(){return o.removeListener(e,n),t.apply(null,arguments)},this.on(e,n),this},e.prototype.removeListener=function(e,t){var n,o;return(null!=(o=this._events)?o[e]:void 0)?(this._events[e]=function(){var o,r,i,a;for(i=this._events[e],a=[],o=0,r=i.length;r>o;o++)n=i[o],n!==t&&a.push(n);return a}.call(this),this):this},e.prototype.off=e.prototype.removeListener,e.prototype.removeAllListeners=function(e){return null!=this._events&&delete this._events[e],this},e.prototype.listeners=function(e){var t;return(null!=(t=this._events)?t[e]:void 0)?this.events[e]:[]},e.prototype.listenTo=function(e,t,n){var o,r,i,a,s;return null==e||null==t||null==n?this:(o=null!=(i=e._emitterId)?i:e._emitterId=uid(),null==(a=(r=null!=(s=this._emitterBindings)?s:this._emitterBindings={})[o])&&(r[o]=[]),this._emitterBindings[o].push({target:e,message:t,action:n}),e.on(t,n),this)},e.prototype.stopListening=function(e,t,n){var o,r,i,a,s,l,p,d,u,f,c,h;if(null==this._emitterBindings)return this;if(null===e){h=this._emitterBindings;for(a in h)r=h[a],p=r.target,s=r.message,o=r.action,p.off(s,o);this._emitterBindings={}}else{if(i=this._emitterBindings[e._emitterId],null==r)return this;if(l=[],null===t)for(;r=i.pop();)p=r.target,s=r.message,o=r.action,p.off(s,o);else if(null===n)for(d=0,f=i.length;f>d;d++)r=i[d],r.message===t&&(p=r.target,s=r.message,o=r.action,p.off(s,o),l.push(r));else for(u=0,c=i.length;c>u;u++)r=i[u],r.message===t&&r.action===n&&(p=r.target,s=r.message,o=r.action,p.off(s,o),l.push(r));l.length>0&&(this._emitterBindings[e._emitterId]=arrayWithout(i,l))}return this},e}(),n.exports=o},"cog/view":function(e,t,n){var o,r,i;r=t("./events"),i=t("util/uid"),o=function(){function e(e){var t;this.options=null!=e?e:{},this.id=i("view-"),this.model=null!=(t=this.options.model)?t:{},this._createElem(),this.assignEvents(),"function"==typeof this.initialize&&this.initialize()}return r.mixin(e,e.prototype),e.prototype.tagName="div",e.prototype.className="view",e.prototype.template=null,e.prototype.events={},e.prototype.outlets={},e.prototype._createElem=function(){return this.elem=null!=this.options.elem?$(this.options.elem):$("<"+this.tagName+" class='"+this.className+"'></"+this.tagName+">")},e.prototype.assignEvents=function(){var e,t,n,o,r;r=this.events;for(n in r)e=r[n],t=n.split(" "),t.length>1?(n=t.shift(),o=t.join(" "),this.elem.on(n,o,this[e])):this.elem.on(n,this[e]);return this},e.prototype.unassignEvents=function(){var e,t,n,o,r;r=this.events;for(n in r)e=r[n],t=n.split(" "),t.length>1?(n=t.shift(),o=t.join(" "),this.elem.off(n,o,this[e])):this.elem.off(n,this[e]);return this},e.prototype.assignOutlets=function(){var e,t,n;this.ui={},n=this.outlets;for(e in n)t=n[e],this.ui[e]=this.elem.find(t),this[e]=this.elem.find(t);return this},e.prototype.unassignOutlets=function(){var e,t,n;n=this.ui;for(t in n)e=n[t],delete this.ui[t],delete this[t];return this},e.prototype.dispose=function(){return this.unassignEvents(),this.unassignOutlets(),this},e.prototype.close=function(){return"function"==typeof this.beforeClose&&this.beforeClose(),this.dispose(),this.elem.remove(),"function"==typeof this.onClose&&this.onClose(),this},e.prototype.getData=function(){var e,t;return null!=(t="function"==typeof(e=this.model).toJSON?e.toJSON():void 0)?t:this.model},e.prototype.appendTo=function(e){return this.render(),e.append(this.elem),"function"==typeof this.onDomActive?this.onDomActive():void 0},e.prototype.addView=function(){},e.prototype.replaceView=e.prototype.addView,e.prototype.appendView=function(){},e.prototype.render=function(){var e,t;return"function"==typeof this.beforeRender&&this.beforeRender(),this.fire("before:render",this),e=this.getData(),t=this.template(e),this.elem.html(t),this.assignOutlets(),this.fire("render",this),"function"==typeof this.onRender&&this.onRender(),this},e}(),n.exports=o},env:function(e,t,n){n.exports={version:t("version"),debug:!0,test:!1,mobile:null!=navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)}},main:function(e,t){var n,o,r,i,a,s,l,p;r=t("env"),s=t("util/log").prefix("main:"),o=t("util/ensure"),l=t("scanner"),p=t("validator"),n=t("viewer/controller"),i=function(){return r.mobile?o.libs.hammer():null},o("jquery",i,function(e){if(null!=e)throw e;return $(a)}),a=function(){var e,t,o,i,a,d,u,f;for(r.debug&&s.level(2),s.info("FlipBook v"+r.version),s.debug("ENV",r),s.info("Ready."),e=l.run(),f=[],a=0,d=e.length;d>a;a++)u=e[a],t=u.item,o=u.model,p(o)?(i=new n({model:o}),f.push(i.appendTo($(t).empty()))):f.push(s.info("! Invalid model:",p.errors(),o));return f},r.debug&&r.mobile&&o("firebug",function(){return window.onerror=function(e){return s.info("ERROR!",e)}})},scanner:function(e,t,n){var o,r,i;r=t("util/log").prefix("scanner:"),i=[],n.exports=o={define:function(e){return i.push(e),this},run:function(){var e,t,n,o,r,a,s,l;for(t=[],o=0,a=i.length;a>o;o++)for(n=i[o],l=n(),r=0,s=l.length;s>r;r++)e=l[r],t.push(e);return t}},o.define(function(){var e;return e=[],$("[data-flipbook]").each(function(t,n){var o,r,i,a,s,l,p,d,u;for(o=$(n).data("flipbook"),i={},u=o.split(","),p=0,d=u.length;d>p;p++)s=u[p],a=s.split(":"),r=a.shift(),l=a.join(":"),i[$.trim(r)]=$.trim(l);return e.push({item:n,model:i})}),e}),o.define(function(){var e;return e=[],$("[data-flipbook-pages]").each(function(t,n){var o,r,i,a,s,l,p,d;for(t=$(n),r={},l=n.attributes,a=0,s=l.length;s>a;a++)o=l[a],i=(null!=(p=o.name)?p:o.nodeName)+"",0===i.indexOf("data-flipbook-")&&(i=i.replace("data-flipbook-",""),r[i]=null!=(d=o.value)?d:o.nodeValue);return e.push({item:n,model:r})}),e})},"util/ensure":function(e,t,n){var o,r,i,a,s=[].slice;o={angular:function(){return"undefined"!=typeof angular&&null!==angular?angular:"//ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"},backbone:function(){return"undefined"!=typeof Backbone&&null!==Backbone?Backbone:"//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min.js"},fastclick:function(){return"undefined"!=typeof FastClick&&null!==FastClick?FastClick:"//cdnjs.cloudflare.com/ajax/libs/fastclick/0.6.0/fastclick.min.js"},firebug:function(){return"undefined"!=typeof FBL&&null!==FBL?FBL:"https://getfirebug.com/releases/lite/1.4/firebug-lite.js"},hammer:function(){return"undefined"!=typeof Hammer&&null!==Hammer?Hammer:"https://raw.github.com/EightMedia/hammer.js/v1.0.3/dist/hammer.min.js"},jquery:function(){return"undefined"!=typeof jQuery&&null!==jQuery?jQuery:"//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"},jqueryui:function(){var e;return null!=(e="undefined"!=typeof jQuery&&null!==jQuery?jQuery.Widget:void 0)?e:"//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"},underscore:function(){return"undefined"!=typeof _&&null!==_?_:"//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"},webfont:function(){return"undefined"!=typeof WebFont&&null!==WebFont?WebFont:"//ajax.googleapis.com/ajax/libs/webfont/1.1.2/webfont.js"},zepto:function(){return"undefined"!=typeof Zepto&&null!==Zepto?Zepto:"//cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js"}},a="file:"===location.protocol?"http:":"",r=function(e,t){var n,r,s,l;return r=null!=(s=null!=(l="function"==typeof e?e():void 0)?l:"function"==typeof o[e]?o[e]():void 0)?s:null,"string"!=typeof r?t(null):(n=document.createElement("script"),n.type="text/javascript",i.defer&&(n.defer=!0),i.async&&(n.async=!0),n.onload=function(){return t(null)},n.onerror=function(){return t(Error("Could not load external resource: "+e+" from "+r))},n.src="/"===r[0]?""+a+r:r,n.onreadystatechange=function(){return"loaded"===n.readyState||"complete"===n.readyState?(n.onreadystatechange=null,t(null)):void 0},document.getElementsByTagName("HTML")[0].appendChild(n),n)},i=function(){var e,t,n,o;return t=arguments.length>=1?s.call(arguments,0):[],e="function"==typeof t.slice(-1)[0]?t.pop():function(e){if(null!=e)throw e;return"undefined"!=typeof console&&null!==console?"function"==typeof console.log?console.log("Library loading complete."):void 0:void 0},o=t.shift(),n=function(i){return null!=i?e(i):0===t.length?e(null):(o=t.shift(),r(o,n))},r(o,n),null},i.async=!0,i.defer=!1,i.libs=o,n!==void 0&&null!==n?n.exports=i:this.ensure=i},"util/log":function(e,t,n){var o,r,i,a,s,l,p,d,u;l=1,o=function(){return"undefined"!=typeof console&&null!==console?function(e){return console.log.apply(console,e)}:function(){}}(),s=function(e){return null!=e&&(l=function(){switch(e){case-1:case"none":case"n":return-1;case 0:case"quiet":case"1":return 0;case 1:case"info":case"i":return 1;case 2:case"debug":case"d":return 2;default:return l}}()),l},d=function(){return 0>l?void 0:o(arguments)},a=function(){return 1>l?void 0:o(arguments)},r=function(){return 2>l?void 0:o(arguments)},i=function(){var e,t;return t=Error(),null!=t.stack&&(e=t.stack.split("\n"),"undefined"!=typeof console&&null!==console&&"function"==typeof console.error&&console.error("Error",e[2].trim())),o(arguments)},u=Array.prototype.slice,p=function(e){return{level:s,say:function(){var t;if(!(0>l))return(t=u.call(arguments)).unshift(e),d.apply(d,t)},info:function(){var t;if(!(1>l))return(t=u.call(arguments)).unshift(e),a.apply(a,t)},debug:function(){var t;if(!(2>l))return(t=u.call(arguments)).unshift(e),r.apply(r,t)},error:function(){var t;return(t=u.call(arguments)).unshift(e),i.apply(i,t)}}},n.exports={level:s,info:a,debug:r,error:i,say:d,prefix:p},Function.prototype.bind&&console&&"object"==typeof console.log&&["log","info","warn","error","assert","dir","clear","profile","profileEnd"].forEach(function(e){console[e]=this.bind(console[e],console)},Function.prototype.call)},"util/number/pad":function(e,t,n){var o;n.exports=o=function(e,t){var n;for(n=""+e;t>n.length;)n="0"+n;return n}},"util/uid":function(e,t,n){var o;o=1,n.exports=function(e){return null==e&&(e=""),e+ ++o}},validator:function(e,t,n){var o,r,i,a;i=t("util/log").prefix("validator:"),o=[],r=function(e){var t;return"string"==typeof e.pages&&(e.pages=parseInt(e.pages,10)),e.start=null!=e.start?"string"==typeof e.start?parseInt(e.start,10):void 0:1,null!=(t=e.theme)?t:e.theme="default"},n.exports=a=function(e){return o=[],null==e.path&&o.push("path is missing"),null==e.pages&&o.push("pages is missing"),0===o.length?(r(e),!0):!1},a.errors=function(){return o.join(", ")}},version:function(e,t,n){n.exports="1.0.0-66"},"viewer/controller":function(e,t,n){var o,r,i,a,s,l,p,d,u,f,c,h,b,g,m={}.hasOwnProperty,k=function(e,t){function n(){this.constructor=e}for(var o in t)m.call(t,o)&&(e[o]=t[o]);return n.prototype=t.prototype,e.prototype=new n,e.__super__=t.prototype,e},v=[].indexOf||function(e){for(var t=0,n=this.length;n>t;t++)if(t in this&&this[t]===e)return t;return-1};a=t("env"),g=t("util/uid"),f=t("util/number/pad"),d=t("util/log").prefix("controller:"),s=t("cog/events"),c=t("./preloader"),t("./layout").activate(),o=t("cog/view"),l=function(e){var t;return null!=e.offsetX?e.offsetX:(t=$(e.target).offset(),null!=e.gesture?e.gesture.center.pageX-t.left:e.pageX-t.left)},p={ready:!1,init:function(){return this.ready||a.mobile?void 0:($(document).on("keydown",this.onKeyInput),this.ready=!0)},onKeyInput:function(e){return null!=r.active?r.active.onKeyInput(e):void 0}},i=function(e,t){return e=e.replace("####",f(t,4)),e=e.replace("###",f(t,3)),e=e.replace("##",f(t,2)),e=e.replace("#",t)},b=function(e){var n;n="theme-"+e.theme;try{return t("./"+n).activate(),n}catch(o){return t("./theme-default").activate(),"theme-default"}},u=[39,32],h=[37],r=function(e){function n(){var e=this;return this.onLoadError=function(){return n.prototype.onLoadError.apply(e,arguments)},this.onLoad=function(){return n.prototype.onLoad.apply(e,arguments)},this.prevPage=function(){return n.prototype.prevPage.apply(e,arguments)},this.nextPage=function(){return n.prototype.nextPage.apply(e,arguments)},this.didBlur=function(){return n.prototype.didBlur.apply(e,arguments)},this.didFocus=function(){return n.prototype.didFocus.apply(e,arguments)},this.stopScrubbing=function(){return n.prototype.stopScrubbing.apply(e,arguments)},this.startScrubbing=function(){return n.prototype.startScrubbing.apply(e,arguments)},this.didTapScrubber=function(){return n.prototype.didTapScrubber.apply(e,arguments)},this.didTap=function(){return n.prototype.didTap.apply(e,arguments)},this.navigateTo=function(){return n.prototype.navigateTo.apply(e,arguments)},this.onKeyInput=function(){return n.prototype.onKeyInput.apply(e,arguments)},n.__super__.constructor.apply(this,arguments)}return k(n,e),n.active=null,n.prototype.className="flipbook",n.prototype.template=t("./template"),n.prototype.outlets={stack:".screen-stack",nextBtn:".nextPage",prevBtn:".prevPage",restartBtn:".restart",pagerArea:".pager",progressBar:".progress",locationBar:".progress .location",loadingBar:".progress .loading"},n.prototype.initialize=function(){return this.screenCount=this.model.pages,this.current=0,this.ready=!1,this.active=!1,this.atEnd=!1,this.elem.attr("tabindex",-1).addClass("inactive").addClass(b(this.model)),a.mobile?this.elem.addClass("isMobile"):this.elem.addClass("isDesktop"),p.init()},n.prototype.onKeyInput=function(e){var t,n;if(this.ready&&this.active)return t=e.which,v.call(u,t)>=0?(this.atEnd||this.nextPage(e),!1):(n=e.which,v.call(h,n)>=0?(this.prevPage(e),!1):void 0)},n.prototype.navigateTo=function(e){return e===this.current||0>e||e===this.screenCount?void 0:(this.atEnd&&(this.stack.find(".the-end").hide(),this.atEnd=!1,this.nextBtn.toggleClass("disabled",this.atEnd)),this.hideCurrent(),this.current=e,this.showCurrent())},n.prototype.didTap=function(e){var t;if(!this.atEnd)return null!=e&&"function"==typeof e.preventDefault&&e.preventDefault(),null!=e&&"function"==typeof e.stopPropagation&&e.stopPropagation(),t=l(e),this.imageW/2>t?this.prevPage():this.nextPage(),!1},n.prototype.didTapScrubber=function(e){var t,n,o;return null!=e&&"function"==typeof e.preventDefault&&e.preventDefault(),null!=e&&"function"==typeof e.stopPropagation&&e.stopPropagation(),o=l(e),t=o/this.progressWidth,n=Math.floor(t*this.screenCount),n>this.screenCount&&(n=this.screenCount-1),0>n&&(n=0),this.navigateTo(n)},n.prototype.startScrubbing=function(e){return this.ready?(this.progressBar.on("mousemove",this.didTapScrubber),this.elem.on("mouseleave",this.stopScrubbing),$(document).on("mouseup",this.stopScrubbing),this.didTapScrubber(e)):void 0},n.prototype.stopScrubbing=function(){return this.progressBar.off("mousemove",this.didTapScrubber),this.elem.off("mouseleave",this.stopScrubbing),$(document).off("mouseup",this.stopScrubbing)},n.prototype.didFocus=function(){return this.active=!0,this.elem.removeClass("inactive").addClass("active"),n.active=this},n.prototype.didBlur=function(){return this.active=!1,this.elem.removeClass("active").addClass("inactive"),n.active===this?n.active=null:void 0},n.prototype.nextPage=function(e){return null!=e&&"function"==typeof e.preventDefault&&e.preventDefault(),this.ready?this.current===this.screenCount-1?(this.atEnd?(this.hideCurrent(),this.current=0,this.atEnd=!1,this.stack.find(".the-end").hide(),this.showCurrent()):(this.stack.find(".the-end").show(),this.atEnd=!0,this.nextBtn.toggleClass("disabled",this.atEnd)),null!=e&&"function"==typeof e.stopPropagation&&e.stopPropagation(),!1):(this.hideCurrent(),this.current+=1,this.showCurrent()):void 0},n.prototype.prevPage=function(e){if(null!=e&&"function"==typeof e.preventDefault&&e.preventDefault(),this.ready){if(this.atEnd)return this.stack.find(".the-end").hide(),this.atEnd=!1,this.nextBtn.toggleClass("disabled",this.atEnd),void 0;if(0!==this.current)return this.hideCurrent(),this.current-=1,this.showCurrent()}},n.prototype.onLoad=function(){var e;return this.nextBtn.removeClass("disabled"),this.loadingBar.addClass("done"),this.locationBar.show(),this.showCurrent(),this.imageH=e=this.stack.show().find("img").height(),this.imageW=this.stack.find("img").width(),this.stack.find(".screen").hide(),this.showCurrent(),this.elem.css({width:this.imageW}),this.stack.css({opacity:0}).animate({height:e,opacity:1}),this.progressWidth=this.progressBar.width(),this.ready=!0},n.prototype.onLoadError=function(e){var t;return d.info("ERROR Loading image",e.target),this.progressBar.addClass("errors"),this.loadingBar.hide(),this.stack.find("img").remove(),t=$("<div class='errors'>There were errors loading the images, please refresh your browser!</div>").hide(),this.stack.append(t).show(),t.slideDown()},n.prototype.showCurrent=function(){var e;return $(this.stack.find(".screen").get(this.current)).show(),e=Math.ceil(100*((this.current+1)/this.screenCount)),this.locationBar.width(""+e+"%"),this.locationBar.toggleClass("done",e>=100),this.prevBtn.toggleClass("disabled",0===this.current),this.nextBtn.toggleClass("disabled",this.atEnd)},n.prototype.hideCurrent=function(){return $(this.stack.find(".screen").get(this.current)).hide()},n.prototype.getData=function(){var e,t,n,o,r,a,s;for(r=[],t=this.model.start,a=this.model.start+(this.screenCount-1),n=s=t;a>=t?a>=s:s>=a;n=a>=t?++s:--s)o={src:i(this.model.path,n)},r.push(o);return e=this.model,e.screens=r,e.id=this.id,e},n.prototype.onRender=function(){var e=this;return c(this.elem).onError(this.onLoadError).onLoad(this.onLoad).onProgress(function(t){return e.loadingBar.width(""+t+"%"),t>=100?e.loadingBar.addClass("done"):void 0}).start(),this.nextBtn.addClass("disabled"),this.prevBtn.addClass("disabled"),this.locationBar.hide(),this.progressWidth=this.progressBar.width(),this.elem.on("focus",this.didFocus).on("blur",this.didBlur),a.mobile?(Hammer(this.stack.get(0),{prevent_default:!0}).on("swipeleft",this.nextPage).on("swiperight",this.prevPage).on("tap",this.didTap),Hammer(this.nextBtn.get(0),{prevent_default:!0}).on("tap",this.nextPage),Hammer(this.prevBtn.get(0),{prevent_default:!0}).on("tap",this.prevPage),Hammer(this.restartBtn.get(0),{prevent_default:!0}).on("tap",this.nextPage),Hammer(this.progressBar.get(0),{prevent_default:!0}).on("tap",this.didTapScrubber).on("drag",this.didTapScrubber)):this.elem.on("click",".nextPage",this.nextPage).on("click",".restart",this.nextPage).on("click",".prevPage",this.prevPage).on("click",".screen",this.didTap).on("mousedown",".progress",this.startScrubbing)},n.prototype.onDomActive=function(){return this.model.autofocus?this.elem.focus():void 0},n}(o),n.exports=r},"viewer/layout":function(e,t,n){var o=null,r='.flipbook div,\n.flipbook span,\n.flipbook object,\n.flipbook iframe,\n.flipbook h1,\n.flipbook h2,\n.flipbook h3,\n.flipbook h4,\n.flipbook h5,\n.flipbook h6,\n.flipbook p,\n.flipbook pre,\n.flipbook a,\n.flipbook abbr,\n.flipbook acronym,\n.flipbook address,\n.flipbook code,\n.flipbook del,\n.flipbook dfn,\n.flipbook em,\n.flipbook img,\n.flipbook dl,\n.flipbook dt,\n.flipbook dd,\n.flipbook ol,\n.flipbook ul,\n.flipbook li,\n.flipbook fieldset,\n.flipbook form,\n.flipbook label,\n.flipbook legend,\n.flipbook caption,\n.flipbook tbody,\n.flipbook tfoot,\n.flipbook thead,\n.flipbook tr {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  outline: 0;\n  font-weight: inherit;\n  font-style: inherit;\n  font-family: inherit;\n  font-size: 100%;\n  vertical-align: baseline;\n}\n.flipbook table {\n  border-collapse: separate;\n  border-spacing: 0;\n  vertical-align: middle;\n}\n.flipbook caption,\n.flipbook th,\n.flipbook td {\n  text-align: left;\n  font-weight: normal;\n  vertical-align: middle;\n}\n.flipbook a img {\n  border: none;\n}\n.flipbook {\n  font-family: "Helvetica Neue", Helvetica, Sans-Serif;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  width: 100%;\n  max-width: 100%;\n  cursor: default;\n}\n.flipbook:focus {\n  outline: 0;\n  border: 0;\n}\n.flipbook header {\n  z-index: 5;\n  display: relative;\n}\n.flipbook header h3 {\n  display: block;\n  white-space: nowrap;\n  overflow: hidden;\n  -o-text-overflow: ellipsis;\n  text-overflow: ellipsis;\n  font-size: 120%;\n}\n.flipbook header .zoom {\n  padding: 2px;\n  width: 26px;\n  float: right;\n  text-align: center;\n  cursor: pointer;\n}\n.flipbook header .zoom span {\n  display: block;\n  text-align: center;\n  -webkit-transform: rotate(-45deg);\n  -moz-transform: rotate(-45deg);\n  -o-transform: rotate(-45deg);\n  -ms-transform: rotate(-45deg);\n  transform: rotate(-45deg);\n}\n.flipbook .screen-stack {\n  position: relative;\n  overflow: hidden;\n  width: 100%;\n  max-width: 100%;\n  z-index: 10;\n}\n.flipbook .screen-stack .errors {\n  padding: 25px;\n  text-align: center;\n  border: 1px solid #f00;\n}\n.flipbook .screen-stack .screen {\n  position: absolute;\n  top: 0;\n  left: 0;\n  max-width: 100%;\n}\n.flipbook .screen-stack .screen img {\n  max-width: 100%;\n}\n.flipbook .screen-stack .screen.the-end {\n  display: none;\n  height: 100%;\n  background: rgba(0,0,0,0.7);\n  color: #fff;\n  width: 100%;\n  position: relative;\n  text-align: center;\n}\n.flipbook .screen-stack .screen.the-end .container {\n  display: table;\n  width: 100%;\n  height: 100%;\n}\n.flipbook .screen-stack .screen.the-end .body {\n  display: table-cell;\n  vertical-align: middle;\n  text-align: center;\n}\n.flipbook .screen-stack .screen.the-end .restart {\n  display: inline-block;\n  border: 3px dotted #fff;\n  -webkit-border-radius: 15px;\n  border-radius: 15px;\n  cursor: pointer;\n}\n.flipbook .screen-stack .screen.the-end .restart .icon {\n  text-align: center;\n  font-size: 75px;\n  display: block;\n  cursor: pointer;\n  line-height: 75px;\n}\n.flipbook .screen-stack .screen.the-end .restart label {\n  text-align: center;\n  display: block;\n  font-size: 90%;\n  margin: 15px;\n  cursor: pointer;\n  text-shadow: 0px 1px 0px #000;\n}\n.flipbook footer {\n  text-align: center;\n  z-index: 5;\n}\n.flipbook footer.copyright {\n  font-size: 75%;\n  padding: 2px;\n  white-space: nowrap;\n  overflow: hidden;\n  -o-text-overflow: ellipsis;\n  text-overflow: ellipsis;\n}\n.flipbook footer.pager {\n  position: relative;\n  padding: 3px;\n  height: 28px;\n  line-height: 28px;\n}\n.flipbook footer.pager .progress {\n  display: block;\n  height: 28px;\n  margin: 0 33px;\n  position: relative;\n}\n.flipbook footer.pager .progress.errors .bar.background {\n  visibility: hidden;\n}\n.flipbook footer.pager .progress .bar {\n  position: absolute;\n  height: 14px;\n  top: 7px;\n  overflow: hidden;\n}\n.flipbook footer.pager .progress .bar.done {\n  width: 100%;\n}\n.flipbook footer.pager .progress .bar.background {\n  background: #aaa;\n  width: 100%;\n}\n.flipbook footer.pager .progress .bar.loading {\n  background-color: #bbb;\n  width: 1%;\n  height: 10px;\n  top: 9px;\n}\n.flipbook footer.pager .progress .bar.location {\n  background-color: #ccc;\n  width: 0%;\n  height: 12px;\n  top: 8px;\n}\n.flipbook footer.pager .button {\n  width: 30px;\n  height: 28px;\n  overflow: hidden;\n  cursor: pointer;\n  font-size: 135%;\n}\n.flipbook footer.pager .button.nextPage {\n  position: absolute;\n  top: 3px;\n  right: 3px;\n}\n.flipbook footer.pager .button.prevPage {\n  position: absolute;\n  top: 3px;\n  left: 3px;\n}\n.flipbook footer.pager .button.disabled {\n  opacity: 0.3;\n  filter: alpha(opacity=30);\n  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";\n  cursor: default;\n}\n.flipbook.isDesktop .the-end .restart:hover {\n  background: rgba(0,0,0,0.2);\n}\n';n.exports={content:r,isActive:function(){return null!=o},activate:function(e){return null==o?(e=e||document.getElementsByTagName("HEAD")[0]||document.body||document,o=document.createElement("style"),o.innerHTML=r,e.appendChild(o),this):void 0},deactivate:function(){return null!=o&&(o.parentNode.removeChild(o),o=null),this}}},"viewer/preloader":function(e,t,n){var o,r;r=t("util/log").prefix("preloader:"),o=function(){function e(t){var n=this;this.didError=function(){return e.prototype.didError.apply(n,arguments)},this.didLoad=function(){return e.prototype.didLoad.apply(n,arguments)},this.elem=$(t)}return e.prototype.onError=function(e){return this.errorCallback=e,this},e.prototype.onProgress=function(e){return this.progressCallback=e,this},e.prototype.onLoad=function(e){return this.loadCallback=e,this},e.prototype.start=function(){var e;return e=this.elem.find("img"),this.total=e.length,this.count=0,e.on("error",this.didError).on("load",this.didLoad),this},e.prototype.didLoad=function(e){var t;return this.count+=1,t=Math.floor(100*(this.count/this.total)),"function"==typeof this.progressCallback&&this.progressCallback(t),this.count===this.total?("function"==typeof this.progressCallback&&this.progressCallback(100),this.elem.find("img").off(),delete this.elem,"function"==typeof this.loadCallback?this.loadCallback(e):void 0):void 0},e.prototype.didError=function(e){return"function"==typeof this.progressCallback&&this.progressCallback(100),this.elem.find("img").off(),delete this.elem,"function"==typeof this.errorCallback?this.errorCallback(e):void 0},e}(),n.exports=function(e){return new o(e)}},"viewer/template":function(e,t,n){n.exports=function(e){e||(e={});var t,n=[],o=function(e){return e&&e.ecoSafe?e:e!==void 0&&null!=e?i(e):""},r=e.safe,i=e.escape;return t=e.safe=function(e){if(e&&e.ecoSafe)return e;(void 0===e||null==e)&&(e="");var t=new String(e);return t.ecoSafe=!0,t},i||(i=e.escape=function(e){return(""+e).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}),function(){(function(){var e,t,r,i,a;for(n.push('<header>\n  <div class="zoom button"><span>&#10132;</span></div>\n  <h3>'),n.push(o(this.title)),n.push('</h3>\n</header>\n<div class="screen-stack">'),a=this.screens,e=r=0,i=a.length;i>r;e=++r)t=a[e],n.push(' \n<div class="screen"><img src="'),n.push(o(t.src)),n.push('"/></div> \n');n.push(' \n  <div class="screen the-end">\n    <div class="container">\n      <div class="body">\n        <div class="restart">\n          <span class="icon">&#8634;</span>\n          <label>Restart from<br/>beginning.</label>\n        </div>    \n        <!-- <div class="restart">\n          <span class="icon">&#10162;</span>\n          <label>Resume<br/>reading.</label>\n        </div>     -->\n      </div>\n    </div>\n  </div>\n</div> \n'),null!=this.copyright&&(n.push(' \n<footer class="copyright" title="'),n.push(o(this.copyright)),n.push('"><span>'),n.push(o(this.copyright)),n.push("</span></footer> \n")),n.push(' \n<footer class="pager"> \n<div class="prevPage button"><span>&lsaquo;</span></div> \n<div class="progress">\n  <div class="bar background"><span>&nbsp;</span></div>\n  <div class="bar loading done"><span>&nbsp;</span></div>\n  <div class="bar location"><span>&nbsp;</span></div>\n</div> \n<div class="nextPage button"><span>&rsaquo;</span></div> \n</footer>')}).call(this)}.call(e),e.safe=r,e.escape=i,n.join("")}},"viewer/theme-dark":function(e,t,n){var o=null,r='.flipbook.theme-dark {\n  font-family: "Helvetica Neue", Helvetica, Sans-Serif;\n  color: #ddd;\n  -webkit-border-top-left-radius: 4px;\n  border-top-left-radius: 4px;\n  -webkit-border-top-right-radius: 4px;\n  border-top-right-radius: 4px;\n  -webkit-border-bottom-left-radius: 3px;\n  border-bottom-left-radius: 3px;\n  -webkit-border-bottom-right-radius: 3px;\n  border-bottom-right-radius: 3px;\n  background-color: #222;\n  -webkit-box-shadow: 0px 2px 4px #999;\n  box-shadow: 0px 2px 4px #999;\n}\n.flipbook.theme-dark:focus {\n  color: #fff;\n/*  \n    &.inactive\n      header, footer\n        opacity: 0.5\n    */\n}\n.flipbook.theme-dark header {\n  background: none;\n  padding: 5px;\n}\n.flipbook.theme-dark header h3 {\n  padding-left: 5px;\n}\n.flipbook.theme-dark header .zoom {\n  -webkit-border-radius: 4px;\n  border-radius: 4px;\n}\n.flipbook.theme-dark .screen-stack .errors {\n  padding: 25px;\n  text-align: center;\n  color: #900;\n  border: 0;\n  background-color: #fff;\n  border: 1px solid #000;\n}\n.flipbook.theme-dark .screen-stack .screen.the-end {\n  background: rgba(0,0,0,0.7);\n  color: #fff;\n  text-align: center;\n}\n.flipbook.theme-dark footer {\n  background: none;\n}\n.flipbook.theme-dark footer.copyright {\n  background: #000;\n  border-bottom: 1px solid #333;\n  color: #555;\n}\n.flipbook.theme-dark footer.pager {\n  -webkit-border-bottom-left-radius: 4px;\n  border-bottom-left-radius: 4px;\n  -webkit-border-bottom-right-radius: 4px;\n  border-bottom-right-radius: 4px;\n}\n.flipbook.theme-dark footer.pager .progress .bar {\n  -webkit-border-top-left-radius: 6px;\n  border-top-left-radius: 6px;\n  -webkit-border-bottom-left-radius: 6px;\n  border-bottom-left-radius: 6px;\n}\n.flipbook.theme-dark footer.pager .progress .bar.done {\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  border: 0;\n}\n.flipbook.theme-dark footer.pager .progress .bar.background {\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  background: #000;\n}\n.flipbook.theme-dark footer.pager .progress .bar.loading {\n  background-color: #1f1f1f;\n}\n.flipbook.theme-dark footer.pager .progress .bar.location {\n  background-color: #444;\n  border-right: 1px solid #000;\n  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #444), color-stop(1, #333));\n  background: -webkit-linear-gradient(top, #444 0%, #333 100%);\n  background: -moz-linear-gradient(top, #444 0%, #333 100%);\n  background: -o-linear-gradient(top, #444 0%, #333 100%);\n  background: -ms-linear-gradient(top, #444 0%, #333 100%);\n  background: linear-gradient(top, #444 0%, #333 100%);\n}\n.flipbook.theme-dark footer.pager .button {\n  -webkit-border-radius: 4px;\n  border-radius: 4px;\n}\n.flipbook.theme-dark footer.pager .button.disabled {\n  opacity: 0.3;\n  filter: alpha(opacity=30);\n  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";\n}\n.flipbook.theme-dark.isDesktop .button:hover {\n  background: #444;\n}\n.flipbook.theme-dark.isDesktop .button.disabled:hover {\n  background: none;\n}\n';n.exports={content:r,isActive:function(){return null!=o},activate:function(e){return null==o?(e=e||document.getElementsByTagName("HEAD")[0]||document.body||document,o=document.createElement("style"),o.innerHTML=r,e.appendChild(o),this):void 0},deactivate:function(){return null!=o&&(o.parentNode.removeChild(o),o=null),this}}},"viewer/theme-default":function(e,t,n){var o=null,r='.flipbook.theme-default {\n  font-family: "Helvetica Neue", Helvetica, Sans-Serif;\n  color: #555;\n}\n.flipbook.theme-default:focus {\n  color: #000;\n/*  \n    &.inactive\n      header, footer\n        opacity: 0.5\n    */\n}\n.flipbook.theme-default header {\n  border-top: 1px solid #ddd;\n  background: #ccc;\n  -webkit-border-top-left-radius: 4px;\n  border-top-left-radius: 4px;\n  -webkit-border-top-right-radius: 4px;\n  border-top-right-radius: 4px;\n  margin: 0 4px;\n  padding: 5px;\n}\n.flipbook.theme-default header h3 {\n  padding-left: 5px;\n}\n.flipbook.theme-default header .zoom {\n  -webkit-border-radius: 4px;\n  border-radius: 4px;\n}\n.flipbook.theme-default .screen-stack {\n  -webkit-box-shadow: 0px 2px 9px #777;\n  box-shadow: 0px 2px 9px #777;\n}\n.flipbook.theme-default .screen-stack .errors {\n  padding: 25px;\n  text-align: center;\n  border: 0;\n}\n.flipbook.theme-default .screen-stack .screen.the-end {\n  background: rgba(0,0,0,0.7);\n  color: #fff;\n  text-align: center;\n}\n.flipbook.theme-default footer {\n  background: #ccc;\n  margin: 0 4px;\n}\n.flipbook.theme-default footer.copyright {\n  background: #bbb;\n  color: #777;\n}\n.flipbook.theme-default footer.pager {\n  -webkit-border-bottom-left-radius: 4px;\n  border-bottom-left-radius: 4px;\n  -webkit-border-bottom-right-radius: 4px;\n  border-bottom-right-radius: 4px;\n  border-top: 1px solid #ddd;\n  border-bottom: 1px solid #bbb;\n}\n.flipbook.theme-default footer.pager .progress .bar {\n  -webkit-border-top-left-radius: 6px;\n  border-top-left-radius: 6px;\n  -webkit-border-bottom-left-radius: 6px;\n  border-bottom-left-radius: 6px;\n}\n.flipbook.theme-default footer.pager .progress .bar.done {\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  border: 0;\n}\n.flipbook.theme-default footer.pager .progress .bar.background {\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  background: #aaa;\n}\n.flipbook.theme-default footer.pager .progress .bar.loading {\n  background-color: #bbb;\n}\n.flipbook.theme-default footer.pager .progress .bar.location {\n  background-color: #ccc;\n  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ddd), color-stop(1, #aaa));\n  background: -webkit-linear-gradient(top, #ddd 0%, #aaa 100%);\n  background: -moz-linear-gradient(top, #ddd 0%, #aaa 100%);\n  background: -o-linear-gradient(top, #ddd 0%, #aaa 100%);\n  background: -ms-linear-gradient(top, #ddd 0%, #aaa 100%);\n  background: linear-gradient(top, #ddd 0%, #aaa 100%);\n  border-right: 1px solid #aaa;\n}\n.flipbook.theme-default footer.pager .button {\n  -webkit-border-radius: 4px;\n  border-radius: 4px;\n}\n.flipbook.theme-default footer.pager .button.disabled {\n  opacity: 0.3;\n  filter: alpha(opacity=30);\n  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";\n}\n.flipbook.theme-default.isDesktop .button:hover {\n  background: #eee;\n}\n.flipbook.theme-default.isDesktop .button.disabled:hover {\n  background: none;\n}\n';
-n.exports={content:r,isActive:function(){return null!=o},activate:function(e){return null==o?(e=e||document.getElementsByTagName("HEAD")[0]||document.body||document,o=document.createElement("style"),o.innerHTML=r,e.appendChild(o),this):void 0},deactivate:function(){return null!=o&&(o.parentNode.removeChild(o),o=null),this}}},"viewer/theme-light":function(e,t,n){var o=null,r='.flipbook.theme-light {\n  font-family: "Helvetica Neue", Helvetica, Sans-Serif;\n  color: #555;\n  background: #fff;\n  -webkit-box-shadow: 0px 1px 4px #aaa;\n  box-shadow: 0px 1px 4px #aaa;\n}\n.flipbook.theme-light:focus {\n  color: #000;\n/*  \n    &.inactive\n      header, footer\n        opacity: 0.5\n    */\n}\n.flipbook.theme-light header {\n  border: 1px solid #ddd;\n  background: none;\n  padding: 5px;\n  z-index: 20;\n  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #f0f0f0));\n  background: -webkit-linear-gradient(top, #fff 0%, #f0f0f0 100%);\n  background: -moz-linear-gradient(top, #fff 0%, #f0f0f0 100%);\n  background: -o-linear-gradient(top, #fff 0%, #f0f0f0 100%);\n  background: -ms-linear-gradient(top, #fff 0%, #f0f0f0 100%);\n  background: linear-gradient(top, #fff 0%, #f0f0f0 100%);\n}\n.flipbook.theme-light header h3 {\n  padding-left: 5px;\n}\n.flipbook.theme-light header .zoom {\n  -webkit-border-radius: 4px;\n  border-radius: 4px;\n}\n.flipbook.theme-light .screen-stack {\n  z-index: 10;\n}\n.flipbook.theme-light .screen-stack .errors {\n  padding: 25px;\n  text-align: center;\n  border: 0;\n}\n.flipbook.theme-light .screen-stack .screen.the-end {\n  background: rgba(0,0,0,0.7);\n  color: #fff;\n  text-align: center;\n}\n.flipbook.theme-light footer.copyright {\n  color: #999;\n  background: #bbb;\n  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #e0e0e0), color-stop(1, #efefef));\n  background: -webkit-linear-gradient(top, #e0e0e0 0%, #efefef 100%);\n  background: -moz-linear-gradient(top, #e0e0e0 0%, #efefef 100%);\n  background: -o-linear-gradient(top, #e0e0e0 0%, #efefef 100%);\n  background: -ms-linear-gradient(top, #e0e0e0 0%, #efefef 100%);\n  background: linear-gradient(top, #e0e0e0 0%, #efefef 100%);\n}\n.flipbook.theme-light footer.pager {\n  border: 1px solid #ddd;\n  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #f0f0f0));\n  background: -webkit-linear-gradient(top, #fff 0%, #f0f0f0 100%);\n  background: -moz-linear-gradient(top, #fff 0%, #f0f0f0 100%);\n  background: -o-linear-gradient(top, #fff 0%, #f0f0f0 100%);\n  background: -ms-linear-gradient(top, #fff 0%, #f0f0f0 100%);\n  background: linear-gradient(top, #fff 0%, #f0f0f0 100%);\n}\n.flipbook.theme-light footer.pager .progress .bar {\n  -webkit-border-top-left-radius: 6px;\n  border-top-left-radius: 6px;\n  -webkit-border-bottom-left-radius: 6px;\n  border-bottom-left-radius: 6px;\n}\n.flipbook.theme-light footer.pager .progress .bar.done {\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  border: 0;\n}\n.flipbook.theme-light footer.pager .progress .bar.background {\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  background: #ccc;\n}\n.flipbook.theme-light footer.pager .progress .bar.loading {\n  background-color: #dadada;\n}\n.flipbook.theme-light footer.pager .progress .bar.location {\n  background-color: #eee;\n  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #ddd));\n  background: -webkit-linear-gradient(top, #fff 0%, #ddd 100%);\n  background: -moz-linear-gradient(top, #fff 0%, #ddd 100%);\n  background: -o-linear-gradient(top, #fff 0%, #ddd 100%);\n  background: -ms-linear-gradient(top, #fff 0%, #ddd 100%);\n  background: linear-gradient(top, #fff 0%, #ddd 100%);\n  border-right: 1px solid #ccc;\n}\n.flipbook.theme-light footer.pager .button {\n  -webkit-border-radius: 4px;\n  border-radius: 4px;\n}\n.flipbook.theme-light footer.pager .button.disabled {\n  opacity: 0.3;\n  filter: alpha(opacity=30);\n  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";\n}\n.flipbook.theme-light.isDesktop .button:hover {\n  background: #eee;\n}\n.flipbook.theme-light.isDesktop .button.disabled:hover {\n  background: none;\n}\n';n.exports={content:r,isActive:function(){return null!=o},activate:function(e){return null==o?(e=e||document.getElementsByTagName("HEAD")[0]||document.body||document,o=document.createElement("style"),o.innerHTML=r,e.appendChild(o),this):void 0},deactivate:function(){return null!=o&&(o.parentNode.removeChild(o),o=null),this}}}}),flipbook("main");
+/* FlipBook v1.0.0-73 */
+(function(/*! Stitched by Assembot !*/) {
+  /* 
+    The commonjs code below was based on @sstephenson's stitch.
+    https://github.com/sstephenson/stitch
+  */
+  if (!this.flipbook) {
+    var modules = {}, cache = {}, moduleList= function(startingWith) {
+      var names= [], startingWith= startingWith || '';
+      for( var name in modules ) {
+        if(name.indexOf(startingWith) === 0) names.push(name);
+      }
+      return names;
+    }, require = function(name, root) {
+      var path = expand(root, name), module = cache[path], fn;
+      if (module) {
+        return module.exports;
+      } else if (fn = modules[path] || modules[path = expand(path, './index')]) {
+        module = {id: path, exports: {}};
+        try {
+          cache[path] = module;
+          var localRequire= function(name) {
+            return require(name, dirname(path));
+          }
+          localRequire.modules= moduleList;
+          fn(module.exports, localRequire, module);
+          return module.exports;
+        } catch (err) {
+          delete cache[path];
+          throw err;
+        }
+      } else {
+        throw 'module \'' + name + '\' not found';
+      }
+    }, expand = function(root, name) {
+      var results = [], parts, part;
+      if (/^\.\.?(\/|$)/.test(name)) {
+        parts = [root, name].join('/').split('/');
+      } else {
+        parts = name.split('/');
+      }
+      for (var i = 0, length = parts.length; i < length; i++) {
+        part = parts[i];
+        if (part == '..') {
+          results.pop();
+        } else if (part != '.' && part != '') {
+          results.push(part);
+        }
+      }
+      return results.join('/');
+    }, dirname = function(path) {
+      return path.split('/').slice(0, -1).join('/');
+    };
+    this.flipbook = function(name) {
+      return require(name, '');
+    }
+    this.flipbook.define = function(bundle) {
+      for (var key in bundle)
+        modules[key] = bundle[key];
+    };
+    this.flipbook.modules= moduleList;
+  }
+  return this.flipbook.define;
+}).call(this)({
+"cog/events": function(exports, require, module) {
+var Events,
+  __slice = [].slice;
+
+Events = (function() {
+
+  function Events() {}
+
+  Events.mixin = function() {
+    var fn, name, target, targets, _i, _len, _ref;
+    targets = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    for (_i = 0, _len = targets.length; _i < _len; _i++) {
+      target = targets[_i];
+      _ref = this.prototype;
+      for (name in _ref) {
+        fn = _ref[name];
+        target[name] = fn;
+      }
+    }
+    return this;
+  };
+
+  Events.prototype.emit = function() {
+    var args, event, listener, _i, _len, _ref, _ref1;
+    event = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    if (!((_ref = this._events) != null ? _ref[event] : void 0)) {
+      return false;
+    }
+    _ref1 = this._events[event];
+    for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+      listener = _ref1[_i];
+      listener.apply(null, args);
+    }
+    return true;
+  };
+
+  Events.prototype.trigger = Events.prototype.emit;
+
+  Events.prototype.fire = Events.prototype.emit;
+
+  Events.prototype.addListener = function(event, listener) {
+    var _base, _ref, _ref1;
+    this.emit('newListener', event, listener);
+    ((_ref = (_base = ((_ref1 = this._events) != null ? _ref1 : this._events = {}))[event]) != null ? _ref : _base[event] = []).push(listener);
+    return this;
+  };
+
+  Events.prototype.on = Events.prototype.addListener;
+
+  Events.prototype.once = function(event, listener) {
+    var fn,
+      _this = this;
+    fn = function() {
+      _this.removeListener(event, fn);
+      return listener.apply(null, arguments);
+    };
+    this.on(event, fn);
+    return this;
+  };
+
+  Events.prototype.removeListener = function(event, listener) {
+    var l, _ref;
+    if (!((_ref = this._events) != null ? _ref[event] : void 0)) {
+      return this;
+    }
+    this._events[event] = (function() {
+      var _i, _len, _ref1, _results;
+      _ref1 = this._events[event];
+      _results = [];
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        l = _ref1[_i];
+        if (l !== listener) {
+          _results.push(l);
+        }
+      }
+      return _results;
+    }).call(this);
+    return this;
+  };
+
+  Events.prototype.off = Events.prototype.removeListener;
+
+  Events.prototype.removeAllListeners = function(event) {
+    if (this._events != null) {
+      delete this._events[event];
+    }
+    return this;
+  };
+
+  Events.prototype.listeners = function(event) {
+    var _ref;
+    if ((_ref = this._events) != null ? _ref[event] : void 0) {
+      return this.events[event];
+    } else {
+      return [];
+    }
+  };
+
+  Events.prototype.listenTo = function(emitter, event, callback) {
+    var id, _base, _ref, _ref1, _ref2;
+    if (!((emitter != null) && (event != null) && (callback != null))) {
+      return this;
+    }
+    id = ((_ref = emitter._emitterId) != null ? _ref : emitter._emitterId = uid());
+    if ((_ref1 = (_base = ((_ref2 = this._emitterBindings) != null ? _ref2 : this._emitterBindings = {}))[id]) == null) {
+      _base[id] = [];
+    }
+    this._emitterBindings[id].push({
+      target: emitter,
+      message: event,
+      action: callback
+    });
+    emitter.on(event, callback);
+    return this;
+  };
+
+  Events.prototype.stopListening = function(emitter, event, callback) {
+    var action, binding, bindings, id, message, removed, target, _i, _j, _len, _len1, _ref;
+    if (this._emitterBindings == null) {
+      return this;
+    }
+    if (emitter === null) {
+      _ref = this._emitterBindings;
+      for (id in _ref) {
+        binding = _ref[id];
+        target = binding.target, message = binding.message, action = binding.action;
+        target.off(message, action);
+      }
+      this._emitterBindings = {};
+    } else {
+      bindings = this._emitterBindings[emitter._emitterId];
+      if (binding == null) {
+        return this;
+      }
+      removed = [];
+      if (event === null) {
+        while (binding = bindings.pop()) {
+          target = binding.target, message = binding.message, action = binding.action;
+          target.off(message, action);
+        }
+      } else if (callback === null) {
+        for (_i = 0, _len = bindings.length; _i < _len; _i++) {
+          binding = bindings[_i];
+          if (!(binding.message === event)) {
+            continue;
+          }
+          target = binding.target, message = binding.message, action = binding.action;
+          target.off(message, action);
+          removed.push(binding);
+        }
+      } else {
+        for (_j = 0, _len1 = bindings.length; _j < _len1; _j++) {
+          binding = bindings[_j];
+          if (!(binding.message === event && binding.action === callback)) {
+            continue;
+          }
+          target = binding.target, message = binding.message, action = binding.action;
+          target.off(message, action);
+          removed.push(binding);
+        }
+      }
+      if (removed.length > 0) {
+        this._emitterBindings[emitter._emitterId] = arrayWithout(bindings, removed);
+      }
+    }
+    return this;
+  };
+
+  return Events;
+
+})();
+
+module.exports = Events;
+
+},
+"cog/view": function(exports, require, module) {
+var View, events, uid;
+
+events = require('./events');
+
+uid = require('util/uid');
+
+View = (function() {
+
+  events.mixin(View, View.prototype);
+
+  View.prototype.tagName = 'div';
+
+  View.prototype.className = 'view';
+
+  View.prototype.template = null;
+
+  View.prototype.events = {};
+
+  View.prototype.outlets = {};
+
+  function View(options) {
+    var _ref;
+    this.options = options != null ? options : {};
+    this.id = uid('view-');
+    this.model = (_ref = this.options.model) != null ? _ref : {};
+    this._createElem();
+    this.assignEvents();
+    if (typeof this.initialize === "function") {
+      this.initialize();
+    }
+  }
+
+  View.prototype._createElem = function() {
+    if (this.options.elem != null) {
+      return this.elem = $(this.options.elem);
+    } else {
+      return this.elem = $("<" + this.tagName + " class='" + this.className + "'></" + this.tagName + ">");
+    }
+  };
+
+  View.prototype.assignEvents = function() {
+    var callback, eparts, evt, sel, _ref;
+    _ref = this.events;
+    for (evt in _ref) {
+      callback = _ref[evt];
+      eparts = evt.split(' ');
+      if (eparts.length > 1) {
+        evt = eparts.shift();
+        sel = eparts.join(' ');
+        this.elem.on(evt, sel, this[callback]);
+      } else {
+        this.elem.on(evt, this[callback]);
+      }
+    }
+    return this;
+  };
+
+  View.prototype.unassignEvents = function() {
+    var callback, eparts, evt, sel, _ref;
+    _ref = this.events;
+    for (evt in _ref) {
+      callback = _ref[evt];
+      eparts = evt.split(' ');
+      if (eparts.length > 1) {
+        evt = eparts.shift();
+        sel = eparts.join(' ');
+        this.elem.off(evt, sel, this[callback]);
+      } else {
+        this.elem.off(evt, this[callback]);
+      }
+    }
+    return this;
+  };
+
+  View.prototype.assignOutlets = function() {
+    var outlet, sel, _ref;
+    this.ui = {};
+    _ref = this.outlets;
+    for (outlet in _ref) {
+      sel = _ref[outlet];
+      this.ui[outlet] = this.elem.find(sel);
+      this[outlet] = this.elem.find(sel);
+    }
+    return this;
+  };
+
+  View.prototype.unassignOutlets = function() {
+    var elem, outlet, _ref;
+    _ref = this.ui;
+    for (outlet in _ref) {
+      elem = _ref[outlet];
+      delete this.ui[outlet];
+      delete this[outlet];
+    }
+    return this;
+  };
+
+  View.prototype.dispose = function() {
+    this.unassignEvents();
+    this.unassignOutlets();
+    return this;
+  };
+
+  View.prototype.close = function() {
+    if (typeof this.beforeClose === "function") {
+      this.beforeClose();
+    }
+    this.dispose();
+    this.elem.remove();
+    if (typeof this.onClose === "function") {
+      this.onClose();
+    }
+    return this;
+  };
+
+  View.prototype.getData = function() {
+    var _base, _ref;
+    return (_ref = typeof (_base = this.model).toJSON === "function" ? _base.toJSON() : void 0) != null ? _ref : this.model;
+  };
+
+  View.prototype.appendTo = function(elem) {
+    this.render();
+    elem.append(this.elem);
+    return typeof this.onDomActive === "function" ? this.onDomActive() : void 0;
+  };
+
+  View.prototype.addView = function(outlet, view) {};
+
+  View.prototype.replaceView = View.prototype.addView;
+
+  View.prototype.appendView = function(outlet, view) {};
+
+  View.prototype.render = function() {
+    var data, html;
+    if (typeof this.beforeRender === "function") {
+      this.beforeRender();
+    }
+    this.fire('before:render', this);
+    data = this.getData();
+    html = this.template(data);
+    this.elem.html(html);
+    this.assignOutlets();
+    this.fire('render', this);
+    if (typeof this.onRender === "function") {
+      this.onRender();
+    }
+    return this;
+  };
+
+  return View;
+
+})();
+
+module.exports = View;
+
+},
+"env": function(exports, require, module) {
+
+module.exports = {
+  version: require('version'),
+  debug: true,
+  test: false,
+  mobile: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/) != null
+};
+
+},
+"main": function(exports, require, module) {
+var Viewer, ensure, env, hammertime, init, log, scanner, validate;
+
+env = require('env');
+
+log = require('util/log').prefix('main:');
+
+ensure = require('util/ensure');
+
+scanner = require('scanner');
+
+validate = require('validator');
+
+Viewer = require('viewer/controller');
+
+hammertime = function() {
+  if (env.mobile) {
+    return ensure.libs.hammer();
+  } else {
+    return null;
+  }
+};
+
+ensure('jquery', hammertime, function(err) {
+  if (err != null) {
+    throw err;
+  }
+  return $(init);
+});
+
+init = function() {
+  var flipbooks, item, model, view, _i, _len, _ref, _results;
+  if (env.debug) {
+    log.level(2);
+  }
+  log.info("FlipBook v" + env.version);
+  log.debug("ENV", env);
+  log.info("Ready.");
+  flipbooks = scanner.run();
+  _results = [];
+  for (_i = 0, _len = flipbooks.length; _i < _len; _i++) {
+    _ref = flipbooks[_i], item = _ref.item, model = _ref.model;
+    if (validate(model)) {
+      view = new Viewer({
+        model: model
+      });
+      _results.push(view.appendTo($(item).empty()));
+    } else {
+      _results.push(log.info("! Invalid model:", validate.errors(), model));
+    }
+  }
+  return _results;
+};
+
+if (env.debug && env.mobile) {
+  ensure('firebug', function(err) {
+    return window.onerror = function(err) {
+      return log.info("ERROR!", err);
+    };
+  });
+}
+
+/*
+// prevents these from being pruned
+require('viewer/theme-light');
+require('viewer/theme-dark');
+require('viewer/theme-default');
+*/
+
+
+},
+"scanner": function(exports, require, module) {
+var api, log, scanners;
+
+log = require('util/log').prefix('scanner:');
+
+scanners = [];
+
+module.exports = api = {
+  define: function(handler) {
+    scanners.push(handler);
+    return this;
+  },
+  run: function() {
+    var result, results, scanner, _i, _j, _len, _len1, _ref;
+    results = [];
+    for (_i = 0, _len = scanners.length; _i < _len; _i++) {
+      scanner = scanners[_i];
+      _ref = scanner();
+      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+        result = _ref[_j];
+        results.push(result);
+      }
+    }
+    return results;
+  }
+};
+
+api.define(function() {
+  var results;
+  results = [];
+  $('[data-flipbook]').each(function(i, item) {
+    var data, key, model, parts, seg, value, _i, _len, _ref;
+    data = $(item).data('flipbook');
+    model = {};
+    _ref = data.split(',');
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      seg = _ref[_i];
+      parts = seg.split(':');
+      key = parts.shift();
+      value = parts.join(':');
+      model[$.trim(key)] = $.trim(value);
+    }
+    return results.push({
+      item: item,
+      model: model
+    });
+  });
+  return results;
+});
+
+api.define(function() {
+  var results;
+  results = [];
+  $('[data-flipbook-pages]').each(function(i, item) {
+    var att, model, name, _i, _len, _ref, _ref1, _ref2;
+    i = $(item);
+    model = {};
+    _ref = item.attributes;
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      att = _ref[_i];
+      name = String((_ref1 = att.name) != null ? _ref1 : att.nodeName);
+      if (name.indexOf('data-flipbook-') === 0) {
+        name = name.replace('data-flipbook-', '');
+        model[name] = (_ref2 = att.value) != null ? _ref2 : att.nodeValue;
+      }
+    }
+    return results.push({
+      item: item,
+      model: model
+    });
+  });
+  return results;
+});
+
+},
+"util/ensure": function(exports, require, module) {
+var libs, load_script, loader, protocol,
+  __slice = [].slice;
+
+libs = {
+  angular: function() {
+    return typeof angular !== "undefined" && angular !== null ? angular : '//ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js';
+  },
+  backbone: function() {
+    return typeof Backbone !== "undefined" && Backbone !== null ? Backbone : '//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.10/backbone-min.js';
+  },
+  fastclick: function() {
+    return typeof FastClick !== "undefined" && FastClick !== null ? FastClick : '//cdnjs.cloudflare.com/ajax/libs/fastclick/0.6.0/fastclick.min.js';
+  },
+  firebug: function() {
+    return typeof FBL !== "undefined" && FBL !== null ? FBL : 'https://getfirebug.com/releases/lite/1.4/firebug-lite.js';
+  },
+  hammer: function() {
+    return typeof Hammer !== "undefined" && Hammer !== null ? Hammer : 'https://raw.github.com/EightMedia/hammer.js/v1.0.3/dist/hammer.min.js';
+  },
+  jquery: function() {
+    return typeof jQuery !== "undefined" && jQuery !== null ? jQuery : '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js';
+  },
+  jqueryui: function() {
+    var _ref;
+    return (_ref = typeof jQuery !== "undefined" && jQuery !== null ? jQuery.Widget : void 0) != null ? _ref : '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js';
+  },
+  underscore: function() {
+    return typeof _ !== "undefined" && _ !== null ? _ : '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js';
+  },
+  webfont: function() {
+    return typeof WebFont !== "undefined" && WebFont !== null ? WebFont : '//ajax.googleapis.com/ajax/libs/webfont/1.1.2/webfont.js';
+  },
+  zepto: function() {
+    return typeof Zepto !== "undefined" && Zepto !== null ? Zepto : '//cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js';
+  }
+};
+
+protocol = location.protocol === 'file:' ? "http:" : '';
+
+load_script = function(name, callback) {
+  var script, url, _ref, _ref1;
+  url = (_ref = (_ref1 = typeof name === "function" ? name() : void 0) != null ? _ref1 : typeof libs[name] === "function" ? libs[name]() : void 0) != null ? _ref : null;
+  if (typeof url !== 'string') {
+    return callback(null);
+  }
+  script = document.createElement('script');
+  script.type = "text/javascript";
+  if (loader.defer) {
+    script.defer = true;
+  }
+  if (loader.async) {
+    script.async = true;
+  }
+  script.onload = function(e) {
+    return callback(null);
+  };
+  script.onerror = function(e) {
+    return callback(new Error("Could not load external resource: " + name + " from " + url));
+  };
+  script.src = url[0] === '/' ? "" + protocol + url : url;
+  script.onreadystatechange = function() {
+    if (script.readyState === 'loaded' || script.readyState === 'complete') {
+      script.onreadystatechange = null;
+      return callback(null);
+    }
+  };
+  document.getElementsByTagName('HTML')[0].appendChild(script);
+  return script;
+};
+
+loader = function() {
+  var callback, libs, load_handler, nextLib;
+  libs = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+  callback = typeof libs.slice(-1)[0] === 'function' ? libs.pop() : function(err) {
+    if (err != null) {
+      throw err;
+    }
+    return typeof console !== "undefined" && console !== null ? typeof console.log === "function" ? console.log("Library loading complete.") : void 0 : void 0;
+  };
+  nextLib = libs.shift();
+  load_handler = function(err) {
+    if (err != null) {
+      return callback(err);
+    }
+    if (libs.length === 0) {
+      return callback(null);
+    } else {
+      nextLib = libs.shift();
+      return load_script(nextLib, load_handler);
+    }
+  };
+  load_script(nextLib, load_handler);
+  return null;
+};
+
+loader.async = true;
+
+loader.defer = false;
+
+loader.libs = libs;
+
+if (typeof module !== "undefined" && module !== null) {
+  module.exports = loader;
+} else {
+  this.ensure = loader;
+}
+
+},
+"util/log": function(exports, require, module) {
+var clog, debug, error, info, level, log_level, prefix, say, toArray;
+
+log_level = 1;
+
+clog = (function() {
+  if (typeof console !== "undefined" && console !== null) {
+    return function(args) {
+      return console.log.apply(console, args);
+    };
+  } else {
+    return function() {};
+  }
+})();
+
+level = function(lvl) {
+  if (lvl != null) {
+    log_level = (function() {
+      switch (lvl) {
+        case -1:
+        case 'none':
+        case 'n':
+          return -1;
+        case 0:
+        case 'quiet':
+        case '1':
+          return 0;
+        case 1:
+        case 'info':
+        case 'i':
+          return 1;
+        case 2:
+        case 'debug':
+        case 'd':
+          return 2;
+        default:
+          return log_level;
+      }
+    })();
+  }
+  return log_level;
+};
+
+say = function() {
+  if (log_level < 0) {
+    return;
+  }
+  return clog(arguments);
+};
+
+info = function() {
+  if (log_level < 1) {
+    return;
+  }
+  return clog(arguments);
+};
+
+debug = function() {
+  if (log_level < 2) {
+    return;
+  }
+  return clog(arguments);
+};
+
+error = function() {
+  var lines, newError;
+  newError = new Error;
+  if (newError.stack != null) {
+    lines = newError.stack.split("\n");
+    if (typeof console !== "undefined" && console !== null) {
+      if (typeof console.error === "function") {
+        console.error("Error", lines[2].trim());
+      }
+    }
+  }
+  return clog(arguments);
+};
+
+toArray = Array.prototype.slice;
+
+prefix = function(msg) {
+  return {
+    level: level,
+    say: function() {
+      var a;
+      if (log_level < 0) {
+        return;
+      }
+      (a = toArray.call(arguments)).unshift(msg);
+      return say.apply(say, a);
+    },
+    info: function() {
+      var a;
+      if (log_level < 1) {
+        return;
+      }
+      (a = toArray.call(arguments)).unshift(msg);
+      return info.apply(info, a);
+    },
+    debug: function() {
+      var a;
+      if (log_level < 2) {
+        return;
+      }
+      (a = toArray.call(arguments)).unshift(msg);
+      return debug.apply(debug, a);
+    },
+    error: function() {
+      var a;
+      (a = toArray.call(arguments)).unshift(msg);
+      return error.apply(error, a);
+    }
+  };
+};
+
+module.exports = {
+  level: level,
+  info: info,
+  debug: debug,
+  error: error,
+  say: say,
+  prefix: prefix
+};
+
+
+// IE Hack, source:
+// http://stackoverflow.com/questions/5538972/console-log-apply-not-working-in-ie9
+if (Function.prototype.bind && console && typeof console.log == "object") {
+  [
+    "log","info","warn","error","assert","dir","clear","profile","profileEnd"
+  ].forEach(function (method) {
+      console[method] = this.bind(console[method], console);
+  }, Function.prototype.call);
+}
+;
+
+},
+"util/number/pad": function(exports, require, module) {
+var pad;
+
+module.exports = pad = function(num, len) {
+  var str;
+  str = "" + num;
+  while (str.length < len) {
+    str = "0" + str;
+  }
+  return str;
+};
+
+},
+"util/uid": function(exports, require, module) {
+var counter;
+
+counter = 1;
+
+module.exports = function(prefix) {
+  if (prefix == null) {
+    prefix = '';
+  }
+  return prefix + (++counter);
+};
+
+},
+"validator": function(exports, require, module) {
+var errors, fixupTypes, log, validator;
+
+log = require('util/log').prefix('validator:');
+
+errors = [];
+
+fixupTypes = function(o) {
+  var _ref;
+  if (typeof o.pages === 'string') {
+    o.pages = parseInt(o.pages, 10);
+  }
+  o.start = o.start != null ? typeof o.start === 'string' ? parseInt(o.start, 10) : void 0 : 1;
+  return (_ref = o.theme) != null ? _ref : o.theme = 'default';
+};
+
+module.exports = validator = function(options) {
+  errors = [];
+  if (options.path == null) {
+    errors.push("path is missing");
+  }
+  if (options.pages == null) {
+    errors.push("pages is missing");
+  }
+  if (errors.length === 0) {
+    fixupTypes(options);
+    return true;
+  } else {
+    return false;
+  }
+};
+
+validator.errors = function() {
+  return errors.join(', ');
+};
+
+},
+"version": function(exports, require, module) {
+
+module.exports = "1.0.0-73";
+
+},
+"viewer/controller": function(exports, require, module) {
+var CogView, Viewer, build_url, env, events, getX, keyListener, log, nextKeys, pad, preloader, prevKeys, setTheme, uid,
+  _this = this,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+env = require('env');
+
+uid = require('util/uid');
+
+pad = require('util/number/pad');
+
+log = require('util/log').prefix('controller:');
+
+events = require('cog/events');
+
+preloader = require('./preloader');
+
+require('./layout').activate();
+
+CogView = require('cog/view');
+
+getX = function(e) {
+  var offset;
+  if (e.offsetX != null) {
+    return e.offsetX;
+  } else {
+    offset = $(e.target).offset();
+    if (e.gesture != null) {
+      return e.gesture.center.pageX - offset.left;
+    } else {
+      return e.pageX - offset.left;
+    }
+  }
+};
+
+keyListener = {
+  ready: false,
+  init: function() {
+    if (this.ready || env.mobile) {
+      return;
+    }
+    $(document).on('keydown', this.onKeyInput);
+    return this.ready = true;
+  },
+  onKeyInput: function(e) {
+    if (Viewer.active != null) {
+      return Viewer.active.onKeyInput(e);
+    }
+  }
+};
+
+build_url = function(pattern, idx) {
+  pattern = pattern.replace('####', pad(idx, 4));
+  pattern = pattern.replace('###', pad(idx, 3));
+  pattern = pattern.replace('##', pad(idx, 2));
+  return pattern = pattern.replace('#', idx);
+};
+
+setTheme = function(o) {
+  var theme_name;
+  theme_name = "theme-" + o.theme;
+  try {
+    require("./" + theme_name).activate();
+    return theme_name;
+  } catch (ex) {
+    require("./theme-default").activate();
+    return "theme-default";
+  }
+};
+
+nextKeys = [39, 32];
+
+prevKeys = [37];
+
+Viewer = (function(_super) {
+
+  __extends(Viewer, _super);
+
+  function Viewer() {
+    var _this = this;
+    this.onLoadError = function(e) {
+      return Viewer.prototype.onLoadError.apply(_this, arguments);
+    };
+    this.onLoad = function() {
+      return Viewer.prototype.onLoad.apply(_this, arguments);
+    };
+    this.prevPage = function(e) {
+      return Viewer.prototype.prevPage.apply(_this, arguments);
+    };
+    this.nextPage = function(e) {
+      return Viewer.prototype.nextPage.apply(_this, arguments);
+    };
+    this.didBlur = function(e) {
+      return Viewer.prototype.didBlur.apply(_this, arguments);
+    };
+    this.didFocus = function(e) {
+      return Viewer.prototype.didFocus.apply(_this, arguments);
+    };
+    this.stopScrubbing = function(e) {
+      return Viewer.prototype.stopScrubbing.apply(_this, arguments);
+    };
+    this.startScrubbing = function(e) {
+      return Viewer.prototype.startScrubbing.apply(_this, arguments);
+    };
+    this.didTapScrubber = function(e) {
+      return Viewer.prototype.didTapScrubber.apply(_this, arguments);
+    };
+    this.didTap = function(e) {
+      return Viewer.prototype.didTap.apply(_this, arguments);
+    };
+    this.navigateTo = function(idx) {
+      return Viewer.prototype.navigateTo.apply(_this, arguments);
+    };
+    this.onKeyInput = function(e) {
+      return Viewer.prototype.onKeyInput.apply(_this, arguments);
+    };
+    return Viewer.__super__.constructor.apply(this, arguments);
+  }
+
+  Viewer.active = null;
+
+  Viewer.prototype.className = 'flipbook';
+
+  Viewer.prototype.template = require('./template');
+
+  Viewer.prototype.outlets = {
+    stack: '.screen-stack',
+    nextBtn: '.nextPage',
+    prevBtn: '.prevPage',
+    restartBtn: '.restart',
+    pagerArea: '.pager',
+    progressBar: '.progress',
+    locationBar: '.progress .location',
+    loadingBar: '.progress .loading'
+  };
+
+  Viewer.prototype.initialize = function() {
+    this.screenCount = this.model.pages;
+    this.current = 0;
+    this.ready = false;
+    this.active = false;
+    this.atEnd = false;
+    this.elem.attr('tabindex', -1).addClass('inactive').addClass(setTheme(this.model));
+    if (env.mobile) {
+      this.elem.addClass('isMobile');
+    } else {
+      this.elem.addClass('isDesktop');
+    }
+    return keyListener.init();
+  };
+
+  Viewer.prototype.onKeyInput = function(e) {
+    var _ref, _ref1;
+    if (!(this.ready && this.active)) {
+      return;
+    }
+    if (_ref = e.which, __indexOf.call(nextKeys, _ref) >= 0) {
+      if (!this.atEnd) {
+        this.nextPage(e);
+      }
+      return false;
+    } else if (_ref1 = e.which, __indexOf.call(prevKeys, _ref1) >= 0) {
+      this.prevPage(e);
+      return false;
+    }
+  };
+
+  Viewer.prototype.navigateTo = function(idx) {
+    if (idx === this.current || idx < 0 || idx === this.screenCount) {
+      return;
+    }
+    if (this.atEnd) {
+      this.stack.find('.the-end').hide();
+      this.atEnd = false;
+      this.nextBtn.toggleClass('disabled', this.atEnd);
+    }
+    this.hideCurrent();
+    this.current = idx;
+    return this.showCurrent();
+  };
+
+  Viewer.prototype.didTap = function(e) {
+    var x;
+    if (this.atEnd) {
+      return;
+    }
+    if (e != null) {
+      if (typeof e.preventDefault === "function") {
+        e.preventDefault();
+      }
+    }
+    if (e != null) {
+      if (typeof e.stopPropagation === "function") {
+        e.stopPropagation();
+      }
+    }
+    x = getX(e);
+    if (x < (this.imageW / 2)) {
+      this.prevPage();
+    } else {
+      this.nextPage();
+    }
+    return false;
+  };
+
+  Viewer.prototype.didTapScrubber = function(e) {
+    var p, page, x;
+    if (e != null) {
+      if (typeof e.preventDefault === "function") {
+        e.preventDefault();
+      }
+    }
+    if (e != null) {
+      if (typeof e.stopPropagation === "function") {
+        e.stopPropagation();
+      }
+    }
+    x = getX(e);
+    p = x / this.progressWidth;
+    page = Math.floor(p * this.screenCount);
+    if (page > this.screenCount) {
+      page = this.screenCount - 1;
+    }
+    if (page < 0) {
+      page = 0;
+    }
+    return this.navigateTo(page);
+  };
+
+  Viewer.prototype.startScrubbing = function(e) {
+    if (!this.ready) {
+      return;
+    }
+    this.progressBar.on('mousemove', this.didTapScrubber);
+    this.elem.on('mouseleave', this.stopScrubbing);
+    $(document).on('mouseup', this.stopScrubbing);
+    return this.didTapScrubber(e);
+  };
+
+  Viewer.prototype.stopScrubbing = function(e) {
+    this.progressBar.off('mousemove', this.didTapScrubber);
+    this.elem.off('mouseleave', this.stopScrubbing);
+    return $(document).off('mouseup', this.stopScrubbing);
+  };
+
+  Viewer.prototype.didFocus = function(e) {
+    this.active = true;
+    this.elem.removeClass('inactive').addClass('active');
+    return Viewer.active = this;
+  };
+
+  Viewer.prototype.didBlur = function(e) {
+    this.active = false;
+    this.elem.removeClass('active').addClass('inactive');
+    if (Viewer.active === this) {
+      return Viewer.active = null;
+    }
+  };
+
+  Viewer.prototype.nextPage = function(e) {
+    if (e != null) {
+      if (typeof e.preventDefault === "function") {
+        e.preventDefault();
+      }
+    }
+    if (!this.ready) {
+      return;
+    }
+    if (this.current === this.screenCount - 1) {
+      if (this.atEnd) {
+        this.hideCurrent();
+        this.current = 0;
+        this.atEnd = false;
+        this.stack.find('.the-end').hide();
+        this.showCurrent();
+      } else {
+        this.stack.find('.the-end').show();
+        this.atEnd = true;
+        this.nextBtn.toggleClass('disabled', this.atEnd);
+      }
+      if (e != null) {
+        if (typeof e.stopPropagation === "function") {
+          e.stopPropagation();
+        }
+      }
+      return false;
+    }
+    this.hideCurrent();
+    this.current += 1;
+    return this.showCurrent();
+  };
+
+  Viewer.prototype.prevPage = function(e) {
+    if (e != null) {
+      if (typeof e.preventDefault === "function") {
+        e.preventDefault();
+      }
+    }
+    if (!this.ready) {
+      return;
+    }
+    if (this.atEnd) {
+      this.stack.find('.the-end').hide();
+      this.atEnd = false;
+      this.nextBtn.toggleClass('disabled', this.atEnd);
+      return;
+    }
+    if (this.current === 0) {
+      return;
+    }
+    this.hideCurrent();
+    this.current -= 1;
+    return this.showCurrent();
+  };
+
+  Viewer.prototype.onLoad = function() {
+    var height;
+    this.nextBtn.removeClass('disabled');
+    this.loadingBar.addClass('done');
+    this.locationBar.show();
+    this.showCurrent();
+    this.imageH = height = this.stack.show().find('img').height();
+    this.imageW = this.stack.find('img').width();
+    this.stack.find('.screen').hide();
+    this.showCurrent();
+    this.elem.css({
+      width: this.imageW
+    });
+    this.stack.css({
+      opacity: 0
+    }).animate({
+      height: height,
+      opacity: 1
+    });
+    this.progressWidth = this.progressBar.width();
+    return this.ready = true;
+  };
+
+  Viewer.prototype.onLoadError = function(e) {
+    var err;
+    log.info("ERROR Loading image", e.target);
+    this.progressBar.addClass('errors');
+    this.loadingBar.hide();
+    this.stack.find('img').remove();
+    err = $("<div class='errors'>There were errors loading the images, please refresh your browser!</div>").hide();
+    this.stack.append(err).show();
+    return err.slideDown();
+  };
+
+  Viewer.prototype.showCurrent = function() {
+    var percent;
+    $(this.stack.find('.screen').get(this.current)).show();
+    percent = Math.ceil((this.current + 1) / this.screenCount * 100);
+    this.locationBar.width("" + percent + "%");
+    this.locationBar.toggleClass('done', percent >= 100);
+    this.prevBtn.toggleClass('disabled', this.current === 0);
+    return this.nextBtn.toggleClass('disabled', this.atEnd);
+  };
+
+  Viewer.prototype.hideCurrent = function() {
+    return $(this.stack.find('.screen').get(this.current)).hide();
+  };
+
+  Viewer.prototype.getData = function() {
+    var data, from, i, mdl, screens, to, _i;
+    screens = [];
+    from = this.model.start;
+    to = this.model.start + (this.screenCount - 1);
+    for (i = _i = from; from <= to ? _i <= to : _i >= to; i = from <= to ? ++_i : --_i) {
+      mdl = {
+        src: build_url(this.model.path, i)
+      };
+      screens.push(mdl);
+    }
+    data = this.model;
+    data.screens = screens;
+    data.id = this.id;
+    return data;
+  };
+
+  Viewer.prototype.onRender = function() {
+    var _this = this;
+    preloader(this.elem).onError(this.onLoadError).onLoad(this.onLoad).onProgress(function(percent) {
+      _this.loadingBar.width("" + percent + "%");
+      if (percent >= 100) {
+        return _this.loadingBar.addClass('done');
+      }
+    }).start();
+    this.nextBtn.addClass('disabled');
+    this.prevBtn.addClass('disabled');
+    this.locationBar.hide();
+    this.progressWidth = this.progressBar.width();
+    this.elem.on('focus', this.didFocus).on('blur', this.didBlur);
+    if (env.mobile) {
+      Hammer(this.stack.get(0), {
+        prevent_default: true
+      }).on('swipeleft', this.nextPage).on('swiperight', this.prevPage).on('tap', this.didTap);
+      Hammer(this.nextBtn.get(0), {
+        prevent_default: true
+      }).on('tap', this.nextPage);
+      Hammer(this.prevBtn.get(0), {
+        prevent_default: true
+      }).on('tap', this.prevPage);
+      Hammer(this.restartBtn.get(0), {
+        prevent_default: true
+      }).on('tap', this.nextPage);
+      return Hammer(this.progressBar.get(0), {
+        prevent_default: true
+      }).on('tap', this.didTapScrubber).on('drag', this.didTapScrubber);
+    } else {
+      return this.elem.on('click', '.nextPage', this.nextPage).on('click', '.restart', this.nextPage).on('click', '.prevPage', this.prevPage).on('click', '.screen', this.didTap).on('mousedown', '.progress', this.startScrubbing);
+    }
+  };
+
+  Viewer.prototype.onDomActive = function() {
+    if (this.model.autofocus) {
+      return this.elem.focus();
+    }
+  };
+
+  return Viewer;
+
+})(CogView);
+
+module.exports = Viewer;
+
+},
+"viewer/layout": function(exports, require, module) {
+var node = null, css = ".flipbook div,\n.flipbook span,\n.flipbook object,\n.flipbook iframe,\n.flipbook h1,\n.flipbook h2,\n.flipbook h3,\n.flipbook h4,\n.flipbook h5,\n.flipbook h6,\n.flipbook p,\n.flipbook pre,\n.flipbook a,\n.flipbook abbr,\n.flipbook acronym,\n.flipbook address,\n.flipbook code,\n.flipbook del,\n.flipbook dfn,\n.flipbook em,\n.flipbook img,\n.flipbook dl,\n.flipbook dt,\n.flipbook dd,\n.flipbook ol,\n.flipbook ul,\n.flipbook li,\n.flipbook fieldset,\n.flipbook form,\n.flipbook label,\n.flipbook legend,\n.flipbook caption,\n.flipbook tbody,\n.flipbook tfoot,\n.flipbook thead,\n.flipbook tr {\n  margin: 0;\n  padding: 0;\n  border: 0;\n  outline: 0;\n  font-weight: inherit;\n  font-style: inherit;\n  font-family: inherit;\n  font-size: 100%;\n  vertical-align: baseline;\n}\n.flipbook table {\n  border-collapse: separate;\n  border-spacing: 0;\n  vertical-align: middle;\n}\n.flipbook caption,\n.flipbook th,\n.flipbook td {\n  text-align: left;\n  font-weight: normal;\n  vertical-align: middle;\n}\n.flipbook a img {\n  border: none;\n}\n.flipbook,\n.flipbook * {\n  -webkit-box-sizing: border-box;\n  -moz-box-sizing: border-box;\n  box-sizing: border-box;\n}\n.flipbook {\n  font-family: \"Helvetica Neue\", Helvetica, Sans-Serif;\n  -webkit-user-select: none;\n  -moz-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n  width: 100%;\n  max-width: 100%;\n  cursor: default;\n}\n.flipbook:focus {\n  outline: 0;\n  border: 0;\n}\n.flipbook header {\n  z-index: 5;\n  display: relative;\n}\n.flipbook header h3 {\n  display: block;\n  white-space: nowrap;\n  overflow: hidden;\n  -o-text-overflow: ellipsis;\n  text-overflow: ellipsis;\n  font-size: 120%;\n}\n.flipbook header .zoom {\n  padding: 2px;\n  width: 26px;\n  float: right;\n  text-align: center;\n  cursor: pointer;\n}\n.flipbook header .zoom span {\n  display: block;\n  text-align: center;\n  -webkit-transform: rotate(-45deg);\n  -moz-transform: rotate(-45deg);\n  -o-transform: rotate(-45deg);\n  -ms-transform: rotate(-45deg);\n  transform: rotate(-45deg);\n}\n.flipbook .screen-stack {\n  position: relative;\n  overflow: hidden;\n  width: 100%;\n  max-width: 100%;\n  z-index: 10;\n}\n.flipbook .screen-stack .errors {\n  padding: 25px;\n  text-align: center;\n  border: 1px solid #f00;\n}\n.flipbook .screen-stack .screen {\n  position: absolute;\n  top: 0;\n  left: 0;\n  max-width: 100%;\n}\n.flipbook .screen-stack .screen img {\n  max-width: 100%;\n}\n.flipbook .screen-stack .screen.the-end {\n  display: none;\n  height: 100%;\n  background: rgba(0,0,0,0.7);\n  color: #fff;\n  width: 100%;\n  position: relative;\n  text-align: center;\n}\n.flipbook .screen-stack .screen.the-end .container {\n  display: table;\n  width: 100%;\n  height: 100%;\n}\n.flipbook .screen-stack .screen.the-end .body {\n  display: table-cell;\n  vertical-align: middle;\n  text-align: center;\n}\n.flipbook .screen-stack .screen.the-end .restart {\n  display: inline-block;\n  border: 3px dotted #fff;\n  -webkit-border-radius: 15px;\n  border-radius: 15px;\n  cursor: pointer;\n}\n.flipbook .screen-stack .screen.the-end .restart .icon {\n  text-align: center;\n  font-size: 75px;\n  display: block;\n  cursor: pointer;\n  line-height: 75px;\n}\n.flipbook .screen-stack .screen.the-end .restart label {\n  text-align: center;\n  display: block;\n  font-size: 90%;\n  margin: 15px;\n  cursor: pointer;\n  text-shadow: 0px 1px 0px #000;\n}\n.flipbook footer {\n  text-align: center;\n  z-index: 5;\n}\n.flipbook footer.copyright {\n  font-size: 75%;\n  padding: 2px;\n  white-space: nowrap;\n  overflow: hidden;\n  -o-text-overflow: ellipsis;\n  text-overflow: ellipsis;\n}\n.flipbook footer.pager {\n  position: relative;\n  padding: 3px;\n  height: 35px;\n  line-height: 28px;\n}\n.flipbook footer.pager .progress {\n  display: block;\n  height: 28px;\n  margin: 0 33px;\n  position: relative;\n}\n.flipbook footer.pager .progress.errors .bar.background {\n  visibility: hidden;\n}\n.flipbook footer.pager .progress .bar {\n  position: absolute;\n  height: 14px;\n  top: 7px;\n  overflow: hidden;\n}\n.flipbook footer.pager .progress .bar.done {\n  width: 100%;\n}\n.flipbook footer.pager .progress .bar.background {\n  background: #aaa;\n  width: 100%;\n}\n.flipbook footer.pager .progress .bar.loading {\n  background-color: #bbb;\n  width: 1%;\n  height: 10px;\n  top: 9px;\n}\n.flipbook footer.pager .progress .bar.location {\n  background-color: #ccc;\n  width: 0%;\n  height: 12px;\n  top: 8px;\n}\n.flipbook footer.pager .button {\n  width: 30px;\n  height: 28px;\n  overflow: hidden;\n  cursor: pointer;\n  font-size: 135%;\n}\n.flipbook footer.pager .button.nextPage {\n  position: absolute;\n  top: 3px;\n  right: 3px;\n}\n.flipbook footer.pager .button.prevPage {\n  position: absolute;\n  top: 3px;\n  left: 3px;\n}\n.flipbook footer.pager .button.disabled {\n  opacity: 0.3;\n  filter: alpha(opacity=30);\n  -ms-filter: \"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)\";\n  cursor: default;\n}\n.flipbook.isDesktop .the-end .restart:hover {\n  background: rgba(0,0,0,0.2);\n}\n";
+module.exports= {
+  content: css,
+  isActive: function(){ return node != null; },
+  activate: function(to){
+    if(node != null) return; // Already added to DOM!
+    to= to || document.getElementsByTagName('HEAD')[0] || document.body || document; // In the HEAD or BODY tags
+    node= document.createElement('style');
+    node.innerHTML= css;
+    to.appendChild(node);
+    return this;
+  },
+  deactivate: function() {
+    if(node != null) {
+      node.parentNode.removeChild(node);
+      node = null;
+    }
+    return this;
+  }
+};
+},
+"viewer/preloader": function(exports, require, module) {
+var Preloader, log,
+  _this = this;
+
+log = require('util/log').prefix('preloader:');
+
+Preloader = (function() {
+
+  function Preloader(root) {
+    var _this = this;
+    this.didError = function(e) {
+      return Preloader.prototype.didError.apply(_this, arguments);
+    };
+    this.didLoad = function(e) {
+      return Preloader.prototype.didLoad.apply(_this, arguments);
+    };
+    this.elem = $(root);
+  }
+
+  Preloader.prototype.onError = function(errorCallback) {
+    this.errorCallback = errorCallback;
+    return this;
+  };
+
+  Preloader.prototype.onProgress = function(progressCallback) {
+    this.progressCallback = progressCallback;
+    return this;
+  };
+
+  Preloader.prototype.onLoad = function(loadCallback) {
+    this.loadCallback = loadCallback;
+    return this;
+  };
+
+  Preloader.prototype.start = function() {
+    var images;
+    images = this.elem.find('img');
+    this.total = images.length;
+    this.count = 0;
+    images.on('error', this.didError).on('load', this.didLoad);
+    return this;
+  };
+
+  Preloader.prototype.didLoad = function(e) {
+    var percent;
+    this.count += 1;
+    percent = Math.floor((this.count / this.total) * 100);
+    if (typeof this.progressCallback === "function") {
+      this.progressCallback(percent);
+    }
+    if (this.count === this.total) {
+      if (typeof this.progressCallback === "function") {
+        this.progressCallback(100);
+      }
+      this.elem.find('img').off();
+      delete this.elem;
+      return typeof this.loadCallback === "function" ? this.loadCallback(e) : void 0;
+    }
+  };
+
+  Preloader.prototype.didError = function(e) {
+    if (typeof this.progressCallback === "function") {
+      this.progressCallback(100);
+    }
+    this.elem.find('img').off();
+    delete this.elem;
+    return typeof this.errorCallback === "function" ? this.errorCallback(e) : void 0;
+  };
+
+  return Preloader;
+
+})();
+
+module.exports = function(root) {
+  return new Preloader(root);
+};
+
+},
+"viewer/template": function(exports, require, module) {
+module.exports= function(__obj) {
+  if (!__obj) __obj = {};
+  var __out = [], __capture = function(callback) {
+    var out = __out, result;
+    __out = [];
+    callback.call(this);
+    result = __out.join('');
+    __out = out;
+    return __safe(result);
+  }, __sanitize = function(value) {
+    if (value && value.ecoSafe) {
+      return value;
+    } else if (typeof value !== 'undefined' && value != null) {
+      return __escape(value);
+    } else {
+      return '';
+    }
+  }, __safe, __objSafe = __obj.safe, __escape = __obj.escape;
+  __safe = __obj.safe = function(value) {
+    if (value && value.ecoSafe) {
+      return value;
+    } else {
+      if (!(typeof value !== 'undefined' && value != null)) value = '';
+      var result = new String(value);
+      result.ecoSafe = true;
+      return result;
+    }
+  };
+  if (!__escape) {
+    __escape = __obj.escape = function(value) {
+      return ('' + value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    };
+  }
+  (function() {
+    (function() {
+      var i, screen, _i, _len, _ref;
+    
+      __out.push('<header>\n  <div class="zoom button"><span>&#10132;</span></div>\n  <h3>');
+    
+      __out.push(__sanitize(this.title));
+    
+      __out.push('</h3>\n</header>\n<div class="screen-stack">');
+    
+      _ref = this.screens;
+      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+        screen = _ref[i];
+        __out.push(' \n<div class="screen"><img src="');
+        __out.push(__sanitize(screen.src));
+        __out.push('"/></div> \n');
+      }
+    
+      __out.push(' \n  <div class="screen the-end">\n    <div class="container">\n      <div class="body">\n        <div class="restart">\n          <span class="icon">&#8634;</span>\n          <label>Restart from<br/>beginning.</label>\n        </div>    \n        <!-- <div class="restart">\n          <span class="icon">&#10162;</span>\n          <label>Resume<br/>reading.</label>\n        </div>     -->\n      </div>\n    </div>\n  </div>\n</div> \n');
+    
+      if (this.copyright != null) {
+        __out.push(' \n<footer class="copyright" title="');
+        __out.push(__sanitize(this.copyright));
+        __out.push('"><span>');
+        __out.push(__sanitize(this.copyright));
+        __out.push('</span></footer> \n');
+      }
+    
+      __out.push(' \n<footer class="pager"> \n<div class="prevPage button"><span>&lsaquo;</span></div> \n<div class="progress">\n  <div class="bar background"><span>&nbsp;</span></div>\n  <div class="bar loading done"><span>&nbsp;</span></div>\n  <div class="bar location"><span>&nbsp;</span></div>\n</div> \n<div class="nextPage button"><span>&rsaquo;</span></div> \n</footer>');
+    
+    }).call(this);
+    
+  }).call(__obj);
+  __obj.safe = __objSafe, __obj.escape = __escape;
+  return __out.join('');
+};
+},
+"viewer/theme-dark": function(exports, require, module) {
+var node = null, css = ".flipbook.theme-dark {\n  font-family: \"Helvetica Neue\", Helvetica, Sans-Serif;\n  color: #ddd;\n  -webkit-border-top-left-radius: 4px;\n  border-top-left-radius: 4px;\n  -webkit-border-top-right-radius: 4px;\n  border-top-right-radius: 4px;\n  -webkit-border-bottom-left-radius: 3px;\n  border-bottom-left-radius: 3px;\n  -webkit-border-bottom-right-radius: 3px;\n  border-bottom-right-radius: 3px;\n  background-color: #222;\n  -webkit-box-shadow: 0px 2px 4px #999;\n  box-shadow: 0px 2px 4px #999;\n}\n.flipbook.theme-dark:focus {\n  color: #fff;\n/*  \n    &.inactive\n      header, footer\n        opacity: 0.5\n    */\n}\n.flipbook.theme-dark header {\n  background: none;\n  padding: 5px;\n}\n.flipbook.theme-dark header h3 {\n  padding-left: 5px;\n}\n.flipbook.theme-dark header .zoom {\n  -webkit-border-radius: 4px;\n  border-radius: 4px;\n}\n.flipbook.theme-dark .screen-stack .errors {\n  padding: 25px;\n  text-align: center;\n  color: #900;\n  border: 0;\n  background-color: #fff;\n  border: 1px solid #000;\n}\n.flipbook.theme-dark .screen-stack .screen.the-end {\n  background: rgba(0,0,0,0.7);\n  color: #fff;\n  text-align: center;\n}\n.flipbook.theme-dark footer {\n  background: none;\n}\n.flipbook.theme-dark footer.copyright {\n  background: #000;\n  border-bottom: 1px solid #333;\n  color: #555;\n}\n.flipbook.theme-dark footer.pager {\n  -webkit-border-bottom-left-radius: 4px;\n  border-bottom-left-radius: 4px;\n  -webkit-border-bottom-right-radius: 4px;\n  border-bottom-right-radius: 4px;\n}\n.flipbook.theme-dark footer.pager .progress .bar {\n  -webkit-border-top-left-radius: 6px;\n  border-top-left-radius: 6px;\n  -webkit-border-bottom-left-radius: 6px;\n  border-bottom-left-radius: 6px;\n}\n.flipbook.theme-dark footer.pager .progress .bar.done {\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  border: 0;\n}\n.flipbook.theme-dark footer.pager .progress .bar.background {\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  background: #000;\n}\n.flipbook.theme-dark footer.pager .progress .bar.loading {\n  background-color: #1f1f1f;\n}\n.flipbook.theme-dark footer.pager .progress .bar.location {\n  background-color: #444;\n  border-right: 1px solid #000;\n  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #444), color-stop(1, #333));\n  background: -webkit-linear-gradient(top, #444 0%, #333 100%);\n  background: -moz-linear-gradient(top, #444 0%, #333 100%);\n  background: -o-linear-gradient(top, #444 0%, #333 100%);\n  background: -ms-linear-gradient(top, #444 0%, #333 100%);\n  background: linear-gradient(top, #444 0%, #333 100%);\n}\n.flipbook.theme-dark footer.pager .button {\n  -webkit-border-radius: 4px;\n  border-radius: 4px;\n}\n.flipbook.theme-dark footer.pager .button.disabled {\n  opacity: 0.3;\n  filter: alpha(opacity=30);\n  -ms-filter: \"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)\";\n}\n.flipbook.theme-dark.isDesktop .button:hover {\n  background: #444;\n}\n.flipbook.theme-dark.isDesktop .button.disabled:hover {\n  background: none;\n}\n";
+module.exports= {
+  content: css,
+  isActive: function(){ return node != null; },
+  activate: function(to){
+    if(node != null) return; // Already added to DOM!
+    to= to || document.getElementsByTagName('HEAD')[0] || document.body || document; // In the HEAD or BODY tags
+    node= document.createElement('style');
+    node.innerHTML= css;
+    to.appendChild(node);
+    return this;
+  },
+  deactivate: function() {
+    if(node != null) {
+      node.parentNode.removeChild(node);
+      node = null;
+    }
+    return this;
+  }
+};
+},
+"viewer/theme-default": function(exports, require, module) {
+var node = null, css = ".flipbook.theme-default {\n  font-family: \"Helvetica Neue\", Helvetica, Sans-Serif;\n  color: #555;\n}\n.flipbook.theme-default:focus {\n  color: #000;\n/*  \n    &.inactive\n      header, footer\n        opacity: 0.5\n    */\n}\n.flipbook.theme-default header {\n  border-top: 1px solid #ddd;\n  background: #ccc;\n  -webkit-border-top-left-radius: 4px;\n  border-top-left-radius: 4px;\n  -webkit-border-top-right-radius: 4px;\n  border-top-right-radius: 4px;\n  margin: 0 4px;\n  padding: 5px;\n}\n.flipbook.theme-default header h3 {\n  padding-left: 5px;\n}\n.flipbook.theme-default header .zoom {\n  -webkit-border-radius: 4px;\n  border-radius: 4px;\n}\n.flipbook.theme-default .screen-stack {\n  -webkit-box-shadow: 0px 2px 9px #777;\n  box-shadow: 0px 2px 9px #777;\n}\n.flipbook.theme-default .screen-stack .errors {\n  padding: 25px;\n  text-align: center;\n  border: 0;\n}\n.flipbook.theme-default .screen-stack .screen.the-end {\n  background: rgba(0,0,0,0.7);\n  color: #fff;\n  text-align: center;\n}\n.flipbook.theme-default footer {\n  background: #ccc;\n  margin: 0 4px;\n}\n.flipbook.theme-default footer.copyright {\n  background: #bbb;\n  color: #777;\n}\n.flipbook.theme-default footer.pager {\n  -webkit-border-bottom-left-radius: 4px;\n  border-bottom-left-radius: 4px;\n  -webkit-border-bottom-right-radius: 4px;\n  border-bottom-right-radius: 4px;\n  border-top: 1px solid #ddd;\n  border-bottom: 1px solid #bbb;\n}\n.flipbook.theme-default footer.pager .progress .bar {\n  -webkit-border-top-left-radius: 6px;\n  border-top-left-radius: 6px;\n  -webkit-border-bottom-left-radius: 6px;\n  border-bottom-left-radius: 6px;\n}\n.flipbook.theme-default footer.pager .progress .bar.done {\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  border: 0;\n}\n.flipbook.theme-default footer.pager .progress .bar.background {\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  background: #aaa;\n}\n.flipbook.theme-default footer.pager .progress .bar.loading {\n  background-color: #bbb;\n}\n.flipbook.theme-default footer.pager .progress .bar.location {\n  background-color: #ccc;\n  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ddd), color-stop(1, #aaa));\n  background: -webkit-linear-gradient(top, #ddd 0%, #aaa 100%);\n  background: -moz-linear-gradient(top, #ddd 0%, #aaa 100%);\n  background: -o-linear-gradient(top, #ddd 0%, #aaa 100%);\n  background: -ms-linear-gradient(top, #ddd 0%, #aaa 100%);\n  background: linear-gradient(top, #ddd 0%, #aaa 100%);\n  border-right: 1px solid #aaa;\n}\n.flipbook.theme-default footer.pager .button {\n  -webkit-border-radius: 4px;\n  border-radius: 4px;\n}\n.flipbook.theme-default footer.pager .button.disabled {\n  opacity: 0.3;\n  filter: alpha(opacity=30);\n  -ms-filter: \"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)\";\n}\n.flipbook.theme-default.isDesktop .button:hover {\n  background: #eee;\n}\n.flipbook.theme-default.isDesktop .button.disabled:hover {\n  background: none;\n}\n";
+module.exports= {
+  content: css,
+  isActive: function(){ return node != null; },
+  activate: function(to){
+    if(node != null) return; // Already added to DOM!
+    to= to || document.getElementsByTagName('HEAD')[0] || document.body || document; // In the HEAD or BODY tags
+    node= document.createElement('style');
+    node.innerHTML= css;
+    to.appendChild(node);
+    return this;
+  },
+  deactivate: function() {
+    if(node != null) {
+      node.parentNode.removeChild(node);
+      node = null;
+    }
+    return this;
+  }
+};
+},
+"viewer/theme-light": function(exports, require, module) {
+var node = null, css = ".flipbook.theme-light {\n  font-family: \"Helvetica Neue\", Helvetica, Sans-Serif;\n  color: #555;\n  background: #fff;\n  -webkit-box-shadow: 0px 1px 4px #aaa;\n  box-shadow: 0px 1px 4px #aaa;\n}\n.flipbook.theme-light:focus {\n  color: #000;\n/*  \n    &.inactive\n      header, footer\n        opacity: 0.5\n    */\n}\n.flipbook.theme-light header {\n  border: 1px solid #ddd;\n  background: none;\n  padding: 5px;\n  z-index: 20;\n  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #f0f0f0));\n  background: -webkit-linear-gradient(top, #fff 0%, #f0f0f0 100%);\n  background: -moz-linear-gradient(top, #fff 0%, #f0f0f0 100%);\n  background: -o-linear-gradient(top, #fff 0%, #f0f0f0 100%);\n  background: -ms-linear-gradient(top, #fff 0%, #f0f0f0 100%);\n  background: linear-gradient(top, #fff 0%, #f0f0f0 100%);\n}\n.flipbook.theme-light header h3 {\n  padding-left: 5px;\n}\n.flipbook.theme-light header .zoom {\n  -webkit-border-radius: 4px;\n  border-radius: 4px;\n}\n.flipbook.theme-light .screen-stack {\n  z-index: 10;\n}\n.flipbook.theme-light .screen-stack .errors {\n  padding: 25px;\n  text-align: center;\n  border: 0;\n}\n.flipbook.theme-light .screen-stack .screen.the-end {\n  background: rgba(0,0,0,0.7);\n  color: #fff;\n  text-align: center;\n}\n.flipbook.theme-light footer.copyright {\n  color: #999;\n  background: #bbb;\n  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #e0e0e0), color-stop(1, #efefef));\n  background: -webkit-linear-gradient(top, #e0e0e0 0%, #efefef 100%);\n  background: -moz-linear-gradient(top, #e0e0e0 0%, #efefef 100%);\n  background: -o-linear-gradient(top, #e0e0e0 0%, #efefef 100%);\n  background: -ms-linear-gradient(top, #e0e0e0 0%, #efefef 100%);\n  background: linear-gradient(top, #e0e0e0 0%, #efefef 100%);\n}\n.flipbook.theme-light footer.pager {\n  border: 1px solid #ddd;\n  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #f0f0f0));\n  background: -webkit-linear-gradient(top, #fff 0%, #f0f0f0 100%);\n  background: -moz-linear-gradient(top, #fff 0%, #f0f0f0 100%);\n  background: -o-linear-gradient(top, #fff 0%, #f0f0f0 100%);\n  background: -ms-linear-gradient(top, #fff 0%, #f0f0f0 100%);\n  background: linear-gradient(top, #fff 0%, #f0f0f0 100%);\n}\n.flipbook.theme-light footer.pager .progress .bar {\n  -webkit-border-top-left-radius: 6px;\n  border-top-left-radius: 6px;\n  -webkit-border-bottom-left-radius: 6px;\n  border-bottom-left-radius: 6px;\n}\n.flipbook.theme-light footer.pager .progress .bar.done {\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  border: 0;\n}\n.flipbook.theme-light footer.pager .progress .bar.background {\n  -webkit-border-radius: 6px;\n  border-radius: 6px;\n  background: #ccc;\n}\n.flipbook.theme-light footer.pager .progress .bar.loading {\n  background-color: #dadada;\n}\n.flipbook.theme-light footer.pager .progress .bar.location {\n  background-color: #eee;\n  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #ddd));\n  background: -webkit-linear-gradient(top, #fff 0%, #ddd 100%);\n  background: -moz-linear-gradient(top, #fff 0%, #ddd 100%);\n  background: -o-linear-gradient(top, #fff 0%, #ddd 100%);\n  background: -ms-linear-gradient(top, #fff 0%, #ddd 100%);\n  background: linear-gradient(top, #fff 0%, #ddd 100%);\n  border-right: 1px solid #ccc;\n}\n.flipbook.theme-light footer.pager .button {\n  -webkit-border-radius: 4px;\n  border-radius: 4px;\n}\n.flipbook.theme-light footer.pager .button.disabled {\n  opacity: 0.3;\n  filter: alpha(opacity=30);\n  -ms-filter: \"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)\";\n}\n.flipbook.theme-light.isDesktop .button:hover {\n  background: #eee;\n}\n.flipbook.theme-light.isDesktop .button.disabled:hover {\n  background: none;\n}\n";
+module.exports= {
+  content: css,
+  isActive: function(){ return node != null; },
+  activate: function(to){
+    if(node != null) return; // Already added to DOM!
+    to= to || document.getElementsByTagName('HEAD')[0] || document.body || document; // In the HEAD or BODY tags
+    node= document.createElement('style');
+    node.innerHTML= css;
+    to.appendChild(node);
+    return this;
+  },
+  deactivate: function() {
+    if(node != null) {
+      node.parentNode.removeChild(node);
+      node = null;
+    }
+    return this;
+  }
+};
+}});
+flipbook('main');
