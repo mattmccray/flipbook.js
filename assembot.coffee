@@ -24,7 +24,7 @@ module.exports=
       http:
         log: no
         latency:
-          enabled: yes
+          enabled: no
           max: 1000
           rules:
             ".(jpg|png|jpeg)": -100
@@ -38,7 +38,7 @@ module.exports=
         debug: true
         test: false
         prune: true
-        minify: 0
+        minify: 2
         exclude: "test/*"
 
       # "flipbook.js": 
