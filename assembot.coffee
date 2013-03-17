@@ -23,7 +23,7 @@ module.exports=
         when: 'after:write' 
       http:
         latency:
-          enabled: yes
+          enabled: no
           max: 1000
           rules:
             ".(jpg|png|jpeg)": -100
@@ -37,6 +37,7 @@ module.exports=
         debug: true
         test: false
         prune: true
+        minify: 2
         exclude: "test/*"
 
       # "flipbook.js": 
