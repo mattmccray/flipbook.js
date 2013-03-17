@@ -55,6 +55,7 @@ class Viewer extends CogView
     nextBtn: '.nextPage'
     prevBtn: '.prevPage'
     restartBtn: '.restart'
+    pagerArea: '.pager'
     progressBar: '.progress'
     locationBar: '.progress .location'
     loadingBar: '.progress .loading'
@@ -120,16 +121,23 @@ class Viewer extends CogView
     return unless @ready
     @progressBar
       .on('mousemove', @didTapScrubber)
+    @pagerArea
+      .on('mouseleave', @stopScrubbing)
     $(document)
       .on('mouseup', @stopScrubbing)
+    # $(window).mouseleave((e)->
+    #   log.info("OUTTA DIS WIN!", e)
+    # )
     @didTapScrubber(e)
   
   stopScrubbing: (e)=>
     @progressBar
       .off('mousemove', @didTapScrubber)
+    @pagerArea
+      .off('mouseleave', @stopScrubbing)
     $(document)
       .off('mouseup', @stopScrubbing)
-    @didTapScrubber(e)
+    # @didTapScrubber(e)
 
   didDragScrubber: (e)=>
     # x= getX e
