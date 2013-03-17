@@ -4,6 +4,9 @@
 .flipbook
   nested-reset()
 
+.flipbook, .flipbook *
+  box-sizing: border-box
+
 .flipbook
   font-family "Helvetica Neue", Helvetica, Sans-Serif
   user-select: none
@@ -111,7 +114,7 @@
     &.pager
       position: relative
       padding 3px
-      height: 28px
+      height: pagerHeight * 2.5
       line-height: 28px
   
       .progress

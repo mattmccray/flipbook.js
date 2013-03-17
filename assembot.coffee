@@ -38,7 +38,7 @@ module.exports=
         debug: true
         test: false
         prune: true
-        minify: 2
+        minify: 0
         exclude: "test/*"
 
       # "flipbook.js": 
