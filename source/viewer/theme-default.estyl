@@ -81,10 +81,20 @@
         &.disabled
           opacity: 0.3
 
+  &.zoomed
+    header
+      margin 0
+      border-radius: 0
+    footer
+      margin 0
+      border-radius: 0
+    .screen-stack
+      background-color #EFEFEF
+
   &.isDesktop
     .button
       &:hover
-        background: #EEE
+        background: #E0E0E0
       &.disabled
         &:hover
           background: none

@@ -77,6 +77,7 @@ class View
   appendTo: (elem)->
     @render()
     elem.append(@elem)
+    @containingElem= elem
     @onDomActive?()
 
   addView: (outlet, view)->

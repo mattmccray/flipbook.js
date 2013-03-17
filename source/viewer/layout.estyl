@@ -187,3 +187,50 @@
       .restart
         &:hover
           background: rgba(0,0,0,0.2)
+
+
+.flipbook.zoomed
+  position fixed
+  top: 0px
+  left: 0px
+  right: 0px
+  bottom: 0px
+  width: 100%
+  height: 100%
+  z-index: 1000000
+
+  header
+    .zoom
+      span
+        transform: rotate(135deg)
+
+  .screen-stack
+    display: table !important
+    position: absolute !important
+    top: 35px !important
+    bottom: 50px !important
+    left: 0px !important
+    right: 0px !important
+
+    .screen
+      position: static !important
+      vertical-align middle !important
+      text-align center
+      width: 100%
+      height: 100%
+
+      img
+        display: inline
+
+      &.the-end
+        position: absolute !important
+
+  .copyright
+    position: absolute !important
+    bottom: 35px !important
+    width: 100% !important
+
+  .pager
+    position: absolute !important
+    bottom: 0 !important
+    width: 100% !important

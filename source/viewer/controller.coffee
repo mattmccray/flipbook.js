@@ -49,8 +49,8 @@ setTheme= (o)->
     require("./theme-default").activate()
     "theme-default"
 
-nextKeys= [39, 32]
-prevKeys= [37]
+nextKeys= [32, 39, 68, 221]
+prevKeys= [37, 65, 219]
 
 class Viewer extends CogView
 
@@ -64,6 +64,7 @@ class Viewer extends CogView
     stack: '.screen-stack'
     nextBtn: '.nextPage'
     prevBtn: '.prevPage'
+    zoomBtn: '.zoom'
     restartBtn: '.restart'
     pagerArea: '.pager'
     progressBar: '.progress'
@@ -73,6 +74,7 @@ class Viewer extends CogView
 
   initialize: ->
     @screenCount= @model.pages
+    @screenCountIdx= @screenCount - 1
     @current= 0
     @ready= no
     @active= no
@@ -88,6 +90,57 @@ class Viewer extends CogView
       @elem.addClass 'isDesktop'
     keyListener.init()
 
+  fullScreen: (e)=>
+    e?.preventDefault()
+    @hideCurrent()
+    if @elem.is '.zoomed'
+      @elem.remove()
+      @elem.removeClass('zoomed')
+      @containingElem.append(@elem)
+      @elem.css width:@imageW
+      @stack.css(height:@imageH)
+      @progressWidth= @progressBar.width()
+      $(window).off 'resize', @resizeFullscreenElements
+      @stack.find('img').css maxWidth:'100%', maxHeight:'auto'
+    else
+      @elem.remove()
+      @elem.addClass('zoomed')
+      newParent= $('body')
+      newParent.after(@elem)
+      # @progressBar.css bottom:'0'
+      @resizeFullscreenElements()
+      $(window).on 'resize', @resizeFullscreenElements
+    @showCurrent()
+    @hookupEvents()
+  
+  resizeFullscreenElements: (e)=>
+    d= $(window)
+    h= d.height()
+    w= d.width()
+    @elem.css width:w, heigth:h
+    h -= @elem.find('.pager').outerHeight()
+    h -= @elem.find('header').outerHeight()
+    h -= @elem.find('.copyright').outerHeight()
+    @stack.css height:h
+    @stack.find('img').css maxWidth:Math.min(w, @fullImageWidth), maxHeight:Math.min(h, @fullImageHeight)
+    @progressWidth= @progressBar.width()
+
+
+  triggerfullScreen: =>
+    @goFullscreen= yes unless @elem.is('.zoomed')
+  triggerInline: =>
+    @goInline= yes if @elem.is('.zoomed')
+
+  touchComplete: (e)=>
+    if @goFullscreen
+      @fullScreen(e)
+      @goFullscreen= no
+      @goInline= no
+    else if @goInline
+      @fullScreen(e)
+      @goFullscreen= no
+      @goInline= no
+
   onKeyInput: (e)=>
     return unless @ready and @active
     if e.which in nextKeys
@@ -96,6 +149,9 @@ class Viewer extends CogView
     else if e.which in prevKeys
       @prevPage(e)
       false
+    else if e.which is 27
+      if @elem.is '.zoomed'
+        @fullScreen()
 
   navigateTo: (idx)=>
     return if idx is @current or idx < 0 or idx is @screenCount
@@ -120,7 +176,7 @@ class Viewer extends CogView
 
   didTapScrubber: (e)=>
     e?.preventDefault?()
-    e?.stopPropagation?()
+    # e?.stopPropagation?()
     x= getX(e)
     p= (x / @progressWidth)
     page= Math.floor p * @screenCount
@@ -131,6 +187,8 @@ class Viewer extends CogView
 
   startScrubbing: (e)=>
     return unless @ready
+    @elem.focus()
+    @progressBar.find('span').hide()
     @progressBar
       .on('mousemove', @didTapScrubber)
     @elem
@@ -140,6 +198,7 @@ class Viewer extends CogView
     @didTapScrubber(e)
   
   stopScrubbing: (e)=>
+    @progressBar.find('span').show()
     @progressBar
       .off('mousemove', @didTapScrubber)
     @elem
@@ -153,6 +212,7 @@ class Viewer extends CogView
     Viewer.active= this
 
   didBlur: (e)=>
+    return if @elem.is '.zoomed'
     @active= no
     @elem.removeClass('active').addClass 'inactive'
     Viewer.active= null if Viewer.active is this
@@ -160,7 +220,9 @@ class Viewer extends CogView
   nextPage: (e)=>
     e?.preventDefault?()
     return unless @ready
-    if @current is @screenCount - 1
+    if $(e?.currentTarget).is('.nextPage')
+      return if @atEnd
+    if @current is @screenCountIdx
       if @atEnd
         @hideCurrent()
         @current= 0
@@ -195,6 +257,16 @@ class Viewer extends CogView
     @loadingBar.addClass('done')
     @locationBar.show()
     @showCurrent()
+    @fullImageHeight= 0
+    @fullImageWidth= 0
+    @tmpImg= new Image
+    @tmpImg.onload= (e)=>
+      # log.info "TMP IMAGE LOAD"
+      @fullImageHeight= @tmpImg.height
+      @fullImageWidth= @tmpImg.width
+      # log.info "fullImageHeight", @fullImageHeight
+      delete @tmpImg
+    @tmpImg.src= @stack.show().find('img').get(0).src
     @imageH= height= @stack.show().find('img').height()
     @imageW= @stack.find('img').width()
     @stack.find('.screen').hide()
@@ -216,10 +288,18 @@ class Viewer extends CogView
     err.slideDown()
 
   showCurrent: ->
-    $(@stack.find('.screen').get(@current)).show()
-    percent= Math.min Math.ceil( (@current + 1) / @screenCount * 100 ), 100
+    if @elem.is('.zoomed')
+      $(@stack.find('.screen').get(@current)).css(display:'table-cell')
+    else
+      $(@stack.find('.screen').get(@current)).show()
+    percent= if (@current is @screenCountIdx)
+      100
+    else
+      Math.min Math.ceil( ((@current + 1) / @screenCount) * 100 ), 100
+    # log.info "%", percent, @current
     @locationBar.width "#{percent}%"
-    @locationBar.toggleClass 'done', (percent >= 100)
+    # @locationBar.toggle((@current is 0))
+    @locationBar.toggleClass 'done', (@current is @screenCountIdx)
     @prevBtn.toggleClass('disabled', (@current is 0)) 
     @nextBtn.toggleClass('disabled', (@atEnd)) 
 
@@ -230,7 +310,7 @@ class Viewer extends CogView
   getData: ->
     screens= []
     from= @model.start
-    to= @model.start + (@screenCount - 1)
+    to= @model.start + @screenCountIdx
     for i in [from..to]
       mdl= src:build_url(@model.path, i)
       # log.info "ViewModel", mdl
@@ -254,21 +334,29 @@ class Viewer extends CogView
     # Hook up events!!
     @locationBar.hide()
     @progressWidth= @progressBar.width()
+    @hookupEvents()
+
+  hookupEvents: (reassign=false)=>
     @elem
       .on('focus', @didFocus)
       .on('blur', @didBlur)
     
-    if env.mobile
+    if env.mobile and not reassign
       Hammer(@stack.get(0), prevent_default:yes)
         .on('swipeleft', @nextPage)
         .on('swiperight', @prevPage)
         .on('tap', @didTap)
+        .on('pinchout', @triggerfullScreen)
+        .on('pinchin', @triggerInline)
+        .on('release', @touchComplete)
       Hammer(@nextBtn.get(0), prevent_default:yes)
         .on('tap', @nextPage)
       Hammer(@prevBtn.get(0), prevent_default:yes)
         .on('tap', @prevPage)
       Hammer(@restartBtn.get(0), prevent_default:yes)
         .on('tap', @nextPage)
+      Hammer(@zoomBtn.get(0), prevent_default:yes)
+        .on('tap', @fullScreen)
       Hammer(@progressBar.get(0), prevent_default:yes)
         .on('tap', @didTapScrubber)
         .on('drag', @didTapScrubber)
@@ -278,7 +366,10 @@ class Viewer extends CogView
         .on('click', '.restart', @nextPage)
         .on('click', '.prevPage', @prevPage)
         .on('click', '.screen', @didTap)
+        .on('click', '.zoom', @fullScreen)
         .on('mousedown', '.progress', @startScrubbing)
+
+
 
   onDomActive: ->
     if @model.autofocus

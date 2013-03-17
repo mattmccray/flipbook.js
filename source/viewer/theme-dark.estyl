@@ -3,9 +3,9 @@
 .flipbook.theme-dark
   font-family "Helvetica Neue", Helvetica, Sans-Serif
   color: #DDD
+  background-color: #222
   border-radius top 4px
   border-radius bottom 3px
-  background-color: #222
   box-shadow: 0px 2px 4px #999
 
   &:focus
@@ -87,10 +87,21 @@
         &.disabled
           opacity: 0.3
 
+  &.zoomed
+    border-radius: 0
+    header
+      margin 0
+      border-radius: 0
+    footer
+      margin 0
+      border-radius: 0
+    .screen
+      background-color: #000
+  
   &.isDesktop
     .button
       &:hover
-        background: #444
+        background: #393939
       &.disabled
         &:hover
           background: none
