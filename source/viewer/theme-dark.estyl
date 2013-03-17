@@ -6,6 +6,7 @@
   border-radius top 4px
   border-radius bottom 3px
   background-color: #222
+  box-shadow: 0px 2px 4px #999
 
   &:focus
     color: #FFF
@@ -49,6 +50,7 @@
     &.copyright
       background #000
       border-bottom 1px solid #333
+      color: #555
 
     &.pager
       border-radius bottom 4px

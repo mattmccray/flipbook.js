@@ -22,6 +22,7 @@ module.exports=
         segment: 'build' # or major, minor, patch
         when: 'after:write' 
       http:
+        log: no
         latency:
           enabled: no
           max: 1000
