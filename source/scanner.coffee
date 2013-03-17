@@ -35,10 +35,10 @@ api.define ->
     i= $(item)
     model= {}
     for att in item.attributes
-      name= String(att.nodeName)
+      name= String(att.name ? att.nodeName)
       if name.indexOf('data-flipbook-') is 0
         name = name.replace('data-flipbook-', '')
-        model[name]= att.nodeValue
+        model[name]= att.value ? att.nodeValue
     # log.info model
     results.push item:item, model:model
   results

@@ -7,6 +7,16 @@ preloader= require './preloader'
 
 CogView= require 'cog/view'
 
+getX= (e)->
+  if e.offsetX?
+    e.offsetX
+  else 
+    offset= $(e.target).offset() #.parent().offset()
+    if e.gesture?
+      e.gesture.center.pageX - offset.left
+    else
+      e.pageX - offset.left
+
 keyListener=
   ready: no
 
@@ -44,6 +54,7 @@ class Viewer extends CogView
     stack: '.screen-stack'
     nextBtn: '.nextPage'
     prevBtn: '.prevPage'
+    restartBtn: '.restart'
     progressBar: '.progress'
     locationBar: '.progress .location'
     loadingBar: '.progress .loading'
@@ -73,15 +84,57 @@ class Viewer extends CogView
       @prevPage(e)
       false
 
+  navigateTo: (idx)=>
+    return if idx is @current or idx < 0 or idx is @screenCount
+    if @atEnd
+      @stack.find('.the-end').hide()
+      @atEnd= no
+      @nextBtn.toggleClass('disabled', (@atEnd)) 
+    @hideCurrent()
+    @current = idx
+    @showCurrent()
+
+
   didTap: (e)=>
     return if @atEnd
-    e.preventDefault()
-    x= e.offsetX ? e.clientX ? e.gesture?.center.pageX
+    e?.preventDefault?()
+    e?.stopPropagation?()
+    x= getX(e)
     if x < (@imageW / 2)
       @prevPage()
     else
       @nextPage()
     false
+
+  didTapScrubber: (e)=>
+    e?.preventDefault?()
+    e?.stopPropagation?()
+    x= getX(e)
+    p= (x / @progressWidth)
+    page= Math.floor p * @screenCount
+    page= @screenCount - 1 if page is @screenCount
+    # log.info "SCRUBBER AT", x, p, page, '/', @screenCount
+    @navigateTo page
+
+  startScrubbing: (e)=>
+    return unless @ready
+    @progressBar
+      .on('mousemove', @didTapScrubber)
+    $(document)
+      .on('mouseup', @stopScrubbing)
+    @didTapScrubber(e)
+  
+  stopScrubbing: (e)=>
+    @progressBar
+      .off('mousemove', @didTapScrubber)
+    $(document)
+      .off('mouseup', @stopScrubbing)
+    @didTapScrubber(e)
+
+  didDragScrubber: (e)=>
+    # x= getX e
+    # log.info 'DRAGGING', x
+    @didTapScrubber(e)
 
   didFocus: (e)=>
     @active= yes
@@ -93,14 +146,13 @@ class Viewer extends CogView
     @elem.removeClass('active').addClass 'inactive'
     Viewer.active= null if Viewer.active is this
 
-
   nextPage: (e)=>
     e?.preventDefault?()
     return unless @ready
     if @current is @screenCount - 1
       if @atEnd
         @hideCurrent()
-        @current = 0
+        @current= 0
         @atEnd= no
         @stack.find('.the-end').hide()
         @showCurrent()
@@ -108,7 +160,8 @@ class Viewer extends CogView
         @stack.find('.the-end').show()
         @atEnd= yes
         @nextBtn.toggleClass('disabled', (@atEnd)) 
-      return 
+      e?.stopPropagation?()
+      return false
     @hideCurrent()
     @current += 1
     @showCurrent()
@@ -133,6 +186,7 @@ class Viewer extends CogView
     @showCurrent()
     @imageH= height= @stack.show().find('img').height()
     @imageW= @stack.find('img').width()
+    @progressWidth= @progressBar.width()
     @stack.find('.screen').hide()
     @showCurrent()
     @elem.css width:@imageW
@@ -188,6 +242,7 @@ class Viewer extends CogView
     @prevBtn.addClass('disabled')
     # Hook up events!!
     @locationBar.hide()
+    @progressWidth= @progressBar.width()
     @elem
       .on('focus', @didFocus)
       .on('blur', @didBlur)
@@ -201,11 +256,19 @@ class Viewer extends CogView
         .on('tap', @nextPage)
       Hammer(@prevBtn.get(0), prevent_default:yes)
         .on('tap', @prevPage)
+      Hammer(@restartBtn.get(0), prevent_default:yes)
+        .on('tap', @nextPage)
+      Hammer(@progressBar.get(0), prevent_default:yes)
+        .on('tap', @didTapScrubber)
+        .on('drag', @didTapScrubber)
     else
       @elem
         .on('click', '.nextPage', @nextPage)
+        .on('click', '.restart', @nextPage)
         .on('click', '.prevPage', @prevPage)
         .on('click', '.screen', @didTap)
+        .on('mousedown', '.progress', @startScrubbing)
+        # .on('dragover', '.progress', @didDragScrubber)
 
   onDomActive: ->
     if @options.autofocus
