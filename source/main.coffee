@@ -8,14 +8,12 @@ validate= require 'validator'
 
 Viewer= require 'viewer/controller'
 
-require('theme').activate()
-
 hammertime= ->
   if env.mobile
-    log.info "It's hammer time."
+    # log.info "It's hammer time."
     ensure.libs.hammer()
   else
-    log.info "Please hammer, dont' hurt 'em."
+    # log.info "Please hammer, dont' hurt 'em."
     null
 
 ensure 'jquery', hammertime, (err)->
@@ -25,7 +23,7 @@ ensure 'jquery', hammertime, (err)->
 init= ->
   log.level(2) if env.debug
   log.info "FlipBook v#{ env.version }"
-  log.info "ENV", env
+  log.debug "ENV", env
   log.info "Ready."
   flipbooks= scanner.run()
 
@@ -36,10 +34,15 @@ init= ->
     else
       log.info "! Invalid model:", validate.errors(), model
 
-  # Focus first book
-  $('.flipbook').get(0)?.focus()
-
 if env.debug and env.mobile
   ensure 'firebug', (err)->
     window.onerror= (err)->
       log.info "ERROR!", err
+
+
+###
+// prevents these from being pruned
+require('viewer/theme-light');
+require('viewer/theme-dark');
+require('viewer/theme-default');
+###

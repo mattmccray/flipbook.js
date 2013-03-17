@@ -5,6 +5,8 @@ log= require('util/log').prefix('controller:')
 events= require 'cog/events'
 preloader= require './preloader'
 
+require('./layout').activate()
+
 CogView= require 'cog/view'
 
 getX= (e)->
@@ -38,6 +40,14 @@ build_url= (pattern, idx)->
   pattern= pattern.replace('##', pad(idx, 2))
   pattern= pattern.replace('#', idx)
 
+setTheme= (o)->
+  theme_name= "theme-#{ o.theme }"
+  try
+    require("./#{ theme_name }").activate()
+    theme_name
+  catch ex
+    require("./theme-default").activate()
+    "theme-default"
 
 nextKeys= [39, 32]
 prevKeys= [37]
@@ -68,8 +78,10 @@ class Viewer extends CogView
     @active= no
     @atEnd= no
     # Allows for focus and blur events
-    @elem.attr 'tabindex', -1
-    @elem.addClass 'inactive'
+    @elem
+      .attr('tabindex', -1)
+      .addClass('inactive')
+      .addClass setTheme(@model)
     if env.mobile
       @elem.addClass 'isMobile'
     else
@@ -134,11 +146,6 @@ class Viewer extends CogView
       .off('mouseleave', @stopScrubbing)
     $(document)
       .off('mouseup', @stopScrubbing)
-
-  didDragScrubber: (e)=>
-    # x= getX e
-    # log.info 'DRAGGING', x
-    @didTapScrubber(e)
 
   didFocus: (e)=>
     @active= yes
@@ -272,11 +279,11 @@ class Viewer extends CogView
         .on('click', '.prevPage', @prevPage)
         .on('click', '.screen', @didTap)
         .on('mousedown', '.progress', @startScrubbing)
-        # .on('dragover', '.progress', @didDragScrubber)
 
   onDomActive: ->
-    if @options.autofocus
+    if @model.autofocus
       @elem.focus()
+      # @didFocus()
 
 
 module.exports= Viewer
