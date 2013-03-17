@@ -3,6 +3,8 @@
 .flipbook.theme-light
   font-family "Helvetica Neue", Helvetica, Sans-Serif
   color: #555
+  background: #FFF
+  box-shadow: 0px 1px 4px #AAA
 
   &:focus
     color: #000
@@ -14,13 +16,18 @@
     */
 
   header
-    background silver
-    border-radius top 4px
-    margin 0 4px 
+    border 1px solid #DDD
+    background none
     padding 5px
+    z-index 20
+    background: linear-gradient(top, #FFF, #F0F0F0)
+    h3
+      padding-left 5px
+    .zoom
+      border-radius: 4px
 
   .screen-stack
-    box-shadow: 0px 2px 9px #777
+    z-index 10
 
     .errors
       padding: 25px
@@ -37,15 +44,15 @@
 
 
   footer
-    background #CCC
-    margin 0 4px 
 
     &.copyright
+      color: #999
       background #BBB
-      border-bottom 1px solid #DDD
-
+      background: linear-gradient(top, #E0E0E0, #EFEFEF)
+  
     &.pager
-      border-radius bottom 4px
+      border 1px solid #DDD
+      background: linear-gradient(top, #FFF, #F0F0F0)
   
       .progress
 
@@ -54,16 +61,20 @@
 
           &.done
             border-radius: 6px
+            border: 0
           
           &.background
             border-radius: 6px
-            background #AAA
+            background #CCCCCC
 
           &.loading
-            background-color: #BBB
+            background-color: #DADADA
 
           &.location
-            background-color: #ccc
+            background-color: #EEE
+            background: linear-gradient(top, #FFF, #DDDDDD)
+            border-right: 1px solid #CCC
+
 
       .button
         border-radius: 4px
@@ -73,7 +84,7 @@
   &.isDesktop
     .button
       &:hover
-        background: white
+        background: #EEE
       &.disabled
         &:hover
           background: none

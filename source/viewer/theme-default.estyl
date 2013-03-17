@@ -47,6 +47,7 @@
 
     &.copyright
       background #BBB
+      color: #777
 
     &.pager
       border-radius bottom 4px

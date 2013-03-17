@@ -197,13 +197,13 @@ class Viewer extends CogView
     @showCurrent()
     @imageH= height= @stack.show().find('img').height()
     @imageW= @stack.find('img').width()
-    @progressWidth= @progressBar.width()
     @stack.find('.screen').hide()
     @showCurrent()
     @elem.css width:@imageW
     @stack
       .css(opacity:0)
       .animate(height:height, opacity:1)
+    @progressWidth= @progressBar.width()
     @ready= yes
 
   onLoadError: (e)=>
