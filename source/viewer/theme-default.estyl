@@ -82,6 +82,8 @@
           opacity: 0.3
 
   &.zoomed
+    background-color: #FFF
+    
     header
       margin 0
       border-radius: 0

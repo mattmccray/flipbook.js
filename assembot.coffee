@@ -24,7 +24,7 @@ module.exports=
       http:
         log: no
         latency:
-          enabled: no
+          enabled: yes
           max: 1000
           rules:
             ".(jpg|png|jpeg)": -100
