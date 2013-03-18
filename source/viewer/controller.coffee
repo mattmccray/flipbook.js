@@ -91,23 +91,24 @@ class Viewer extends CogView
     keyListener.init()
 
   fullScreen: (e)=>
+    return unless @ready
     e?.preventDefault()
     @hideCurrent()
     if @elem.is '.zoomed'
       @elem.remove()
       @elem.removeClass('zoomed')
       @containingElem.append(@elem)
-      @elem.css width:@imageW
-      @stack.css(height:@imageH)
+      @elem.css width:@imageWidth, height:''
+      @stack.css(height:@imageHeight)
       @progressWidth= @progressBar.width()
       $(window).off 'resize', @resizeFullscreenElements
-      @stack.find('img').css maxWidth:'100%', maxHeight:'auto'
+      @stack.find('img').css maxWidth:'100%', maxHeight:''
     else
       @elem.remove()
       @elem.addClass('zoomed')
       newParent= $('body')
       newParent.after(@elem)
-      # @progressBar.css bottom:'0'
+      @resizeFullscreenElements()
       @resizeFullscreenElements()
       $(window).on 'resize', @resizeFullscreenElements
     @showCurrent()
@@ -117,11 +118,12 @@ class Viewer extends CogView
     d= $(window)
     h= d.height()
     w= d.width()
-    @elem.css width:w, heigth:h
+    @elem.css width:w, height:h
     h -= @elem.find('.pager').outerHeight()
     h -= @elem.find('header').outerHeight()
     h -= @elem.find('.copyright').outerHeight()
     @stack.css height:h
+    log.info "Setting maxHeight", h, @fullImageHeight
     @stack.find('img').css maxWidth:Math.min(w, @fullImageWidth), maxHeight:Math.min(h, @fullImageHeight)
     @progressWidth= @progressBar.width()
 
@@ -154,7 +156,7 @@ class Viewer extends CogView
         @fullScreen()
 
   navigateTo: (idx)=>
-    return if idx is @current or idx < 0 or idx is @screenCount
+    return if not @ready or idx is @current or idx < 0 or idx is @screenCount
     if @atEnd
       @stack.find('.the-end').hide()
       @atEnd= no
@@ -168,7 +170,7 @@ class Viewer extends CogView
     e?.preventDefault?()
     e?.stopPropagation?()
     x= getX(e)
-    if x < (@imageW / 2)
+    if x < (@imageWidth / 2)
       @prevPage()
     else
       @nextPage()
@@ -253,28 +255,22 @@ class Viewer extends CogView
     @showCurrent()
 
   onLoad: =>
+    @zoomBtn.removeClass 'disabled'
     @nextBtn.removeClass('disabled')
     @loadingBar.addClass('done')
     @locationBar.show()
-    @showCurrent()
-    @fullImageHeight= 0
-    @fullImageWidth= 0
-    @tmpImg= new Image
-    @tmpImg.onload= (e)=>
-      # log.info "TMP IMAGE LOAD"
-      @fullImageHeight= @tmpImg.height
-      @fullImageWidth= @tmpImg.width
-      # log.info "fullImageHeight", @fullImageHeight
-      delete @tmpImg
-    @tmpImg.src= @stack.show().find('img').get(0).src
-    @imageH= height= @stack.show().find('img').height()
-    @imageW= @stack.find('img').width()
+    @stack.show()
+    firstImg= @stack.find('img').get(0)
+    @fullImageHeight= firstImg.naturalHeight
+    @fullImageWidth= firstImg.naturalWidth
+    @imageWidth= firstImg.width
+    @imageHeight= firstImg.height
     @stack.find('.screen').hide()
     @showCurrent()
-    @elem.css width:@imageW
+    @elem.css width:@imageWidth
     @stack
       .css(opacity:0)
-      .animate(height:height, opacity:1)
+      .animate(height:@imageHeight, opacity:1)
     @progressWidth= @progressBar.width()
     @ready= yes
 
@@ -331,6 +327,7 @@ class Viewer extends CogView
       .start()
     @nextBtn.addClass('disabled')
     @prevBtn.addClass('disabled')
+    @zoomBtn.addClass('disabled')
     # Hook up events!!
     @locationBar.hide()
     @progressWidth= @progressBar.width()

@@ -35,6 +35,9 @@
         display: block
         text-align: center
         transform: rotate(-45deg)
+      &.disabled
+        opacity: 0.3
+        cursor: default
 
 
   .screen-stack
@@ -132,6 +135,8 @@
           height: pagerHeight
           top: (pagerHeight / 2px)
           overflow: hidden
+          transition: width 150ms
+
 
           span
             background: rgba(255,255,255,0.1)
