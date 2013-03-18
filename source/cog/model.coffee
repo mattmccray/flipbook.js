@@ -2,7 +2,9 @@ events= require './events'
 extend= require 'util/extend'
 defaults= require 'util/defaults'
 
-class Model
+CogObject= require './object'
+
+class Model extends CogObject
   events.mixin @, @::
 
   @attr: (name, options)->
@@ -32,6 +34,8 @@ class Model
       for key, value of object
         @[key]= value
         fireEvent @, "change:#{ key }", value
+    changed= @changedAttrs()
+    fireEvent @, 'change', changed
     # Should a generic 'change' event be fired too?
     @
 

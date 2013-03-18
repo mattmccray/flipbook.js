@@ -6,7 +6,7 @@ ensure= require 'util/ensure'
 scanner= require 'scanner'
 validate= require 'validator'
 
-Viewer= require 'viewer/controller'
+Viewer= require 'viewer/index'
 
 hammertime= ->
   if env.mobile
@@ -45,4 +45,10 @@ if env.debug and env.mobile
 require('viewer/theme-light');
 require('viewer/theme-dark');
 require('viewer/theme-default');
+require('viewer/controllers/buttons');
+require('viewer/controllers/end');
+require('viewer/controllers/focus');
+require('viewer/controllers/help');
+require('viewer/controllers/loading');
+require('viewer/controllers/progress');
 ###

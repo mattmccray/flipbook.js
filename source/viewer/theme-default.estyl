@@ -21,7 +21,7 @@
     padding 5px
     h3
       padding-left 5px
-    .zoom
+    .zoom, .help
       border-radius: 4px
 
   .screen-stack
@@ -83,7 +83,7 @@
 
   &.zoomed
     background-color: #FFF
-    
+
     header
       margin 0
       border-radius: 0

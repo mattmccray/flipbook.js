@@ -1,9 +1,11 @@
 
 console.log "Assembot.coffee!"
 
-onLoad= (assembot)->
-  console.log "Startup!"
+isDebug= String(process.argv[1]).indexOf('serve') > 0
 
+onLoad= (assembot)->
+  console.log "Startup! (debug)", isDebug
+  #, process.argv
 
 module.exports=
   assembot:
@@ -35,10 +37,10 @@ module.exports=
         ident: "flipbook"
         main: "main"
         autoload: true
-        debug: true
+        debug: isDebug
         test: false
         prune: true
-        minify: 2
+        minify: (if isDebug then 0 else 2)
         exclude: "test/*"
 
       # "flipbook.js": 

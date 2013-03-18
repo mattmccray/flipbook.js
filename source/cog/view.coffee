@@ -12,7 +12,8 @@ class View
   outlets: {}
 
   constructor: (@options={})->
-    @id= uid('view-')
+    basename= @.constructor.name ? @.constructor.displayName ? 'view'
+    @id= uid("#{basename}-")
     @model= @options.model ? {}
     @_createElem()
     @assignEvents()
@@ -22,7 +23,7 @@ class View
     if @options.elem?
       @elem= $ @options.elem
     else
-      @elem= $ "<#{ @tagName } class='#{ @className }'></#{ @tagName }>"
+      @elem= $ "<#{ @tagName } id='#{ @id }' class='#{ @className }'></#{ @tagName }>"
 
   assignEvents: ->
     for evt, callback of @events
@@ -71,6 +72,15 @@ class View
     @onClose?()
     @
 
+  remove: ->
+    @unassignEvents()
+    @elem.remove()
+    @
+
+  detach: ->
+    @elem.detach()
+    @
+
   getData: ->
     @model.toJSON?() ? @model
 
@@ -79,11 +89,12 @@ class View
     elem.append(@elem)
     @containingElem= elem
     @onDomActive?()
+    @
 
-  addView: (outlet, view)->
-  replaceView: @::addView
+  # addView: (outlet, view)->
+  # replaceView: @::addView
 
-  appendView: (outlet, view)->
+  # appendView: (outlet, view)->
 
   render: ->
     @beforeRender?()

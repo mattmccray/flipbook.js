@@ -28,7 +28,7 @@ borderCol= #CCC
 
     h3
       padding-left 5px
-    .zoom
+    .zoom, .help
       border: 1px solid transparent
       border-radius: 4px
 

@@ -2,7 +2,7 @@ log_level= 1
 
 clog= do ->
   if console?
-    (args)-> console.log.apply console, args
+    (type, args)-> console[type].apply console, args
   else
     -> # Noop
 
@@ -18,22 +18,22 @@ level= (lvl)->
 
 say= ->
   return if log_level < 0
-  clog arguments
+  clog 'log', arguments
 
 info= ->
   return if log_level < 1
-  clog arguments
+  clog 'info', arguments
 
 debug= ->
   return if log_level < 2
-  clog arguments
+  clog 'debug', arguments
 
 error= ->
   newError= new Error
   if newError.stack?
     lines= newError.stack.split "\n"
     console?.error? "Error", lines[2].trim()
-  clog arguments
+  clog 'warn', arguments
 
 toArray= Array::slice
 
