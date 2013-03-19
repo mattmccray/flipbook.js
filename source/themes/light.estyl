@@ -12,11 +12,16 @@ borderCol= #CCC
   &:focus
     color: #000
 
-    /*  
-    &.inactive
-      header, footer
-        opacity: 0.5
-    */
+  .button
+    color: #777
+    border-radius: 4px
+    border: 1px solid transparent
+    &.disabled
+      opacity: 0.3
+    &.down
+      background: #DDD
+      border: 1px solid #CCCCCC
+
 
   header
     border 1px solid borderCol
@@ -28,9 +33,7 @@ borderCol= #CCC
 
     h3
       padding-left 5px
-    .zoom, .help
-      border: 1px solid transparent
-      border-radius: 4px
+
 
   .screen-stack
     z-index 10
@@ -81,22 +84,17 @@ borderCol= #CCC
             background-color: #EEE
             background: linear-gradient(top, #FFF, #DDDDDD)
             border-right: 1px solid #CCC
-
-
-      .button
-        border-radius: 4px
-        border: 1px solid transparent
-        &.disabled
-          opacity: 0.3
-
+  
   &.zoomed
     border-radius: 0
     header
       margin 0
       border-radius: 0
+      z-index: 9999
     footer
       margin 0
       border-radius: 0
+      z-index: 9999
 
   &.isDesktop
     .button
@@ -106,4 +104,8 @@ borderCol= #CCC
       &.disabled
         &:hover
           background: none
+      &.down
+        &:hover
+          background: #D9D9D9
+          border: 1px solid #CCCCCC
 

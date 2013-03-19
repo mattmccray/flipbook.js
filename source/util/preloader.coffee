@@ -1,4 +1,4 @@
-log= require('util/log').prefix('preloader:')
+log= require('./log').prefix('preloader:')
 
 class Preloader
   constructor: (root)->
@@ -9,17 +9,19 @@ class Preloader
   onLoad: (@loadCallback)-> @
 
   start: ->
-    # log.debug "START!", @
+    # log.debug "START!", @elem
     images= @elem.find('img')
     @total= images.length
     @count= 0
     images
       .on('error', @didError)
       .on('load', @didLoad)
+    if @total is @count
+      @didError(null)
     @
 
   didLoad: (e)=>
-    # log.debug 'didLoad', e.target
+    # log.debug 'didLoad', e
     @count += 1
     percent= Math.floor( (@count / @total) * 100 )    
     # log.debug "PERCENT", @count, @total, "#{percent}%"
@@ -35,6 +37,7 @@ class Preloader
     @progressCallback?(100)
     @elem.find('img').off()
     delete @elem
+    # log.debug "Calling errorCallback"
     @errorCallback?(e)
 
 

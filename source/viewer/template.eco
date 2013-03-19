@@ -26,9 +26,7 @@
     </div>
   </div>
 </div> 
-<% if @copyright?: %> 
 <footer class="copyright" title="<%= @copyright %>"><span><%= @copyright %></span></footer> 
-<% end %> 
 <footer class="pager"> 
 <div class="prevPage button"><span>&#8227;</span></div><!-- lsaquo -->
 <div class="progress">

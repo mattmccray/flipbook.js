@@ -1,4 +1,15 @@
-// FlipBook
+/*
+require('themes/light');require('themes/dark');require('themes/gray');
+*/
+
+
+headerHeight= 40px
+stausHeight= 15px
+footerHeight= 35px
+
+buttonHeight= 32px
+buttonWidth= 32px
+
 @import 'nib'
 
 .flipbook
@@ -158,7 +169,6 @@
           height: pagerHeight
           top: (pagerHeight / 2px)
           overflow: hidden
-          /* transition: width 150ms */
 
 
           span
@@ -171,6 +181,10 @@
 
           &.done
             width: 100% !important
+            span
+              display: none
+
+          &.start
             span
               display: none
           
@@ -210,6 +224,16 @@
           opacity: 0.3
           cursor: default
 
+  &.animated
+    .bar
+      transition: width 150ms, opacity 150ms
+
+  &.allowEmptyProgress
+    .bar
+      &.start
+        opacity:0
+
+
   &.isDesktop
     .the-end
       .restart
@@ -235,7 +259,7 @@
   .screen-stack
     display: table !important
     position: absolute !important
-    top: 35px !important
+    top: 38px !important
     bottom: 50px !important
     left: 0px !important
     right: 0px !important

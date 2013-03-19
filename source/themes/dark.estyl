@@ -11,22 +11,19 @@
   &:focus
     color: #FFF
 
-    /*  
-    &.inactive
-      header, footer
-        opacity: 0.5
-    */
+  .button
+    color: #CCC
+    border-radius: 4px
+    &.disabled
+      opacity: 0.3
 
   header
     background none
     padding 5px
     h3
       padding-left 5px
-    .zoom, .help
-      border-radius: 4px
 
   .screen-stack
-    /*box-shadow: 0px 2px 9px #777 */
 
     .errors
       padding: 25px
@@ -81,11 +78,6 @@
             background: linear-gradient(top, #444, #333)
             span
               background-color: #000
-
-      .button
-        border-radius: 4px
-        &.disabled
-          opacity: 0.3
 
   &.zoomed
     border-radius: 0

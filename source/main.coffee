@@ -4,7 +4,7 @@ env= require 'env'
 log= require('util/log').prefix('main:')
 ensure= require 'util/ensure'
 scanner= require 'scanner'
-validate= require 'validator'
+validate= require 'viewer/validator'
 
 Viewer= require 'viewer/index'
 
@@ -38,17 +38,3 @@ if env.debug and env.mobile
   ensure 'firebug', (err)->
     window.onerror= (err)->
       log.info "ERROR!", err
-
-
-###
-// prevents these from being pruned
-require('viewer/theme-light');
-require('viewer/theme-dark');
-require('viewer/theme-default');
-require('viewer/controllers/buttons');
-require('viewer/controllers/end');
-require('viewer/controllers/focus');
-require('viewer/controllers/help');
-require('viewer/controllers/loading');
-require('viewer/controllers/progress');
-###

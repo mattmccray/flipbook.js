@@ -1,5 +1,10 @@
 # FlipBook Ideas
 
+
+##
+  
+  - Think about adding: https://github.com/benbarnett/jQuery-Animate-Enhanced
+
 ## From Workflowy
 
 ### Names for style of comic?

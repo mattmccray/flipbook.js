@@ -6,5 +6,7 @@ module.exports= (elem, state)->
       .toggleClass('inactive', (not isActive))
       .toggleClass('active', isActive)    
 
-  elem.on 'focus', -> state.set active:true
-  elem.on 'blur', ->  state.set active:false unless elem.is '.zoomed'
+  elem.on 'focus', -> 
+    state.set active:true
+  elem.on 'blur', ->  
+    state.set active:false unless elem.is '.zoomed'

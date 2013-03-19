@@ -6,13 +6,23 @@ errors= []
 fixupTypes= (o)->
   o.pages= parseInt(o.pages, 10) if typeof o.pages is 'string'
   o.start= if o.start?
-      parseInt(o.start, 10) if typeof o.start is 'string'
+      if typeof o.start is 'string'
+        parseInt(o.start, 10)
+      else
+        o.start
     else
       1
-  o.theme ?= 'default'
+  o.progressAllowEmpty= if o.progressAllowEmpty?
+      (ae= o.progressAllowEmpty) is true or ae is 'true' or ae is 'yes'
+    else
+      true
+  o.animated = if o.animated? 
+      o.animated is true or o.animated is 'true' or o.animated is 'yes'
+    else
+      true
+  o.copyright ?= ""
 
-
-module.exports= validator= (options)->
+module.exports= validator= (options, fixup=false)->
   # Validates all the options a present
   # Need to do more, later... but for now this will do.
   errors= []
@@ -21,7 +31,7 @@ module.exports= validator= (options)->
   errors.push "pages is missing" unless options.pages?
 
   if errors.length is 0
-    fixupTypes(options)
+    fixupTypes(options) if fixup
     true
   else
     false

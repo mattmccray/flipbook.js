@@ -28,9 +28,11 @@ api.define ->
     results.push item:item, model:model
   results
 
+
 # data-flipbook-*KEY="OPTION" scanner
 api.define ->
   results=[]
+  hyphenParser= /-([a-z])/g
   $('[data-flipbook-pages]').each (i,item)->
     i= $(item)
     model= {}
@@ -38,7 +40,9 @@ api.define ->
       name= String(att.name ? att.nodeName)
       if name.indexOf('data-flipbook-') is 0
         name = name.replace('data-flipbook-', '')
-        model[name]= att.value ? att.nodeValue
+        safeName = name.replace hyphenParser, (g)-> g[1].toUpperCase()
+        # log.info "munged", name, "to", safeName
+        model[safeName]= att.value ? att.nodeValue
     # log.info model
     results.push item:item, model:model
   results

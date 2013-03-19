@@ -17,58 +17,29 @@
         margin-right: 12px;
         margin-left: 13px;
       }
+      .col pre {
+        margin-top: 4em;
+        font-size: 80%;
+        overflow: auto;
+      }
       .flipbook {
         margin: 0 auto;
       }
     </style>
   </head>
   <body>
-    <!-- <h3>Testing FlipBook Viewer</h3> -->
-
-    <!-- <div 
-      data-flipbook-pages="49" 
-      data-flipbook-start="65" 
-      data-flipbook-autofocus="true"
-      data-flipbook-theme="dark"
-      data-flipbook-path="media/comics2/comic-paxarena-eng###.jpg" 
-      data-flipbook-copyright="Created by and copyright &copy; Mast, Geoffo &amp; Balak" 
-      data-flipbook-title="PAX ARENA">
-      <noscript>
-        Please enable JavaScript, or upgrade to a modern browser to read this comic.
-      </noscript>
-    </div>
-
-
-  <p>&nbsp;</p>
-
-    <div style="width: 250px; float: right">
-      <div data-flipbook="pages:3,start:100,path:media/comics/#.jpg,title:Test Comic 3,theme:dark"></div>
-
-  <p>&nbsp;</p>
-
-    <div 
-      data-flipbook-pages="8" 
-      data-flipbook-path="http://www.zoodotcom.com/media/minicomics/tmnt/tmnt-spy-game-#.png" 
-      data-flipbook-title="TMNT: Spy Game" 
-      data-flipbook-copyright="Created by Matt McCray, no rights reserved really. The turtle's aren't mine. Also, please to don't sue me." 
-      data-flipbook-options="">
-      ZdC Presents...
-    </div>
-
-
-    </div> -->
-
-
     <div class="col">
 
       <div 
         data-flipbook-pages="49" 
         data-flipbook-start="65" 
-        data-flipbook-autofocus="true"
         data-flipbook-theme="dark"
         data-flipbook-path="media/comics2/comic-paxarena-eng###.jpg" 
         data-flipbook-copyright="Created by and copyright &copy; Mast, Geoffo &amp; Balak" 
         data-flipbook-title="PAX ARENA">
+        <div>
+          <p>Loading comic viewer...</p>
+        </div>
         <noscript>
           Please enable JavaScript, or upgrade to a modern browser to read this comic.
         </noscript>
@@ -80,17 +51,32 @@
         data-flipbook-pages="20"
         data-flipbook-path="media/comics2/comic-paxarena-eng###.jpg"
         data-flipbook-title="Test Comic 2: The really, really, long titled comic!"
-        
+        data-flipbook-animated="false"
+        data-flipbook-theme="gray"
         data-flipbook-start="65">
+        <div>
+          <p>Loading comic viewer...</p>
+        </div>
         <noscript>
           Please enable JavaScript, or upgrade to a modern browser to read this comic.
         </noscript>
       </div>
 
       <p>&nbsp;</p>
+      <!-- <p>&nbsp;</p>
       <p>&nbsp;</p>
-      <p>&nbsp;</p>
-      <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+      <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p> -->
+
+          <div 
+      data-flipbook-pages="8" 
+      data-flipbook-path="http://www.zoodotcom.com/media/minicomics/tmnt/tmnt-spy-game-#.png" 
+      data-flipbook-title="TMNT: Spy Game" 
+      data-flipbook-author="Matt McCray" 
+      data-flipbook-copyright="Created by Matt McCray, no rights reserved really. The turtle's aren't mine. Also, please to don't sue me." 
+      data-flipbook-progress-allow-empty="true">
+      ZdC Presents...
+    </div>
+
 
     </div><div class="col">
       
@@ -99,8 +85,12 @@
         data-flipbook-pages="20"
         data-flipbook-path="media/comics2/comic-paxarena-eng###.jpg"
         data-flipbook-title="Test Comic 2"
+        data-flipbook-autofocus="true"
         data-flipbook-copyright="&copy; 2013"
         data-flipbook-start="65">
+        <div>
+          <p>Loading comic viewer...</p>
+        </div>
         <noscript>
           Please enable JavaScript, or upgrade to a modern browser to read this comic.
         </noscript>
@@ -110,4 +100,19 @@
 
   </body>
   <script src="flipbook.js"></script>
+  <script>
+    // flipbook('lifecycle').on('created', function(viewer){
+    //   console.log("Did create a viewer!", viewer)
+    // })
+    window.onload= function() {
+      var divs= document.querySelectorAll('[data-flipbook-path]');
+
+      for (var i = divs.length - 1; i >= 0; i--) {
+        var div= divs[i];
+        var code= document.createElement('pre');
+        code.innerText= div.outerHTML;
+        div.parentNode.appendChild(code)
+      }
+    }
+  </script>
 </html>
