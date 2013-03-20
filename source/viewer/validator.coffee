@@ -2,25 +2,34 @@ log= require('util/log').prefix('validator:')
 
 errors= []
 
+bool= (val, defaultVal)->
+  unless val?
+    defaultVal
+  else
+    val is 'true' or val is 'yes'
+string= (val, defaultVal)->
+  unless val?
+    defaultVal
+  else
+    String(val)
+integer= (val, defaultVal)->
+  unless val?
+    defaultVal
+  else
+    parseInt(val, 10)
+
+boolProp= (o, prop, defaultVal)-> o[prop]= bool o[prop], defaultVal
+intProp= (o, prop, defaultVal)-> o[prop]= integer o[prop], defaultVal
+strProp= (o, prop, defaultVal)-> o[prop]= string o[prop], defaultVal
+
+
 
 fixupTypes= (o)->
-  o.pages= parseInt(o.pages, 10) if typeof o.pages is 'string'
-  o.start= if o.start?
-      if typeof o.start is 'string'
-        parseInt(o.start, 10)
-      else
-        o.start
-    else
-      1
-  o.progressAllowEmpty= if o.progressAllowEmpty?
-      (ae= o.progressAllowEmpty) is true or ae is 'true' or ae is 'yes'
-    else
-      true
-  o.animated = if o.animated? 
-      o.animated is true or o.animated is 'true' or o.animated is 'yes'
-    else
-      true
-  o.copyright ?= ""
+  intProp o, 'pages'
+  intProp o, 'start', 1
+  boolProp o, 'animated', true
+  strProp o, 'copyright', ""
+
 
 module.exports= validator= (options, fixup=false)->
   # Validates all the options a present

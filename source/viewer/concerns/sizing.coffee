@@ -1,9 +1,13 @@
+log= require('util/log').prefix('sizing:')
+
 module.exports= (elem, state)->
   imageWidth=0
   imageHeight=0
   imageFullWidth=0
   imageFullHeight=0
   progressWidth=0
+
+  stack= elem.find('.screen-stack')
 
   state.on 'resize', ->
     if elem.is('.zoomed')
@@ -15,29 +19,32 @@ module.exports= (elem, state)->
 
   getDimensions= ->
     # return if imageFullHeight isnt 0
-    # stack.show()
+    # log.info 'calcing sizes'
+    wasVisible= stack.is(':visible')
+    stack.show() unless wasVisible
     # state.trigger 'cmd:current:show'
     firstImg= elem.find('img').get(0)
     state.imageWidth= imageWidth= firstImg.width
     state.imageHeight= imageHeight= firstImg.height
     state.imageFullWidth= imageFullWidth= firstImg.naturalWidth
     state.imageFullHeight= imageFullHeight= firstImg.naturalHeight
-    log.info imageWidth, 'x', imageHeight, ' -- ', imageFullWidth, 'x', imageFullHeight
+    # log.info imageWidth, 'x', imageHeight, ' -- ', imageFullWidth, 'x', imageFullHeight
     getProgressDimensions()
+    stack.hide() unless wasVisible
     # state.trigger 'cmd:current:hide'
 
   getProgressDimensions= ->
     state.progressWidth= progressWidth= elem.find('.progress').width()
 
-  # state.on 'cmd:sizes:calc', ->
-  #   getDimensions()
-
-  state.on 'change:loaded', (loaded)->
-    getDimensions()
+  state.on 'sizes:calc', getDimensions
 
   resizeRegularElements= ->
-    elem.css width:state.imageWidth, height:''
-    stack.css(height:state.imageHeight)
+    elem.css height:''
+    if state.animated and not state.ready
+      elem.animate width:state.imageWidth
+    else
+      elem.css width:state.imageWidth
+    stack.css(height:state.imageHeight) if state.ready
     elem.find('img').css maxWidth:'100%', maxHeight:''
 
 

@@ -21,6 +21,7 @@ module.exports= (elem, state)->
 
   preload_loaded= ->
     state.set loaded:yes
+    state.trigger 'loaded'
     state.trigger 'load:complete'
 
   preload_progress= (percent)-> 

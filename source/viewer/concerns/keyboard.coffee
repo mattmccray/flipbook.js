@@ -52,7 +52,7 @@ module.exports= (elem, state)->
       if e.which in keys
         state.trigger cmd
         return false
-    log.info "Unknown key:", e.which
+    # log.info "Unknown key:", e.which
     null
 
   state.on 'key:input', handler

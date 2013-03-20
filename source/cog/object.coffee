@@ -23,19 +23,24 @@ class Cog
   # (or obj.set key:'name'), the object will emit a 'change:key'
   # and 'change' events
   set: (keyOrHash, value)->
-    changed=[]
+    changed={}
+    hasChanged= no
     if typeof keyOrHash is 'string'
       if @[keyOrHash] isnt value
+        oldval= @[keyOrHash]
         @[keyOrHash]= value
-        changed.push keyOrHash
-        @fire "change:#{ keyOrHash }", value, @
+        changed[keyOrHash]= [value, oldval]
+        hasChanged= yes
+        @fire "change:#{ keyOrHash }", value, oldval, @
     else
       for key, val of keyOrHash
         if @[key] isnt val
+          oldval= @[key]
           @[key]= val
-          changed.push key
-          @fire "change:#{ key }", val, @
-    @fire 'change', changed, @ if changed.length
+          changed[key]= [val, oldval]
+          hasChanged= yes
+          @fire "change:#{ key }", val, oldval, @
+    @fire 'change', changed, @ if hasChanged
     @
 
   # hasChanged: (key)->

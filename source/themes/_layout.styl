@@ -2,7 +2,6 @@
 require('themes/light');require('themes/dark');require('themes/gray');
 */
 
-
 headerHeight= 40px
 stausHeight= 15px
 footerHeight= 35px
@@ -24,6 +23,7 @@ buttonWidth= 32px
   width: 100%
   max-width: 100%
   cursor: default
+  margin: 0 auto;
 
   &:focus
     outline: 0
@@ -73,10 +73,13 @@ buttonWidth= 32px
       position: absolute
       top: 0
       left: 0
+      width: 100%
       max-width: 100%
+      text-align: center
 
       img
         max-width: 100%
+        margin: 0 auto
 
       &.content-screen
         display: none
@@ -185,6 +188,7 @@ buttonWidth= 32px
               display: none
 
           &.start
+            opacity:0
             span
               display: none
           
@@ -227,11 +231,8 @@ buttonWidth= 32px
   &.animated
     .bar
       transition: width 150ms, opacity 150ms
-
-  &.allowEmptyProgress
-    .bar
-      &.start
-        opacity:0
+    .button
+      transition: opacity 150ms
 
 
   &.isDesktop

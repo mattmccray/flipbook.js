@@ -7,11 +7,6 @@ module.exports= progressCtrl= (elem, state)->
   progressBar= elem.find('.progress') #.hide()
   locationBar= elem.find('.progress .location').hide()
 
-  updateEmptyness= ->
-    elem.toggleClass 'allowEmptyProgress', state.progressAllowEmpty
-
-  updateEmptyness()
-
   updateWidth= ->
     percent= state.getPercentageRead()
     locationBar.width "#{percent}%"
@@ -26,15 +21,25 @@ module.exports= progressCtrl= (elem, state)->
     if state.isValidPage(page)
       updateWidth()
 
-  state.on 'change:progressAllowEmpty', updateEmptyness
-
   didTapScrubber= (e)->
+    isDragging= e.type is 'mousemove' or e.type is 'drag'
     x= getX(e)
-    p= (x / progressBar.width()) # best to cache progressBar.width 
-    page= Math.round p * state.pages
-    page= state.pages - 1 if page > state.pages
-    page= 0 if page < 0
-    # log.info "SCRUBBER AT", x, p, page, '/', @screenCount
+    l= null
+    w= progressBar.width()
+    p= (x / w) # best to cache progressBar.width 
+    pageF= p * (state.pages - 1)
+    page= if isDragging
+        Math.round pageF
+      else
+        l= locationBar.width()
+        if x < l 
+          Math.floor pageF 
+        else 
+          Math.ceil pageF
+    # log.info 'x', x, 'w', w, 'p', p, 'page', page, "(#{ pageF }) l", l
+    # page= state.pages - 1 if page >= state.pages
+    # page= 0 if page < 0
+    # log.info "SCRUBBER AT", x, (page + 1), '/', state.pages
     state.set currentPage:page
 
   startScrubbing= (e)->

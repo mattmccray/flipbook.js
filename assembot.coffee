@@ -29,10 +29,22 @@ module.exports=
           enabled: yes
           max: 1000
           rules:
-            ".(jpg|png|jpeg)": -100
+            ".(jpg|png|jpeg)": 100
     
     targets:
       "public/flipbook.js":
+        source: "./source"
+        ident: "flipbook"
+        main: "start"
+        autoload: true
+        debug: isDebug
+        test: false
+        prune: true
+        embedded: true
+        minify: (if isDebug then 0 else 2)
+        exclude: "test/*"
+
+      "public/flipbook.core.js":
         source: "./source"
         ident: "flipbook"
         main: "main"
@@ -40,8 +52,14 @@ module.exports=
         debug: isDebug
         test: false
         prune: true
+        embedded: false
         minify: (if isDebug then 0 else 2)
         exclude: "test/*"
+
+      "public/flipbook.core.css":
+        source: "./source"
+        stylus:
+          compress: yes
 
       # "flipbook.js": 
       #   source: "./source"

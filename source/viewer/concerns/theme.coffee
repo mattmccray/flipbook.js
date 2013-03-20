@@ -1,4 +1,6 @@
 
+require("themes/#{ 'embedded' }").activate()
+
 setTheme= (o, defaultTheme='light')->
   try
     require("themes/#{ o.theme }").activate()
@@ -8,4 +10,5 @@ setTheme= (o, defaultTheme='light')->
   "theme-#{ o.theme }"
 
 module.exports= (elem, state)->
-  elem.addClass setTheme state
+  # elem.addClass setTheme state
+  elem.addClass "theme-#{ state.theme ? 'light'}"

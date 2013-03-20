@@ -13,30 +13,30 @@
       }
       .col {
         width: 350px;
-        float: right;
+        float: left;
         margin-right: 12px;
         margin-left: 13px;
+      }
+      .col.wider {
+        width: 550px;
       }
       .col pre {
         margin-top: 4em;
         font-size: 80%;
         overflow: auto;
       }
-      .flipbook {
-        margin: 0 auto;
-      }
     </style>
   </head>
   <body>
-    <div class="col">
-
       <div 
         data-flipbook-pages="49" 
         data-flipbook-start="65" 
         data-flipbook-theme="dark"
+        data-flipbook-autofocus="true"
+        data-flipbook-autofix="true"
         data-flipbook-path="media/comics2/comic-paxarena-eng###.jpg" 
         data-flipbook-copyright="Created by and copyright &copy; Mast, Geoffo &amp; Balak" 
-        data-flipbook-title="PAX ARENA">
+        data-flipbook-title="PAX ARENA (no container)">
         <div>
           <p>Loading comic viewer...</p>
         </div>
@@ -44,8 +44,8 @@
           Please enable JavaScript, or upgrade to a modern browser to read this comic.
         </noscript>
       </div>
-
-    </div><div class="col">
+      <p>&nbsp;</p>
+    <div class="col">
 
       <div 
         data-flipbook-pages="20"
@@ -73,19 +73,18 @@
       data-flipbook-title="TMNT: Spy Game" 
       data-flipbook-author="Matt McCray" 
       data-flipbook-copyright="Created by Matt McCray, no rights reserved really. The turtle's aren't mine. Also, please to don't sue me." 
-      data-flipbook-progress-allow-empty="true">
+      data-flipbook-progress-allow-empty="false">
       ZdC Presents...
     </div>
 
 
-    </div><div class="col">
+    </div><div class="col wider">
       
       <div 
         data-flipbook-theme="light"
         data-flipbook-pages="20"
         data-flipbook-path="media/comics2/comic-paxarena-eng###.jpg"
         data-flipbook-title="Test Comic 2"
-        data-flipbook-autofocus="true"
         data-flipbook-copyright="&copy; 2013"
         data-flipbook-start="65">
         <div>
@@ -104,15 +103,15 @@
     // flipbook('lifecycle').on('created', function(viewer){
     //   console.log("Did create a viewer!", viewer)
     // })
-    window.onload= function() {
-      var divs= document.querySelectorAll('[data-flipbook-path]');
+    // window.onload= function() {
+    //   var divs= document.querySelectorAll('[data-flipbook-path]');
 
-      for (var i = divs.length - 1; i >= 0; i--) {
-        var div= divs[i];
-        var code= document.createElement('pre');
-        code.innerText= div.outerHTML;
-        div.parentNode.appendChild(code)
-      }
-    }
+    //   for (var i = divs.length - 1; i >= 0; i--) {
+    //     var div= divs[i];
+    //     var code= document.createElement('pre');
+    //     code.innerText= div.outerHTML;
+    //     div.parentNode.appendChild(code)
+    //   }
+    // }
   </script>
 </html>

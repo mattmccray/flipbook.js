@@ -16,7 +16,7 @@ log= require('util/log').prefix('viewer:')
 events= require 'cog/events'
 validate= require './validator'
 
-require('themes/_layout').activate()
+
 
 CogView= require 'cog/view'
 CogModel= require 'cog/object'
@@ -38,15 +38,12 @@ class ViewState extends CogModel
   getLastPage: -> @pages - 1
   isValidPage: (num) -> num >= 0 and num < @pages
   getPercentageRead: -> 
-    if @isLastPage()
+    if @currentPage is 0
+      0
+    else if @isLastPage()
       100
-    else if @progressAllowEmpty
-      if @current is 0
-        0
-      else
-        Math.min Math.round( (@currentPage / @getLastPage()) * 100 ), 100
-    else
-      Math.min Math.ceil( ((@currentPage + 1) / @pages) * 100 ), 100
+    else 
+      Math.min Math.round( (@currentPage / @getLastPage()) * 100 ), 100
 
 
 class FlipBookViewer extends CogView
@@ -77,13 +74,13 @@ class FlipBookViewer extends CogView
       helpScreen: no
     
     # @state.on 'change', (changed)-> console.warn "state changed", changed
-    @state.on 'change:currentPage', @onPageChange
-    @state.on 'change:ready', @onReady
+    # @state.on 'change:currentPage', @onPageChange
+    @state.on 'ready', @onReady
 
     @state.on 'cmd:page:next', @onNextPage
     @state.on 'cmd:page:prev', @onPrevPage
-    @state.on 'cmd:current:show', @showCurrent
-    @state.on 'cmd:current:hide', @hideCurrent
+    # @state.on 'cmd:current:show', @showCurrent
+    # @state.on 'cmd:current:hide', @hideCurrent
     # @state.on 'cmd:help:toggle', @toggleHelp
     @state.on 'cmd:zoom:toggle', @toggleZoom
     @state.on 'cmd:zoom:out', @doZoomOut
@@ -140,21 +137,28 @@ class FlipBookViewer extends CogView
     # @fullImageWidth= firstImg.naturalWidth
     # @imageWidth= firstImg.width
     # @imageHeight= firstImg.height
-    @showCurrent()
+    # @showCurrent()
     # @state.trigger 'resize'
     # @elem.css width:@imageWidth
     # @progressWidth= @progressBar.width()
-    setTimeout (=> @state.set ready:yes ), 1
+    
+    # setTimeout (=> @state.set ready:yes ), 1
+    @state.trigger 'ready'
+    @state.set ready:yes
 
   onReady: =>
-    log.info "onREady!"
+    log.info 'onReady'
+    @state.trigger 'cmd:current:show'
+    @state.trigger 'sizes:calc'
+    log.info 'resizing stack'
+    @state.trigger 'resize'
     if @state.animated is false
       @stack
         .css(height:@state.imageHeight, opacity:1)
     else
       @stack
         .css(opacity:0)
-        .animate(height:@state.imageHeight, opacity:1)
+        .animate height:@state.imageHeight, opacity:1 #, => @state.trigger 'resize'
 
 
   onLoadError: =>
@@ -166,11 +170,10 @@ class FlipBookViewer extends CogView
     err.slideDown()
 
   showCurrent: =>
-    displayType= if @state.zoomed then 'table-cell' else 'block'
-    @stack.find('.screen').get(@current).style.display= displayType;
+    @state.trigger 'cmd:current:show'
 
   hideCurrent: =>
-    $(@stack.find('.screen').get(@current)).hide()
+    @state.trigger 'cmd:current:hide'
 
   getData: ->
     screens= []
@@ -189,11 +192,10 @@ class FlipBookViewer extends CogView
     data
 
   onRender: ->
+    @stack.find('.screen').hide()
     for ctrlName in require.modules('viewer/concerns/')
       # log.debug "applying module:", ctrlName
       require(ctrlName).call @, @elem, @state
-    # @progressWidth= @progressBar.width()
-    @stack.find('.screen').hide()
 
 
   onDomActive: ->
@@ -203,8 +205,6 @@ class FlipBookViewer extends CogView
       @elem.addClass 'animated'
       @elem.fadeIn()
     @elem.focus() if @model.autofocus
-    unless @state.firstRun is false
-      @state.trigger 'cmd:help:toggle'
       
 
 module.exports= FlipBookViewer

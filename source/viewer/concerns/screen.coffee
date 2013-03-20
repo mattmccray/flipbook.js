@@ -7,14 +7,39 @@ module.exports= (elem, state)->
   pending= null
 
   state.on 'change:loaded', (loaded)->
-    # log.info 'stack loaded?', loaded
+    log.info 'stack loaded?', loaded
     stack.toggle loaded
+
+  getScreen= (idx=state.currentPage)->
+    elem.find('.screen').get(idx)
+
+  updateScreen= (current, old)->
+    # log.info "updateScreen", current
+    getScreen(current).style.display= 'table-cell'
+    getScreen(old).style.display= 'none'
+
+  showCurrent= ->
+    # log.info "showCurrent"
+    # displayType= if state.zoomed then 'table-cell' else 'block'
+    displayType= 'table-cell'
+    getScreen().style.display= displayType;
+  
+  hideCurrent= ->
+    # log.info "hideCurrent"
+    $(getScreen()).hide()
+
+  state.on 'change:currentPage', updateScreen
+  state.on 'change:ready', showCurrent
+
+  state.on 'cmd:current:show', showCurrent
+  state.on 'cmd:current:hide', hideCurrent
 
   didTap= (e)->
     return if state.endScreen or state.helpScreen or not state.ready
-    tgt= $(e.currentTarget)
+    tgt= $(e.delegateTarget ? e.currentTarget)
     e?.preventDefault?()
     # e?.stopPropagation?()
+    # log.info getX(e), tgt.width(),
     if getX(e) < (tgt.width() / 2)
       state.trigger 'cmd:page:prev'
     else
