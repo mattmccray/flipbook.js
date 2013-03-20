@@ -12,6 +12,7 @@
   <div class="screen the-end content-screen">
     <div class="container">
       <div class="body">
+        <div class="close">&oplus;</div>
         <div class="restart">
           <span class="icon">&#8634;</span>
           <label>Restart from<br/>beginning.</label>
@@ -22,9 +23,58 @@
   <div class="screen help-content content-screen">
     <div class="container">
       <div class="body">
-        <%= @tapOrClick() %> on the left or right half.
+        <div class="close">&oplus;</div>
+        <dl>
+        <% if @isMobile: %>
+          <dt><span>&#9702;</span> Tap</dt>
+          <dd>On the right half of the comic to see the next screen, tap on the
+            left half to go back.</dd>
+          
+          <dt><span>&#8644;</span> Swipe</dt>
+          <dd>Left or right to progress through the screens.</dd>
 
-        <p class="info"><small>FlipBook v{%- package.version -%}.</small></p>
+          <dt><span>&bull;</span> Hold</dt>
+          <dd>To show or hide this help screen.</dd>
+
+          <dt><span>&harr;</span> Pinch</dt>
+          <dd>Out to zoom viewer, in to shrink.</dd>
+        <% else: %>
+          <dt>Mouse</dt>
+          <dd><p>Click on the right half of the comic to see the next<br>
+            screen, click on the left half to go back.</p></dd>
+
+          <dt>Keyboard</dt>
+          <dd>
+            <table>
+              <tr>
+                <th><kbd class='space'>SPACE</kbd> <kbd>&rarr;</kbd> <kbd>]</kbd> <kbd>d</kbd></th>
+                <td>Next screen.</td>
+              </tr>
+              <tr>
+                <th><kbd>&larr;</kbd> <kbd>[</kbd> <kbd>a</kbd></th>
+                <td>Previous screen.</td>
+              </tr>
+              <tr>
+                <th><kbd>z</kbd></th>
+                <td>Toggles zoom mode.</td>
+              </tr>
+              <tr>
+                <th><kbd>ESC</kbd></th>
+                <td>Cancels zoom mode.</td>
+              </tr>
+              <tr>
+                <th><kbd>r</kbd></th>
+                <td>Restart from the beginning.</td>
+              </tr>
+              <tr>
+                <th><kbd>h</kbd> <kbd>?</kbd></th>
+                <td>Toggles this help screen.</td>
+              </tr>
+            </table>
+          </dd>
+        <% end %>
+        </dl>
+        <p class="info"><small>FlipBook v{%- package.version -%}</small></p>
       </div>
     </div>
   </div>

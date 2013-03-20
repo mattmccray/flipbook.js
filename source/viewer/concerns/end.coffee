@@ -2,7 +2,8 @@ env= require 'env'
 
 module.exports= (elem, state)->
   endScreen= elem.find('.the-end')
-  restartBtn= elem.find('.restart')
+  restartBtn= endScreen.find('.restart')
+  closeBtn= endScreen.find('.close')
 
   doRestart= (e)->
     e?.preventDefault?()
@@ -20,4 +21,12 @@ module.exports= (elem, state)->
   else
     restartBtn.on 'click', doRestart
 
-
+  closeScreen= (e)->
+    e.preventDefault()
+    e.stopPropagation()
+    state.set endScreen:no
+  
+  if env.mobile
+    Hammer(closeBtn.get(0), prevent_default:true).on 'tap', closeScreen
+  else
+    closeBtn.on 'click', closeScreen

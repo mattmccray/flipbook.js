@@ -19,6 +19,7 @@ buttonWidth= 32px
 
 .flipbook
   font-family "Helvetica Neue", Helvetica, Sans-Serif
+  font-size: 16px
   user-select: none
   width: 100%
   max-width: 100%
@@ -104,14 +105,69 @@ buttonWidth= 32px
           display: table-cell
           vertical-align middle
 
+        .close
+          position: absolute
+          display: block
+          top: .5em
+          right: 1em
+          font-size: 25px
+          font-family: Times, Serif
+          transform: rotate(45deg)
+          cursor: pointer
+
 
       &.help-content
         padding: 1em
+        overflow: auto
+        font-size: 12px
+
 
         .body
+          // padding: 1em
+          // border: 3px dotted white
+          // border-radius: 15px
+
+        dt
           padding: 1em
-          border: 3px dotted white
-          border-radius: 15px
+          font-weight: bold
+          font-size: 120%
+          span
+            font-size: 120%
+        dd
+          margin-bottom: 2em
+
+
+        table
+          display: inline-block
+      
+        th
+          text-align: right
+          color: #999
+          whitespace: nowrap
+          kbd
+            font-family: Times, Serif
+            display: inline-block
+            text-align: center
+            min-width: 2em
+            font-size: 11px
+            color: #FFF
+            border: 1px solid #DDD
+            border-bottom: 3px solid #DDD
+            border-radius: 3px
+            padding: .25em
+            text-transform: uppercase
+            border-color: #AAA
+            border-bottom-color: #999
+            background-color: #DDD
+            background: linear-gradient(top, #DDD, #FFF)
+            color: #555
+            box-shadow: 0px 2px 2px #000
+
+        td
+          padding: .25em
+          padding-left: 1em
+          text-align: left
+          vertical-align middel
 
         .info
           display: absolute
@@ -240,6 +296,19 @@ buttonWidth= 32px
       transition: width 150ms, opacity 150ms
     .button
       transition: opacity 150ms
+
+  &.isMobile
+    .help-content
+      .body
+        overflow: scroll !important
+      dl
+        margin: 0 auto
+        margin-bottom: 1em !important
+        max-width: 20em
+      dt
+        padding-bottom: 0px !important
+      dd
+        margin: 0 !important
 
 
   &.isDesktop

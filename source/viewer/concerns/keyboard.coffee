@@ -51,6 +51,7 @@ module.exports= (elem, state)->
     for cmd, keys of keyMap
       if e.which in keys
         state.trigger cmd
+        e.preventDefault() unless e.metaKey or e.ctrlKey
         return false
     # log.info "Unknown key:", e.which
     null

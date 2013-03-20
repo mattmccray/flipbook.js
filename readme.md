@@ -37,4 +37,5 @@ For use with modern browsers. Tested on later versions of:
 - Use hash urls. (#/page/N -- allowing bookmarks or links to specific page)
 - Rearrangable UI elements.
 - Animate zooming in and out
-- User options screen, so they can disable/enable features (saves to localStorage)
+- User options screen, so they can disable/enable features (saves to localStorage) 
+- Allow reading images inside the DIV and pull those out instead of generating img tags via path/pages opts.
