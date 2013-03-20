@@ -17,6 +17,9 @@ module.exports= progressCtrl= (elem, state)->
     locationBar.toggle isLoaded
     updateWidth()
 
+  state.once 'ready', ->
+    progressBar.toggle state.showProgress
+
   state.on 'change:currentPage', (page)->
     if state.isValidPage(page)
       updateWidth()

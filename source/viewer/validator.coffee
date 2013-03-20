@@ -32,6 +32,7 @@ fixupTypes= (o)->
   boolProp o, 'autofit', true
   boolProp o, 'showHelpButton', true
   boolProp o, 'showZoomButton', true
+  boolProp o, 'showProgress', true
   strProp o, 'copyright', ""
   strProp o, 'background', ""
 
