@@ -6,6 +6,9 @@
 <div class="screen-stack"><% for screen,i in @screens: %> 
 <div class="screen"><img src="<%= screen.src %>"/></div> 
 <% end %> 
+  <div class="blocker content-screen">
+    &nbsp;
+  </div>
   <div class="screen the-end content-screen">
     <div class="container">
       <div class="body">

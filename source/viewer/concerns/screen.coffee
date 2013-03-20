@@ -35,7 +35,7 @@ module.exports= (elem, state)->
   state.on 'cmd:current:hide', hideCurrent
 
   didTap= (e)->
-    return if state.endScreen or state.helpScreen or not state.ready
+    return if state.contentScreenVisible or not state.ready
     tgt= $(e.delegateTarget ? e.currentTarget)
     e?.preventDefault?()
     # e?.stopPropagation?()

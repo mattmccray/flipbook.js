@@ -29,7 +29,8 @@ class Cog
       if @[keyOrHash] isnt value
         oldval= @[keyOrHash]
         @[keyOrHash]= value
-        changed[keyOrHash]= [value, oldval]
+        changed[keyOrHash]= value
+        changed["#{keyOrHash}Previous"]= oldval
         hasChanged= yes
         @fire "change:#{ keyOrHash }", value, oldval, @
     else
@@ -37,7 +38,8 @@ class Cog
         if @[key] isnt val
           oldval= @[key]
           @[key]= val
-          changed[key]= [val, oldval]
+          changed[key]= val
+          changed["#{key}Previous"]= oldval
           hasChanged= yes
           @fire "change:#{ key }", val, oldval, @
     @fire 'change', changed, @ if hasChanged

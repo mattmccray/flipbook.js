@@ -17,3 +17,7 @@ module.exports= (elem, state)->
       @html(value).attr('title', value).show()
     else
       @hide()
+
+  reactor 'title', 'header h3', (value)->
+    value ?= ''
+    @html(value).attr('title', value).show()

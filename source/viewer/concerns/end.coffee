@@ -4,11 +4,14 @@ module.exports= (elem, state)->
   endScreen= elem.find('.the-end')
   restartBtn= elem.find('.restart')
 
-  doRestart= ->
-    state.set currentPage:0, endScreen:no, helpScreen:no    
+  doRestart= (e)->
+    e?.preventDefault?()
+    e?.stopPropagation?()
+    state.set currentPage:0, endScreen:no, helpScreen:no
 
   state.on 'change:endScreen', (show)=>
     endScreen.toggle(show)
+    state.contentScreenVisible= show
 
   state.on 'cmd:restart', doRestart
 

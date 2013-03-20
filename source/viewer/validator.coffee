@@ -28,7 +28,12 @@ fixupTypes= (o)->
   intProp o, 'pages'
   intProp o, 'start', 1
   boolProp o, 'animated', true
+  boolProp o, 'autofocus', false
+  boolProp o, 'autofit', true
+  boolProp o, 'showHelpButton', true
+  boolProp o, 'showZoomButton', true
   strProp o, 'copyright', ""
+  strProp o, 'background', ""
 
 
 module.exports= validator= (options, fixup=false)->
@@ -36,8 +41,8 @@ module.exports= validator= (options, fixup=false)->
   # Need to do more, later... but for now this will do.
   errors= []
 
-  errors.push "path is missing" unless options.path?
-  errors.push "pages is missing" unless options.pages?
+  errors.push "path is missing" unless options?.path?
+  errors.push "pages is missing" unless options?.pages?
 
   if errors.length is 0
     fixupTypes(options) if fixup

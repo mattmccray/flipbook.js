@@ -5,7 +5,6 @@ module.exports= (elem, state)->
   imageHeight=0
   imageFullWidth=0
   imageFullHeight=0
-  progressWidth=0
 
   stack= elem.find('.screen-stack')
 
@@ -29,21 +28,21 @@ module.exports= (elem, state)->
     state.imageFullWidth= imageFullWidth= firstImg.naturalWidth
     state.imageFullHeight= imageFullHeight= firstImg.naturalHeight
     # log.info imageWidth, 'x', imageHeight, ' -- ', imageFullWidth, 'x', imageFullHeight
-    getProgressDimensions()
     stack.hide() unless wasVisible
     # state.trigger 'cmd:current:hide'
 
-  getProgressDimensions= ->
-    state.progressWidth= progressWidth= elem.find('.progress').width()
 
   state.on 'sizes:calc', getDimensions
 
   resizeRegularElements= ->
     elem.css height:''
-    if state.animated and not state.ready
+    if state.animated and not state.ready and state.autofit
       elem.animate width:state.imageWidth
     else
-      elem.css width:state.imageWidth
+      if state.autofit
+        elem.css width:state.imageWidth
+      else
+        elem.css width:''
     stack.css(height:state.imageHeight) if state.ready
     elem.find('img').css maxWidth:'100%', maxHeight:''
 
@@ -53,10 +52,10 @@ module.exports= (elem, state)->
     h= d.height()
     w= d.width()
     elem.css width:w, height:h
+    # elem.css width:''
     h -= elem.find('.pager').outerHeight()
     h -= elem.find('header').outerHeight()
-    h -= elem.find('.copyright').outerHeight() ? 0
-    h -= 6 # margin
+    h -= elem.find('.copyright').outerHeight()
+    # h -= 6 # margin
     stack.css height:h
     elem.find('img').css maxWidth:Math.min(w, imageFullWidth), maxHeight:Math.min(h, imageFullHeight)
-    progressWidth= elem.find('.progress').width()

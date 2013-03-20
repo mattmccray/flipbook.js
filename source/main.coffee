@@ -5,6 +5,7 @@ log= require('util/log').prefix('flipbook:')
 ensure= require 'util/ensure'
 scanner= require 'scanner'
 validate= require 'viewer/validator'
+plugin= require 'plugin'
 
 Viewer= require 'viewer/index'
 
@@ -28,10 +29,12 @@ init= ->
 
   for {item, model} in flipbooks
     if validate(model)
-      view= new Viewer model:model
+      view= new Viewer model
       view.appendTo( $(item).empty() )
     else
       log.info "! Invalid model:", validate.errors(), model
+
+  plugin.install()
 
 if env.debug and env.mobile
   ensure 'firebug', (err)->

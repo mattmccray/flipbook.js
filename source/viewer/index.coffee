@@ -15,12 +15,8 @@ pad= require 'util/number/pad'
 log= require('util/log').prefix('viewer:')
 events= require 'cog/events'
 validate= require './validator'
-
-
-
 CogView= require 'cog/view'
 CogModel= require 'cog/object'
-
 {getX}= require 'util/positions'
 
 build_url= (pattern, idx)->
@@ -55,6 +51,9 @@ class FlipBookViewer extends CogView
     pagerArea: '.pager'
     progressBar: '.progress'
 
+  constructor: (options)->
+    super model:options
+
   initialize: ->
     unless validate(@model, true)
       throw "Invalid settings: #{ validate.errors() }" 
@@ -72,21 +71,18 @@ class FlipBookViewer extends CogView
       zoomed: no
       endScreen: no
       helpScreen: no
-    
-    # @state.on 'change', (changed)-> console.warn "state changed", changed
-    # @state.on 'change:currentPage', @onPageChange
-    @state.on 'ready', @onReady
+      contentScreenVisible: no
+
+    # @state.on 'change', (changes)=> log.info changes
 
     @state.on 'cmd:page:next', @onNextPage
     @state.on 'cmd:page:prev', @onPrevPage
-    # @state.on 'cmd:current:show', @showCurrent
-    # @state.on 'cmd:current:hide', @hideCurrent
-    # @state.on 'cmd:help:toggle', @toggleHelp
     @state.on 'cmd:zoom:toggle', @toggleZoom
     @state.on 'cmd:zoom:out', @doZoomOut
     @state.on 'cmd:zoom:in', @doZoomIn
     @state.on 'load:complete', @onLoad
     @state.on 'load:error', @onLoadError
+    @state.on 'ready', @onReady
 
     @screenCountIdx= @screenCount - 1
     @current= 0
@@ -108,14 +104,6 @@ class FlipBookViewer extends CogView
     return if not @state.zoomed
     @state.set zoomed:no
 
-  onPageChange: (idx)=>
-    return @state.set currentPage:@state.getLastPage() if idx is -1
-    return if not @state.ready or not @state.isValidPage(idx)
-    @state.set endScreen:no
-    @hideCurrent()
-    @current = idx
-    @showCurrent()
-
   onNextPage: =>
     return unless @state.ready
     if @state.isLastPage()
@@ -134,19 +122,6 @@ class FlipBookViewer extends CogView
       @state.set currentPage:@state.getPrevPage()
 
   onLoad: =>
-    # @state.trigger 'cmd:sizes:calc'
-    # @stack.show()
-    # firstImg= @stack.find('img').get(0)
-    # @fullImageHeight= firstImg.naturalHeight
-    # @fullImageWidth= firstImg.naturalWidth
-    # @imageWidth= firstImg.width
-    # @imageHeight= firstImg.height
-    # @showCurrent()
-    # @state.trigger 'resize'
-    # @elem.css width:@imageWidth
-    # @progressWidth= @progressBar.width()
-    
-    # setTimeout (=> @state.set ready:yes ), 1
     @state.trigger 'ready'
     @state.set ready:yes
 
@@ -163,7 +138,6 @@ class FlipBookViewer extends CogView
       @stack
         .css(opacity:0)
         .animate height:@state.imageHeight, opacity:1 #, => @state.trigger 'resize'
-
 
   onLoadError: =>
     log.info "ERROR Loading images"
@@ -197,6 +171,8 @@ class FlipBookViewer extends CogView
 
   onRender: ->
     @stack.find('.screen').hide()
+    @stack.css backgroundColor:@state.background
+    # log.info "Setting bg to ", @state.background
     for ctrlName in require.modules('viewer/concerns/')
       # log.debug "applying module:", ctrlName
       require(ctrlName).call @, @elem, @state

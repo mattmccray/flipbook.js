@@ -4,6 +4,7 @@ module.exports= helpScreenCtrl= (elem, state)->
   
   state.on 'change:helpScreen', (show)=>
     helpScreen.toggle(show)
+    state.contentScreenVisible= show
 
   toggleHelp= ->
     return if not state.ready or state.endScreen
