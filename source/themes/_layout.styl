@@ -233,6 +233,7 @@ buttonWidth= 32px
         .bar
           position: absolute
           height: pagerHeight
+          line-height: pagerHeight
           top: (pagerHeight / 2px)
           overflow: hidden
 
@@ -270,6 +271,11 @@ buttonWidth= 32px
             width: 0%
             height: (pagerHeight - 2)
             top: ((pagerHeight + 2) / 2px)
+
+          &.position
+            width: 100%
+            text-align: center
+            font-size: 10px
 
       .button
         width: 30px

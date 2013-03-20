@@ -5,6 +5,7 @@ module.exports= (elem, state)->
 
   zoomZoomZoom= (zoomed)->
     # log.info "zoom?", zoomed
+    return if state.zoomDisabled
     return if zoomed and elem.is('.zoomed')
     return if not zoomed and not elem.is('.zoomed')
     state.trigger 'cmd:current:hide'

@@ -6,15 +6,19 @@ module.exports= progressCtrl= (elem, state)->
 
   progressBar= elem.find('.progress') #.hide()
   locationBar= elem.find('.progress .location').hide()
+  positionBar= elem.find('.progress .position')
 
   updateWidth= ->
     percent= state.getPercentageRead()
     locationBar.width "#{percent}%"
     locationBar.toggleClass 'done', state.isLastPage()
     locationBar.toggleClass 'start', state.isFirstPage()
+    positionBar.html("#{ state.currentPage + 1} / #{ state.pages }")
+
 
   state.once 'change:loaded', (isLoaded)->
     locationBar.toggle isLoaded
+    positionBar.toggle state.showLocation
     updateWidth()
 
   state.once 'ready', ->

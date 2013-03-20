@@ -86,6 +86,7 @@
   <div class="bar background done"><span>&nbsp;</span></div>
   <div class="bar loading"><span>&nbsp;</span></div>
   <div class="bar location"><span>&nbsp;</span></div>
+  <div class="bar position"><span>&nbsp;</span></div>
 </div> 
 <div class="nextPage button"><span>&#8227;</span></div><!-- rsaquo -->
 </footer>
