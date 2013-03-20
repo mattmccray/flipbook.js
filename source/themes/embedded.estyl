@@ -2,3 +2,4 @@
 @import 'themes/dark'
 @import 'themes/gray'
 @import 'themes/light'
+@import 'themes/light-shiny'
