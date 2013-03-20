@@ -35,9 +35,10 @@
 
           <dt><span>&bull;</span> Hold</dt>
           <dd>To show or hide this help screen.</dd>
-
+        <% unless @zoomDisabled: %>
           <dt><span>&harr;</span> Pinch</dt>
           <dd>Out to zoom viewer, in to shrink.</dd>
+        <% end %>
         <% else: %>
           <dt>Mouse</dt>
           <dd><p>Click on the right half of the comic to see the next<br>
@@ -54,6 +55,7 @@
                 <th><kbd>&larr;</kbd> <kbd>[</kbd> <kbd>a</kbd></th>
                 <td>Previous screen.</td>
               </tr>
+              <% unless @zoomDisabled: %>
               <tr>
                 <th><kbd>z</kbd></th>
                 <td>Toggles zoom mode.</td>
@@ -62,6 +64,7 @@
                 <th><kbd>ESC</kbd></th>
                 <td>Cancels zoom mode.</td>
               </tr>
+              <% end %>
               <tr>
                 <th><kbd>r</kbd></th>
                 <td>Restart from the beginning.</td>
