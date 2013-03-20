@@ -7,7 +7,7 @@ module.exports= (elem, state)->
   pending= null
 
   state.on 'change:loaded', (loaded)->
-    log.info 'stack loaded?', loaded
+    # log.info 'stack loaded?', loaded
     stack.toggle loaded
 
   getScreen= (idx=state.currentPage)->

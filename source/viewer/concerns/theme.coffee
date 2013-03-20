@@ -1,5 +1,6 @@
+env= require 'env'
 
-require("themes/#{ 'embedded' }").activate()
+require("themes/#{ 'embedded' }").activate() if env.embedded
 
 setTheme= (o, defaultTheme='light')->
   try

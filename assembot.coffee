@@ -44,38 +44,19 @@ module.exports=
         minify: (if isDebug then 0 else 2)
         exclude: "test/*"
 
-      "public/flipbook.core.js":
-        source: "./source"
-        ident: "flipbook"
-        main: "main"
-        autoload: true
-        debug: isDebug
-        test: false
-        prune: true
-        embedded: false
-        minify: (if isDebug then 0 else 2)
-        exclude: "test/*"
-
-      "public/flipbook.core.css":
-        source: "./source"
-        stylus:
-          compress: yes
-
-      # "flipbook.js": 
+      # "public/flipbook.core.js":
       #   source: "./source"
       #   ident: "flipbook"
       #   main: "main"
       #   autoload: true
-      #   debug: false
+      #   debug: isDebug
       #   test: false
       #   prune: true
-      #   minify: 2
+      #   embedded: false
+      #   minify: (if isDebug then 0 else 2)
       #   exclude: "test/*"
 
-      # "test/flipbook.debug.js": 
+      # "public/flipbook.core.css":
       #   source: "./source"
-      #   ident: "flipbook"
-      #   autoload: true
-      #   debug: true
-      #   test: true
-      #   main: "test/main"
+      #   stylus:
+      #     compress: yes

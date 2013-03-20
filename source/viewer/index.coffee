@@ -84,7 +84,7 @@ class FlipBookViewer extends CogView
     # @state.on 'cmd:help:toggle', @toggleHelp
     @state.on 'cmd:zoom:toggle', @toggleZoom
     @state.on 'cmd:zoom:out', @doZoomOut
-    @state.on 'cmd:zoom:in', @toggleZoom
+    @state.on 'cmd:zoom:in', @doZoomIn
     @state.on 'load:complete', @onLoad
     @state.on 'load:error', @onLoadError
 
@@ -99,6 +99,10 @@ class FlipBookViewer extends CogView
   toggleZoom: (e)=>
     return if not @state.ready
     @state.toggle 'zoomed'
+
+  doZoomIn: (e)=>
+    return if @state.zoomed
+    @state.set zoomed:yes
 
   doZoomOut: (e)=>
     return if not @state.zoomed
@@ -147,10 +151,10 @@ class FlipBookViewer extends CogView
     @state.set ready:yes
 
   onReady: =>
-    log.info 'onReady'
+    # log.info 'onReady'
     @state.trigger 'cmd:current:show'
     @state.trigger 'sizes:calc'
-    log.info 'resizing stack'
+    # log.info 'resizing stack'
     @state.trigger 'resize'
     if @state.animated is false
       @stack

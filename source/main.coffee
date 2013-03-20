@@ -1,7 +1,7 @@
 # FlipBook main
 
 env= require 'env'
-log= require('util/log').prefix('main:')
+log= require('util/log').prefix('flipbook:')
 ensure= require 'util/ensure'
 scanner= require 'scanner'
 validate= require 'viewer/validator'
@@ -24,7 +24,6 @@ init= ->
   log.level(2) if env.debug
   log.info "FlipBook v#{ env.version }"
   log.debug "ENV", env
-  log.info "Ready."
   flipbooks= scanner.run()
 
   for {item, model} in flipbooks
