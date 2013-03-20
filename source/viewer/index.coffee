@@ -87,7 +87,7 @@ class FlipBookViewer extends CogView
     @screenCountIdx= @screenCount - 1
     @current= 0
     @elem
-      .attr( 'tabindex', -1 )
+      .attr( 'tabindex', "0" )
       .addClass( 'inactive' ) # Allows for focus and blur events
       .toggleClass( 'isMobile', env.mobile)
       .toggleClass( 'isDesktop', (not env.mobile))
@@ -197,6 +197,7 @@ require('viewer/concerns/help');
 require('viewer/concerns/keyboard');
 require('viewer/concerns/loading');
 require('viewer/concerns/metadata');
+require('viewer/concerns/msie');
 require('viewer/concerns/progress');
 require('viewer/concerns/screen');
 require('viewer/concerns/sizing');

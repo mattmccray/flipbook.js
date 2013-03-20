@@ -4,3 +4,4 @@ module.exports=
   debug: {%- debug -%}
   test: {%- test -%}
   mobile: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)?
+  msie: navigator.userAgent.match(/(MSIE)/)?
