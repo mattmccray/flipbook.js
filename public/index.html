@@ -1,31 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" debug="true" class="nojs">
   <head>
-    <!-- <meta charset="utf-8" /> -->
-        <meta name="viewport" content="width=1150" />
-
     <title>FlipBook</title>
-    <!-- <link rel="stylesheet" type="text/css" href="flipbook.css"> -->
-    <style>
-      body {
-        width: 960px;
-        margin: 50px auto !important;
-      }
-      .col {
-        width: 350px;
-        float: left;
-        margin-right: 12px;
-        margin-left: 13px;
-      }
-      .col.wider {
-        width: 550px;
-      }
-      .col pre {
-        margin-top: 4em;
-        font-size: 80%;
-        overflow: auto;
-      }
-    </style>
+    <script src="flipbook.js"></script>
   </head>
   <body>
       <div 
@@ -37,10 +14,11 @@
         data-flipbook-background="black"
         data-flipbook-animated="yes"
         data-flipbook-show-progress="yes"
-        data-flipbook-show-location="no"
+        data-flipbook-show-location="yes"
         data-flipbook-path="media/comics2/comic-paxarena-eng###.jpg" 
         data-flipbook-copyright="Created by and copyright &copy; Mast, Geoffo &amp; Balak" 
-        data-flipbook-title="PAX ARENA (no container)">
+        data-flipbook-author="by ThrillBent"
+        data-flipbook-title="PAX ARENA">
         <div>
           <p>Loading comic viewer...</p>
         </div>
@@ -48,8 +26,69 @@
           Please enable JavaScript, or upgrade to a modern browser to read this comic.
         </noscript>
       </div>
-      <p>&nbsp;</p>
-    <div class="col">
+
+<!-- 
+  The following is just stuff for this page, has nothing to do with FlipBook itself:
+-->
+
+    <style>
+      body {
+        width: 960px;
+        margin: 50px auto !important;
+      }
+      .main {
+        text-align: center;
+        padding-top: 20px;
+      }
+      fieldset {
+        display: inline-block;
+        text-align: left;
+        border-radius: 8px;
+        border: 1px solid silver;
+      }
+      label {
+        display: inline-block;
+        width: 150px;
+        text-align: right;
+        padding-left: 1em;
+        white-space: nowrap;
+      }
+    </style>
+
+      <div class="main column">
+        
+        <div id="options" style="display:none">
+  
+          <fieldset>
+            <legend>Options</legend>
+            <form>
+              <div>
+                <label>Theme:</label>
+                <select id="themes">
+                  <option value="light-shiny" selected>Light 'n Shiny</option>
+                  <option value="light">Light</option>
+                  <option value="gray">Gray</option>
+                  <option value="dark">Dark</option>
+                </select>            
+              </div>
+              <div>
+                <label>Show Location:</label>
+                <input id="location" checked type="checkbox">
+              </div>
+              <div>
+                <label>Show Progress:</label>
+                <input id="progress" checked type="checkbox">
+              </div>
+              <div>
+                <label>Animated UI:</label>
+                <input id="animated" checked type="checkbox">
+              </div>
+            </form>
+          </fieldset>      
+        </div>
+
+      </div>
+<!--     <div class="col">
 
       <div 
         data-flipbook-pages="20"
@@ -68,9 +107,9 @@
       </div>
 
       <p>&nbsp;</p>
-      <!-- <p>&nbsp;</p>
       <p>&nbsp;</p>
-      <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p> -->
+      <p>&nbsp;</p>
+      <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
 
     <div 
       data-flipbook-pages="8" 
@@ -105,22 +144,36 @@
       </div>
 
      </div>
-
+ -->
   </body>
-  <script src="flipbook.js"></script>
   <script>
     // flipbook('lifecycle').on('created', function(viewer){
     //   console.log("Did create a viewer!", viewer)
     // })
-    // window.onload= function() {
-    //   var divs= document.querySelectorAll('[data-flipbook-path]');
+    flipbook('lifecycle').on('created', function(viewer){
+      $('#options').fadeIn()
+      
+      $('#themes').on('change', function(){
+        var theme= $('#themes').val();
+        viewer.set('theme', theme)
+      })
 
-    //   for (var i = divs.length - 1; i >= 0; i--) {
-    //     var div= divs[i];
-    //     var code= document.createElement('pre');
-    //     code.innerText= div.outerHTML;
-    //     div.parentNode.appendChild(code)
-    //   }
-    // }
+      $('#progress').on('change', function(){
+        viewer.set('showProgress', $(this).is(':checked'))
+      })
+
+      $('#location').on('change', function(){
+        viewer.set('showLocation', $(this).is(':checked'))
+      })
+
+      $('#animated').on('change', function(){
+        viewer.set('animated', $(this).is(':checked'))
+      })
+
+      $('#greedyKeys').on('change', function(){
+        viewer.set('greedyKeys', $(this).is(':checked'))
+      })
+
+    })
   </script>
 </html>

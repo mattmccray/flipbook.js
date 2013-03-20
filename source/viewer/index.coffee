@@ -15,6 +15,7 @@ pad= require 'util/number/pad'
 log= require('util/log').prefix('viewer:')
 events= require 'cog/events'
 validate= require './validator'
+lifecycle= require 'lifecycle'
 CogView= require 'cog/view'
 CogModel= require 'cog/object'
 {getX}= require 'util/positions'
@@ -91,7 +92,19 @@ class FlipBookViewer extends CogView
       .addClass( 'inactive' ) # Allows for focus and blur events
       .toggleClass( 'isMobile', env.mobile)
       .toggleClass( 'isDesktop', (not env.mobile))
+    log.debug "State", @state
+    lifecycle.fire 'created', this
   
+  get: (key)->
+    @state.get key
+
+  set: (key,val)->
+    @state.set key, val
+    @
+
+  focus: ->
+    @elem.focus()
+
   toggleZoom: (e)=>
     return if not @state.ready
     @state.toggle 'zoomed'
@@ -190,6 +203,7 @@ class FlipBookViewer extends CogView
 module.exports= FlipBookViewer
 
 ###
+require('viewer/concerns/animated');
 require('viewer/concerns/buttons');
 require('viewer/concerns/end');
 require('viewer/concerns/focus');

@@ -18,6 +18,12 @@ module.exports= (elem, state)->
     else
       @hide()
 
+  renderTitle= (header)->
+    title= "#{ state.title } <span>#{ state.author }</span>"
+    header.html(title).attr('title', state.title).show()
+
   reactor 'title', 'header h3', (value)->
-    value ?= ''
-    @html(value).attr('title', value).show()
+    renderTitle(@)
+
+  reactor 'author', 'header h3', (value)->
+    renderTitle(@)

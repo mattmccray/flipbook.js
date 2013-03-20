@@ -35,7 +35,9 @@ fixupTypes= (o)->
   boolProp o, 'showLocation', true
   boolProp o, 'showProgress', true
   boolProp o, 'zoomDisabled', false
+  boolProp o, 'greedyKeys', false
   strProp o, 'copyright', ""
+  strProp o, 'author', ""
   strProp o, 'background', ""
 
 

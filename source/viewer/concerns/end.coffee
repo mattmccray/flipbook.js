@@ -11,7 +11,13 @@ module.exports= (elem, state)->
     state.set currentPage:0, endScreen:no, helpScreen:no
 
   state.on 'change:endScreen', (show)=>
-    endScreen.toggle(show)
+    if state.animated
+      if show
+        endScreen.fadeIn('fast')
+      else
+        endScreen.fadeOut('fast')
+    else
+      endScreen.toggle(show)
     state.contentScreenVisible= show
 
   state.on 'cmd:restart', doRestart

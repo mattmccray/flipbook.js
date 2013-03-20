@@ -5,6 +5,7 @@ borderCol= #CCC
 .flipbook.theme-light, .flipbook.theme-light-shiny
   font-family "Helvetica Neue", Helvetica, Sans-Serif
   color: #555
+  color: #000
   background: #FFF
   box-shadow: 0px 1px 4px #AAA
   border-radius 3px
@@ -33,6 +34,9 @@ borderCol= #CCC
 
     h3
       padding-left 5px
+      text-shadow: 0px 2px 0px #FFF
+      span
+        color: #999
 
 
   .screen-stack
@@ -46,7 +50,7 @@ borderCol= #CCC
 
     .screen
 
-      &.the-end
+      &.content-screen
         background: rgba(0,0,0,0.7)
         color: white
         text-align center
@@ -58,6 +62,7 @@ borderCol= #CCC
       color: #999
       background #BBB
       background: linear-gradient(top, #E0E0E0, #EFEFEF)
+      text-shadow: 0px 1px 0px #FFF
   
     &.pager
       border 1px solid borderCol
@@ -87,6 +92,7 @@ borderCol= #CCC
 
           &.position
             color: #999
+            text-shadow: 0px 1px 0px #FFF
   
   &.zoomed
     border-radius: 0

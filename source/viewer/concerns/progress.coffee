@@ -23,6 +23,13 @@ module.exports= progressCtrl= (elem, state)->
 
   state.once 'ready', ->
     progressBar.toggle state.showProgress
+  
+  state.on 'change:showProgress', (show)->
+    progressBar.toggle show
+    updateWidth if show
+
+  state.on 'change:showLocation', (show)->
+    positionBar.toggle show
 
   state.on 'change:currentPage', (page)->
     if state.isValidPage(page)

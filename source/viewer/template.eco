@@ -1,8 +1,7 @@
-    <!-- <meta charset="utf-8" /> -->
 <header>
   <div class="zoom button"><span>&#10132;</span></div>
   <div class="help button"><span>i</span></div>
-  <h3 title="<%= @title %>"><%= @title %></h3>
+  <h3 title="<%= @title %>"><%= @title %><span><%= @author %></span></h3>
 </header>
 <div class="screen-stack"><% for screen,i in @screens: %> 
 <div class="screen"><img src="<%= screen.src %>"/></div> 
@@ -25,6 +24,14 @@
     <div class="container">
       <div class="body">
         <div class="close">&oplus;</div>
+        <div class="intro">
+          <dl>
+            <dt>Welcome!</dt>
+            <dd>
+              <p>This seems to be your first time, so here's a quick rundown:</p>
+            </dd>
+          </dl>
+        </div>
         <dl>
         <% if @isMobile: %>
           <dt><span>&#9702;</span> Tap</dt>

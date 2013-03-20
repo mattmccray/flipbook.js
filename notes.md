@@ -1,13 +1,10 @@
 # FlipBook Ideas
 
+- Think about adding: https://github.com/benbarnett/jQuery-Animate-Enhanced
 
-##
-  
-  - Think about adding: https://github.com/benbarnett/jQuery-Animate-Enhanced
+## Brainstormed Ideas
 
-## From Workflowy
-
-### Names for style of comic?
+### Names for this style of comic?
 - CineComic
 - DigiComic
 - Storyboard Comic
@@ -54,11 +51,5 @@
 - Layer Groups at the root, one for each 'page.' Page 1 on the bottom, the
   final page on top.
 - Action to auto name the groups, sequentially?
-
-### Tech Notes
-- External modules
-    - 'ensure/jquery' -- and/or other requirements that are needed
-    - They can automatically add a cdn script to the page, and run
-      a callback on load?
 
 

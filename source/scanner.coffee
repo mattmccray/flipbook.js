@@ -1,4 +1,5 @@
 log= require('util/log').prefix('scanner:')
+lifecycle= require 'lifecycle'
 
 scanners= []
 

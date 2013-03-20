@@ -3,6 +3,7 @@
 env= require 'env'
 log= require('util/log').prefix('flipbook:')
 ensure= require 'util/ensure'
+lifecycle= require 'lifecycle'
 scanner= require 'scanner'
 validate= require 'viewer/validator'
 plugin= require 'plugin'
@@ -25,6 +26,10 @@ init= ->
   log.level(2) if env.debug
   log.info "FlipBook v#{ env.version }"
   log.debug "ENV", env
+  plugin.install()
+
+  lifecycle.fire 'ready'
+
   flipbooks= scanner.run()
 
   for {item, model} in flipbooks
@@ -34,7 +39,6 @@ init= ->
     else
       log.info "! Invalid model:", validate.errors(), model
 
-  plugin.install()
 
 if env.debug and env.mobile
   ensure 'firebug', (err)->
