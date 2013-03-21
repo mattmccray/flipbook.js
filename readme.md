@@ -59,6 +59,7 @@ page/screen comics WITHOUT reloading the page.
     usage -- never a global option -- if it seems like such a device would be
     used for good, not evil.
 
+
 ## Supported Platforms
 
 For use with modern browsers. Tested on later versions of:
@@ -74,13 +75,16 @@ For use with modern browsers. Tested on later versions of:
 - Support for reading images inside the div and pulling those out instead of 
   generating img tags via the path/pages options.
 - A `greedyKeys` option to always handle hotkeys even if viewer isn't focused.
+- A `stretchedZoom` option to stretch the image to fit, as best as possible,
+  within the zoomed screen area even if it's larger than the original image
+  size.
 - A `beginReadingAt` option to start on a screen other than the first.
 
 ## Probable Features for Version 2
 
-- Support for comics with inconsistent sized images (different size per screen).
-- Configurable/customizable end Screen.
-- Comic meta data in the info/help screen.
+- Support for comics with variable sized images (different size per screen).
+- Configurable/customizable end screen content.
+- Comic meta data in the info/help screen (or perhaps a new screen).
 - Rearrangeable UI elements.
 - Animate zooming in and out.
 - User options screen so they can disable/enable features. (saves via
