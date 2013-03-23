@@ -38,13 +38,14 @@ module.exports= (elem, state)->
 
   button '.zoom',
     action: 'cmd:zoom:toggle'
+    states: 'showZoomButton'
     update: ->
       @removeClass 'disabled'
       @toggle (state.showZoomButton and not state.zoomDisabled)
 
   button '.help',
     action: 'cmd:help:toggle'
-    states: 'helpScreen,endScreen'
+    states: 'helpScreen,endScreen,showHelpButton'
     update: ->
       @toggleClass 'disabled', (state.endScreen)
       @toggleClass 'down', (state.helpScreen)  

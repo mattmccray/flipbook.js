@@ -1,3 +1,13 @@
+###
+assembot:
+  options:
+    autoincrement:
+      enabled: yes
+      target: './package.json'
+      segment: 'build' # or major, minor, patch
+      when: 'after:write' 
+###
+
 semver= require 'semver'
 path= require 'path'
 

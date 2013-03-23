@@ -1,16 +1,14 @@
 {
   "name": "FlipBook",
-  "version": "1.0.0-129",
-  "license": "",
-  "description": "",
-  "author": "",
+  "version": "1.0.0-139",
+  "license": "MIT",
+  "description": "An embeddable comic viewer.",
+  "author": "Matt McCray <matt@inkwellian.com>",
   "devDependencies": {
-    "assembot": "*",
-    "coffee-script": "*",
+    "assembot": "~0.2.4",
+    "coffee-script": "~1.6.1",
+    "semver": "~1.1.4",
     "mocha": "*",
     "chai": "*"
-  },
-  "dependencies": {
-    "semver": "~1.1.4"
   }
 }

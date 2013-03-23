@@ -1,11 +1,19 @@
 events= require './events'
-extend= require 'util/extend'
+
+extend= (obj)->
+  for source in Array::slice.call(arguments, 1)
+    if source
+      for key,value of source
+        obj[key]= value
+  obj
+
 
 class Cog
   events.mixin @::
 
   constructor: (data={})->
     # @originalAttrs= data
+    @_previous= {}
     extend @, data
 
   # obj.get('key') is really the same as obj.key
@@ -23,14 +31,15 @@ class Cog
   # (or obj.set key:'name'), the object will emit a 'change:key'
   # and 'change' events
   set: (keyOrHash, value)->
-    changed={}
+    changed= {}
     hasChanged= no
     if typeof keyOrHash is 'string'
       if @[keyOrHash] isnt value
         oldval= @[keyOrHash]
         @[keyOrHash]= value
         changed[keyOrHash]= value
-        changed["#{keyOrHash}Previous"]= oldval
+        @_previous[keyOrHash]= oldval
+        # changed["#{keyOrHash}Previous"]= oldval
         hasChanged= yes
         @fire "change:#{ keyOrHash }", value, oldval, @
     else
@@ -39,22 +48,19 @@ class Cog
           oldval= @[key]
           @[key]= val
           changed[key]= val
-          changed["#{key}Previous"]= oldval
+          @_previous[key]= oldval
+          # changed["#{key}Previous"]= oldval
           hasChanged= yes
           @fire "change:#{ key }", val, oldval, @
     @fire 'change', changed, @ if hasChanged
+    @_previous= {}
     @
 
-  # hasChanged: (key)->
-  #   Check @originalAttrs to @ for key
+  hasChanged: (key)->
+    `(key in this._previous)`
 
-  # previousValue: (key)->
-    # @originalAttrs[key]
+  previous: (key)->
+    @_previous[key] ? null
 
-  # toJSON: ->
-  #   obj={}
-  #   for k, v of @.constructor.attributes
-  #     obj[k]= @[k]
-  #   obj
 
 module.exports= Cog

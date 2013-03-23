@@ -1,6 +1,8 @@
+win = window ? global ? this
+navigator= navigator ? { userAgent: 'non-browser' }
 
 firstRun= do ->
-  if window.localStorage?
+  if win.localStorage?
     val= localStorage.getItem('firstTimeToFlipBook')
     localStorage.setItem('firstTimeToFlipBook', false)
     val isnt false and val isnt 'false'

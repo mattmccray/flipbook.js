@@ -3,3 +3,4 @@
 @import 'themes/gray'
 @import 'themes/light'
 @import 'themes/light-shiny'
+@import 'themes/minimal'

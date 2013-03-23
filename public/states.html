@@ -3,59 +3,104 @@
   <head>
     <title>FlipBook</title>
     <script src="flipbook.js"></script>
+    <script>
+      flipbook('lifecycle').on('ready', function(){
+        var defaults= flipbook('util/defaults');
+        var themes= [
+          'light-shiny',
+          'gray',
+          'dark',
+          'minimal'
+        ]
+        var settings= [
+          {
+            pages: 10,
+            path: 'media/comics2/comic-paxarena-eng###.jpg',
+            start: 65,
+            title: "defaults"
+          },
+          {
+            pages: 2,
+            path: 'missing.jpg',
+            title: 'missing images'
+          },
+          {
+            pages: 10,
+            path: 'media/comics2/comic-paxarena-eng###.jpg',
+            start: 65,
+            title: "no progress",
+            showProgress: false
+          },
+          {
+            pages: 10,
+            path: 'media/comics2/comic-paxarena-eng###.jpg',
+            start: 65,
+            title: "not animated",
+            animated: false
+          },
+          {
+            pages: 10,
+            path: 'media/comics2/comic-paxarena-eng###.jpg',
+            start: 65,
+            title: "no location",
+            showLocation: false
+          },
+          {
+            pages: 1,
+            path: 'Crap.jp',
+            title: "missing w/bg",
+            background: 'black'
+          }
+        ]
+        $.each(['1', '2', '3', '4'], function(i, idx){
+          var container= $('#col'+ idx),
+              theme= themes[i];
+          for (var i = 0; i < settings.length; i++) {
+            var info= defaults({}, settings[i]);
+            info.theme= theme;
+            info.author= theme;
+            $('<div></div>').appendTo(container).flipbook(info)
+          }
+        })
+        // c= $('#col1')
+        
+        // $('<div></div>').flipbook({
+        //   pages: 10,
+        //   path: 'media/comics2/comic-paxarena-eng###.jpg',
+        //   start: 65,
+        //   title: 'default'
+        // }).appendTo(c)
+
+        // $('<div></div>').flipbook({
+        // }).appendTo(c)
+
+      })
+    </script>
   </head>
   <body>
-      <div 
-        data-flipbook-pages="49" 
-        data-flipbook-start="65" 
-        data-flipbook-theme="light-shiny"
-        data-flipbook-autofocus="true"
-        data-flipbook-autofit="yes"
-        data-flipbook-background="black"
-        data-flipbook-animated="yes"
-        data-flipbook-show-progress="yes"
-        data-flipbook-show-location="yes"
-        data-flipbook-path="media/comics2/comic-paxarena-eng###.jpg" 
-        data-flipbook-copyright="Created by and copyright &copy; Mast, Geoffo &amp; Balak" 
-        data-flipbook-author="by ThrillBent"
-        data-flipbook-title="PAX ARENA">
-        <div>
-          <p>Loading comic viewer...</p>
-        </div>
-        <noscript>
-          Please enable JavaScript, or upgrade to a modern browser to read this comic.
-        </noscript>
-      </div>
-
-<!-- 
-  The following is just stuff for this page, has nothing to do with FlipBook itself:
--->
-
     <style>
       body {
         width: 960px;
         margin: 50px auto !important;
       }
-      .main {
-        text-align: center;
-        padding-top: 20px;
+      .col {
+        float: left;
+        width: 24%;
+        margin-right: 1%;
       }
-      fieldset {
-        display: inline-block;
-        text-align: left;
-        border-radius: 8px;
-        border: 1px solid silver;
-      }
-      label {
-        display: inline-block;
-        width: 150px;
-        text-align: right;
-        padding-left: 1em;
-        white-space: nowrap;
+      .flipbook {
+        margin-bottom: 1em;
       }
     </style>
 
-      <div class="main column">
+      <div id="col1" class="col"></div>
+      <div id="col2" class="col"></div>
+      <div id="col3" class="col"></div>
+      <div id="col4" class="col"></div>
+
+      <div style="clear:both;"></div>
+
+      <!-- <div class="col">
         
         <div id="options" style="display:none">
   
@@ -89,7 +134,7 @@
         </div>
 
       </div>
-<!--     <div class="col">
+    <div class="col">
 
       <div 
         data-flipbook-pages="20"
@@ -144,37 +189,26 @@
         </noscript>
       </div>
 
+     </div><div class="col wider">
+      
+      <div 
+        data-flipbook-theme="minimal"
+        data-flipbook-pages="20"
+        data-flipbook-background="black"
+        data-flipbook-show-zoom-button="false"
+        data-flipbook-path="media/comics2/comic-paxarena-eng###.jpg"
+        data-flipbook-title="Test Comic 2"
+        data-flipbook-copyright="&copy; 2013"
+        data-flipbook-start="65">
+        <div>
+          <p>Loading comic viewer...</p>
+        </div>
+        <noscript>
+          Please enable JavaScript, or upgrade to a modern browser to read this comic.
+        </noscript>
+      </div>
+
      </div>
  -->
   </body>
-  <script>
-    // flipbook('lifecycle').on('created', function(viewer){
-    //   console.log("Did create a viewer!", viewer)
-    // })
-    flipbook('lifecycle').on('created', function(viewer){
-      $('#options').fadeIn()
-      
-      $('#themes').on('change', function(){
-        var theme= $('#themes').val();
-        viewer.set('theme', theme)
-      })
-
-      $('#progress').on('change', function(){
-        viewer.set('showProgress', $(this).is(':checked'))
-      })
-
-      $('#location').on('change', function(){
-        viewer.set('showLocation', $(this).is(':checked'))
-      })
-
-      $('#animated').on('change', function(){
-        viewer.set('animated', $(this).is(':checked'))
-      })
-
-      $('#greedyKeys').on('change', function(){
-        viewer.set('greedyKeys', $(this).is(':checked'))
-      })
-
-    })
-  </script>
 </html>

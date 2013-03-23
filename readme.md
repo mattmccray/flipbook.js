@@ -79,6 +79,8 @@ For use with modern browsers. Tested on later versions of:
   within the zoomed screen area even if it's larger than the original image
   size.
 - A `beginReadingAt` option to start on a screen other than the first.
+- When screen count gets to a certain length, allow reading after a specific
+  percentage of images have loaded (instead of 100%).
 
 ## Probable Features for Version 2
 

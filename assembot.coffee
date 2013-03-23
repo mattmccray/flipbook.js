@@ -1,10 +1,10 @@
 
-console.log "Assembot.coffee!"
+console.log "Flipbook!"
 
-isDebug= String(process.argv[1]).indexOf('serve') > 0
+isDebug= String(process.argv[2]) is 'serve'
 
 onLoad= (assembot)->
-  console.log "Startup! (debug)", isDebug
+  console.log "Startup! (debug:#{isDebug})"
   #, process.argv
 
 module.exports=
@@ -57,6 +57,11 @@ module.exports=
       #   exclude: "test/*"
 
       # "public/flipbook.core.css":
+      #   source: "./source"
+      #   stylus:
+      #     compress: yes
+
+      # "public/flextest.css":
       #   source: "./source"
       #   stylus:
       #     compress: yes

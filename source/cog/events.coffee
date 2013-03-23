@@ -1,3 +1,6 @@
+uid= require('../util/uid')
+arrayWithout= require('../util/array/without')
+
 class Events
   @mixin: (targets...)->
     for target in targets
@@ -29,6 +32,7 @@ class Events
   removeListener: (event, listener) ->
     return @ unless @_events?[event]
     @_events[event] = (l for l in @_events[event] when l isnt listener)
+    delete @_events[event] if @_events[event].length is 0
     return @
 
   off: @::removeListener
@@ -57,23 +61,24 @@ class Events
   # All args are optional
   stopListening: (emitter, event, callback)->
     return @ unless @_emitterBindings?
-    if emitter is null # Stop listening to all
-      for id, binding of @_emitterBindings
-        {target, message, action}= binding
-        target.off message, action
+    
+    unless emitter? # Stop listening to all
+      for id, bindings of @_emitterBindings
+        for {target, message, action} in bindings
+          target.off message, action
       @_emitterBindings={}
     
     else 
       bindings= @_emitterBindings[emitter._emitterId]
-      return @ unless binding?
+      return @ unless bindings?
       removed= []
 
-      if event is null # Stop listening to all on emitter
+      unless event? # Stop listening to all on emitter
         while binding = bindings.pop()
           {target, message, action}= binding
           target.off message, action
 
-      else if callback is null # Stop listening to event on emitter
+      else unless callback? # Stop listening to event on emitter
         for binding in bindings when binding.message is event
           {target, message, action}= binding
           target.off message, action
@@ -87,8 +92,11 @@ class Events
 
       if removed.length > 0
         @_emitterBindings[emitter._emitterId]= arrayWithout(bindings, removed)
-    
+
+    if emitter? and @_emitterBindings[emitter._emitterId].length is 0
+      delete @_emitterBindings[emitter._emitterId]
     return @
+  stop: @::stopListening
 
 module.exports= Events 
 # {Events, Listener}

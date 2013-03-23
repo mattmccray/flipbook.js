@@ -39,6 +39,7 @@ fixupTypes= (o)->
   strProp o, 'copyright', ""
   strProp o, 'author', ""
   strProp o, 'background', ""
+  strProp o, 'title', "&nbsp;"
 
 
 module.exports= validator= (options, fixup=false)->

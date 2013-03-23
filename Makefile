@@ -9,15 +9,9 @@ gzip:
 clean:
 	rm public/flipbook.*
 
-SRC=$(shell find  src -name "*.coffee")
-
-exp:
-	coffee -b -p -c -j $(SRC) > theworks.js
-	cat theworks.js | uglifyjs -m > theworks.min.js
-
 test:
 	@NODE_ENV=test
 	@clear
 	@./node_modules/.bin/mocha
 
-.PHONY: build test
+.PHONY: build clean gzip test 

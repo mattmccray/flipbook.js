@@ -14,6 +14,7 @@ uid= require 'util/uid'
 pad= require 'util/number/pad'
 log= require('util/log').prefix('viewer:')
 events= require 'cog/events'
+defaults= require 'util/defaults'
 validate= require './validator'
 lifecycle= require 'lifecycle'
 CogView= require 'cog/view'
@@ -92,7 +93,7 @@ class FlipBookViewer extends CogView
       .addClass( 'inactive' ) # Allows for focus and blur events
       .toggleClass( 'isMobile', env.mobile)
       .toggleClass( 'isDesktop', (not env.mobile))
-    log.debug "State", @state
+    # log.debug "State", @state
     lifecycle.fire 'created', this
   
   get: (key)->
@@ -174,7 +175,7 @@ class FlipBookViewer extends CogView
       mdl= src:build_url(@model.path, i)
       # log.info "state", mdl
       screens.push mdl
-    data= @model
+    data= defaults {}, @model
     data.screens= screens
     data.id= @id
     data.tapOrClick= ->

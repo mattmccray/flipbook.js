@@ -1,7 +1,7 @@
 <header>
   <div class="zoom button"><span>&#10132;</span></div>
   <div class="help button"><span>i</span></div>
-  <h3 title="<%= @title %>"><%= @title %><span><%= @author %></span></h3>
+  <h3 title="<%= @title %>"><%= @title  %><span><%= @author %></span></h3>
 </header>
 <div class="screen-stack"><% for screen,i in @screens: %> 
 <div class="screen"><img src="<%= screen.src %>"/></div> 
