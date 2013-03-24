@@ -1,5 +1,8 @@
 log= require('util/log').prefix('scanner:')
 lifecycle= require 'lifecycle'
+validate= require 'viewer/validator'
+
+Viewer= require 'viewer/index'
 
 scanners= []
 
@@ -7,13 +10,41 @@ module.exports= api=
   define: (handler)-> 
     scanners.push handler
     @
-  # return array of object: [{ item:NODE, model:PARSED_OPTIONS }]
-  run: ->
+
+  scan: ->
     results=[]
     for scanner in scanners
       for result in scanner()
         results.push result
     results
+
+  build: (flipbooks)->
+    for {item, model} in flipbooks
+      if validate(model)
+        log.info $(item).data('controller')
+        if $(item).is('.flipbook-container')
+          log.info "Element already has view!"
+        else
+          log.info "Creating view element!"
+          view= new Viewer model
+          view.appendTo( $(item).empty() )
+          $(item).addClass('flipbook-container')
+      else
+        log.info "! Invalid model:", validate.errors(), model
+    @
+
+  # build: (flipbooks)->
+  #   for {item, model} in flipbooks
+  #     if validate(model)
+  #       view= new Viewer model
+  #       view.appendTo( $(item).empty() )
+  #     else
+  #       log.info "! Invalid model:", validate.errors(), model
+  #   @
+
+  # return array of object: [{ item:NODE, model:PARSED_OPTIONS }]
+  run: ->
+    @build @scan()
 
 # data-flipbook="KEY:OPTION," scanner
 api.define ->

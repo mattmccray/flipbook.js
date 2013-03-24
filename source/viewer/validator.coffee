@@ -40,6 +40,7 @@ fixupTypes= (o)->
   strProp o, 'author', ""
   strProp o, 'background', ""
   strProp o, 'title', "&nbsp;"
+  strProp o, 'loadingErrorMsg', "There was a problem loading the images, please refresh your browser."
 
 
 module.exports= validator= (options, fixup=false)->

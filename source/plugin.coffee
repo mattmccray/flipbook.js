@@ -6,16 +6,6 @@ Viewer= require 'viewer/index'
 fb_builder= (options, value)->
   if options is 'scan'
     flipbooks= scanner.run()
-    log.info "SCAN!", flipbooks
-    for {item, model} in flipbooks
-      if validate(model)
-        if $(item).data('controller')?
-          log.info "Element already has view!"
-        else
-          view= new Viewer model
-          view.appendTo( $(item).empty() )
-      else
-        log.info "! Invalid model:", validate.errors(), model
 
   else if typeof options is 'string' and value?
     if options is 'set' and typeof value is 'object'

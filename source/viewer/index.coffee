@@ -157,7 +157,7 @@ class FlipBookViewer extends CogView
     log.info "ERROR Loading images"
     @elem.addClass('errors')
     @stack.find('img').remove()
-    err= $("<div class='errors'>There were errors loading the images, please refresh your browser!</div>").hide()
+    err= $("<div class='errors'></div>").html(@state.loadingErrorMsg).hide()
     @stack.append(err).show()
     err.slideDown()
 

@@ -29,8 +29,26 @@ Here's some example HTML markup:
 </div>
 ```
 
-There is (or will be) an included jQuery plugin, if you want a little more
-programmatic approach to creating and configuring FlipBook viewers.
+Or, for a more programmatic approach, you can use the jQuery plugin:
+
+```javascript
+$("#my_container").flipbook({
+  title: "My Comic",
+  pages: 10,
+  path: 'images/comic/##.jpg'
+})
+```
+
+If you're adding HTML after the DOM Ready event and want FlipBook to
+rescan, you can use:
+
+```javascript
+// jQuery
+$.flipbook('scan');
+
+// Or directly
+flipbook('scanner').run();
+```
 
 
 ## Working Guidelines
