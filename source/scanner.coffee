@@ -11,6 +11,7 @@ module.exports= api=
     scanners.push handler
     @
 
+  # return array of object: [{ item:NODE, model:PARSED_OPTIONS }]
   scan: ->
     results=[]
     for scanner in scanners
@@ -21,7 +22,7 @@ module.exports= api=
   build: (flipbooks)->
     for {item, model} in flipbooks
       if validate(model)
-        log.info $(item).data('controller')
+        # log.info $(item).data('controller')
         unless $(item).is('.flipbook-container')
           # log.info "Creating view element!"
           view= new Viewer model
@@ -30,17 +31,7 @@ module.exports= api=
       else
         log.info "! Invalid model:", validate.errors(), model
     @
-
-  # build: (flipbooks)->
-  #   for {item, model} in flipbooks
-  #     if validate(model)
-  #       view= new Viewer model
-  #       view.appendTo( $(item).empty() )
-  #     else
-  #       log.info "! Invalid model:", validate.errors(), model
-  #   @
-
-  # return array of object: [{ item:NODE, model:PARSED_OPTIONS }]
+  
   run: ->
     @build @scan()
 
@@ -70,6 +61,24 @@ api.define ->
       name= String(att.name ? att.nodeName)
       if name.indexOf('data-flipbook-') is 0
         name = name.replace('data-flipbook-', '')
+        safeName = name.replace hyphenParser, (g)-> g[1].toUpperCase()
+        # log.info "munged", name, "to", safeName
+        model[safeName]= att.value ? att.nodeValue
+    # log.info model
+    results.push item:item, model:model
+  results
+
+# flipbook-*KEY="OPTION" scanner
+api.define ->
+  results=[]
+  hyphenParser= /-([a-z])/g
+  $('[flipbook-pages]').each (i,item)->
+    i= $(item)
+    model= {}
+    for att in item.attributes
+      name= String(att.name ? att.nodeName)
+      if name.indexOf('flipbook-') is 0
+        name = name.replace('flipbook-', '')
         safeName = name.replace hyphenParser, (g)-> g[1].toUpperCase()
         # log.info "munged", name, "to", safeName
         model[safeName]= att.value ? att.nodeValue

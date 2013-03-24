@@ -1,5 +1,5 @@
 build:
-	./node_modules/.bin/assembot build
+	time ./node_modules/.bin/assembot build
 
 
 gzip:

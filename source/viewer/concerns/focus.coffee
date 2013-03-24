@@ -1,3 +1,4 @@
+log= require('util/log').prefix('focus:')
 
 module.exports= (elem, state)->
   state.on 'change:active', (isActive)=>
@@ -8,5 +9,10 @@ module.exports= (elem, state)->
 
   elem.on 'focus', -> 
     state.set active:true
+  
   elem.on 'blur', ->  
-    state.set active:false unless elem.is '.zoomed'
+    # log.info state
+    # log.info "greedyKeys", state.greedyKeys
+    # log.info "zoomed", elem.is '.zoomed'
+    unless state.greedyKeys or elem.is '.zoomed'
+      state.set active:false 

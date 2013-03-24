@@ -4,7 +4,8 @@ log= require('util/log').prefix('progressBar:')
 
 module.exports= progressCtrl= (elem, state)->
 
-  progressBar= elem.find('.progress') #.hide()
+  progressBar= elem.find('.progress')
+  progBars= elem.find('.bar').not('.position')
   locationBar= elem.find('.progress .location').hide()
   positionBar= elem.find('.progress .position')
 
@@ -15,17 +16,16 @@ module.exports= progressCtrl= (elem, state)->
     locationBar.toggleClass 'start', state.isFirstPage()
     positionBar.html("#{ state.currentPage + 1} / #{ state.pages }")
 
-
   state.once 'change:loaded', (isLoaded)->
     locationBar.toggle isLoaded
     positionBar.toggle state.showLocation
     updateWidth()
 
   state.once 'ready', ->
-    progressBar.toggle state.showProgress
+    progBars.toggle state.showProgress
   
   state.on 'change:showProgress', (show)->
-    progressBar.toggle show
+    progBars.toggle show
     updateWidth if show
 
   state.on 'change:showLocation', (show)->

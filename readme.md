@@ -4,21 +4,24 @@ FlipBook is an embeddable comic viewer optimized for use with Flip Comics...
 Cine Comics... Storyboard Comics... Slideshow Comics? I'm not sure what to call 
 'em. Marvel calls them "Infinite Digital Comics," Mark Waid calls them "Digital
 Comics." I just call them "awesome." I want everyone to be able to make them 
--- and *show* them -- who wants to.
+-- and *show* them.
 
+You can see an example of it here:
+
+## Usage
+
+You'll need to include it on your page, of course:
+
+```html
+<script src="flipbook.js"></script>
+```
 Here's some example HTML markup:
 
 ```html
 <div 
-  data-flipbook-pages="25" 
-  data-flipbook-theme="light-shiny"
-  data-flipbook-autofocus="true"
-  data-flipbook-autofit="yes"
-  data-flipbook-background="black"
+  data-flipbook-title="l33tville"
   data-flipbook-path="comics/chapter-1/page-##.jpg" 
-  data-flipbook-copyright="&copy; Me!" 
-  data-flipbook-author="by Matt McCray"
-  data-flipbook-title="l33tville">
+  data-flipbook-pages="25">
   <div>
     <p>Loading comic viewer...</p>
   </div>
@@ -58,8 +61,8 @@ page/screen comics WITHOUT reloading the page.
 
 - It should "Just Work"
 - It needs to not only support iOS/mobile -- but *rock* on it
-- Themeable
-- Fairly configurable, but not a kitchen-sink
+- Themeable (currently has: light, light-shiny, gray, dark, and minimal)
+- Fairly configurable, but won't include the kitchen sink
 - Easy to use and easy to embed in your site
 - Regarding dependencies and styles, "Batteries included"
 - Small-ish
@@ -89,16 +92,16 @@ For use with modern browsers. Tested on later versions of:
 
 ## Things Coming Sooner Than Version 2
 
-- Hash urls. (#/page/N -- allowing bookmarks or links to specific page)
 - Support for reading images inside the div and pulling those out instead of 
   generating img tags via the path/pages options.
+- Hash urls. (#/page/N -- allowing bookmarks or links to specific page)
 - A `greedyKeys` option to always handle hotkeys even if viewer isn't focused.
 - A `stretchedZoom` option to stretch the image to fit, as best as possible,
   within the zoomed screen area even if it's larger than the original image
   size.
 - A `beginReadingAt` option to start on a screen other than the first.
-- When screen count gets to a certain length, allow reading after a specific
-  percentage of images have loaded (instead of 100%).
+- Allow reading after a specific percentage of images have loaded, instead of
+  100%. Good for really large comics.
 
 ## Probable Features for Version 2
 
