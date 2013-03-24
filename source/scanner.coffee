@@ -22,10 +22,8 @@ module.exports= api=
     for {item, model} in flipbooks
       if validate(model)
         log.info $(item).data('controller')
-        if $(item).is('.flipbook-container')
-          log.info "Element already has view!"
-        else
-          log.info "Creating view element!"
+        unless $(item).is('.flipbook-container')
+          # log.info "Creating view element!"
           view= new Viewer model
           view.appendTo( $(item).empty() )
           $(item).addClass('flipbook-container')
