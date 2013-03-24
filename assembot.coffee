@@ -15,8 +15,8 @@ module.exports=
       addHeader: yes
       replaceTokens: yes
       plugins: [ 
-        "./lib/increment-version" 
-        "./lib/server-latency"
+        "assembot/lib/plugins/increment-version" 
+        "assembot/lib/plugins/server-latency"
       ]
       autoincrement:
         enabled: yes
