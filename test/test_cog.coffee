@@ -41,6 +41,16 @@ describe 'Cog', ->
       o.name.should.equal 'test'
       o.get('name').should.equal 'test'
 
+    it 'should treat methods like attributes when using get()', ->
+      o= new Cog name:'test'
+      o.fullName= -> "Mr. #{@name}"
+      o.get('name').should.equal 'test'
+      o.get('fullName').should.equal 'Mr. test'
+
+    it 'should return default value from get() if attribute is missing', ->
+      o= new Cog name:'test'
+      o.get('fullName', 'Mr. Mom').should.equal 'Mr. Mom'
+
     it 'should allow you to set values via set(name, value) or set(object)', ->
       o= new Cog
       o.set name:'test'
@@ -49,7 +59,6 @@ describe 'Cog', ->
 
       o.set 'name', 'new'
       o.name.should.equal 'new'
-
 
     it 'should trigger change:key events', ->
       o= new Cog name:'test'

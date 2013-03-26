@@ -8,6 +8,31 @@ Comics." I just call them "awesome." I want everyone to be able to make them
 
 You can see an example of it here:
 
+
+The FlipBook viewer is not for everybody, it's meant for showing multiple 
+page/screen comics WITHOUT reloading the page. Here are/were my goals for version 1:
+
+- It should "Just Work"
+- It needs to not only support iOS/mobile -- but *rock* on it
+- Themeable (currently has: light, light-shiny, gray, dark, and minimal)
+- Fairly configurable, but won't include the kitchen sink
+- Easy to use and easy to embed in your site
+- Regarding dependencies and styles, "Batteries included"
+- Small-ish
+
+**Intentionally** missing non-features:
+
+-   Page/screen transitions -- As a comic writer/artist you need to think hard
+    about how pages are 'flipped.' It effects the story telling.
+   
+    Also, the moment any animation is introduced it crosses the line into that
+    horrible abomination "motion comics." Motion comics aren't comics, they are
+    *really shitty* animation. We don't want that.
+   
+    That said, I may add support for cross-dissolves and flashes for per screen
+    usage -- never a global option -- if it seems like such a device would be
+    used for good, not evil.
+
 ## Usage
 
 You'll need to include it on your page, of course:
@@ -15,7 +40,8 @@ You'll need to include it on your page, of course:
 ```html
 <script src="flipbook.js"></script>
 ```
-Here's some example HTML markup:
+
+You can create a FlipBook viewer using HTML:
 
 ```html
 <div 
@@ -43,7 +69,7 @@ $("#my_container").flipbook({
 ```
 
 If you're adding HTML after the DOM Ready event and want FlipBook to
-rescan, you can use:
+rescan the DOM for HTML based controls, you can use:
 
 ```javascript
 // jQuery
@@ -53,33 +79,84 @@ $.flipbook('scan');
 flipbook('scanner').run();
 ```
 
+Currently, Flipbook makes only one assumption about your comics images. That they
+are individual images, named with sequential numbers. For example:
 
-## Working Guidelines
+- comic-1.jpg
+- comic-2.jpg
+- comic-3.jpg
+- comic-4.jpg
+- comic-5.jpg
 
-The FlipBook Viewer is not for everybody, it's meant for showing multiple 
-page/screen comics WITHOUT reloading the page.
+You specify the path to the images, and the image name using the `path` option.
+For example, this call:
 
-- It should "Just Work"
-- It needs to not only support iOS/mobile -- but *rock* on it
-- Themeable (currently has: light, light-shiny, gray, dark, and minimal)
-- Fairly configurable, but won't include the kitchen sink
-- Easy to use and easy to embed in your site
-- Regarding dependencies and styles, "Batteries included"
-- Small-ish
+```javascript
+$('.comic').flipbook({
+  pages: 5,
+  path: "/images/comic-#.jpg"
+})
+```
 
-**Intentionally** missing non-features:
+Will try and load five images: `/images/comic-1.jpg` `/images/comic-2.jpg`
+`/images/comic-3.jpg` `/images/comic-4.jpg` `/images/comic-5.jpg`
 
--   Page/screen transitions -- As a comic writer/artist you need to think hard
-    about how pages are 'flipped.' It effects the story telling.
-   
-    Also, the moment any animation is introduced it crosses the line into that
-    horrible abomination "motion comics." Motion comics aren't comics, they are
-    *really shitty* animation. We don't want that.
-   
-    That said, I may add support for cross-dissolves and flashes for per screen
-    usage -- never a global option -- if it seems like such a device would be
-    used for good, not evil.
+If your images have leading zeros, just add the appropriate number of #'s, like this:
 
+```javascript
+$('.comic').flipbook({
+  pages: 5,
+  path: "/images/comic-###.jpg"
+})
+```
+
+Will try and load five images: `/images/comic-001.jpg` `/images/comic-002.jpg`
+`/images/comic-003.jpg` `/images/comic-004.jpg` `/images/comic-005.jpg`
+
+
+### Technical Questions
+
+**What do I need to include on my page?**
+
+Just `flipbook.js`. It will automatically add the CSS and any other dependencies
+it needs if they aren't already present.
+
+**What are its dependencies?**
+
+For desktop browser usage, it only requires jQuery. For mobile browsers, it will
+also include Hammer.js for gesture support.
+
+**Does it work with Wordpress/tumblr/other?**
+
+It's just JavaScript and CSS, so yes it will work with whatever CMS you use. If,
+however, you're asking if there is a plugin available for those platforms, then
+the answer is no. Not yet, anyway. 
+
+### Configuration
+
+Here are all the available options that Flipbook currently supports and their
+default values:
+
+```javascript
+$('#container').flipbook({
+  animated: true, // Whether the UI is animated
+  author: "", // Shown in the title bar after the title (in gray, for most themes)
+  autofit: true, // Whether to resize the width of the unzoomed control to the width of the comic
+  autofocus: false, // Whether to focus the control immediately
+  background: "", // The background color to use for the comic area of the control
+  copyright: "", // Text to show in the copyright bar under the comic
+  greedyKeys: false, // Capture keyboard events even when the control isn't focused
+  loadingErrorMsg: "There was a problem loading the images, please refresh your browser." // Message to display if any of the images through an error while loading
+  pages: 10, // Number of pages (or screens) in this comic
+  showHelpButton: true, // Toggle help button in title bar
+  showLocation: true, // Toggle location display (the X / Y label)
+  showProgress: true, // Toggle the progress bar
+  showZoomButton: true, // Toggle zoom button in title bar
+  start: 1, // Number to start with, if your files don't start with 1
+  title: "&nbsp;", // Title of the comic
+  zoomDisabled: false, // Entirely disable support (and button) for zooming
+})
+```
 
 ## Supported Platforms
 
@@ -95,7 +172,6 @@ For use with modern browsers. Tested on later versions of:
 - Support for reading images inside the div and pulling those out instead of 
   generating img tags via the path/pages options.
 - Hash urls. (#/page/N -- allowing bookmarks or links to specific page)
-- A `greedyKeys` option to always handle hotkeys even if viewer isn't focused.
 - A `stretchedZoom` option to stretch the image to fit, as best as possible,
   within the zoomed screen area even if it's larger than the original image
   size.

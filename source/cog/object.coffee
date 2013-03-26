@@ -16,9 +16,10 @@ class Cog
     @_previous= {}
     extend @, data
 
-  # obj.get('key') is really the same as obj.key
+  # obj.get('key') is really the same as obj.key but it will call
+  #  obj.key() if it exists
   get: (key, defaultVal)->
-    @[key] ? defaultVal
+    @[key]?() ? @[key] ? defaultVal
 
   toggle: (key, value)->
     if typeof value is 'boolean'
