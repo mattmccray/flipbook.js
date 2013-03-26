@@ -80,17 +80,9 @@ $.flipbook('scan');
 flipbook('scanner').run();
 ```
 
-Currently, Flipbook makes only one assumption about your comics images. That they
-are individual images, named with sequential numbers. For example:
-
-- comic-1.jpg
-- comic-2.jpg
-- comic-3.jpg
-- comic-4.jpg
-- comic-5.jpg
-
-You specify the path to the images, and the image name using the `path` option.
-For example, this call:
+There are two ways to tell the Flipbook viewer what images to load for your comic.
+The first way, shown above, has the control generate all the images based on the
+`page` count and `path` options you define. For example, this call:
 
 ```javascript
 $('.comic').flipbook({
@@ -114,24 +106,39 @@ $('.comic').flipbook({
 Will try and load five images: `/images/comic-001.jpg` `/images/comic-002.jpg`
 `/images/comic-003.jpg` `/images/comic-004.jpg` `/images/comic-005.jpg`
 
+The other way is to manually put the `<img src=""/>` tags yourself within the
+flipbook container tag, like this:
+
+```html
+<div data-flipbook-title="l33tville">
+  <img src="comic/page-1.jpg"/>
+  <img src="comic/page-2.jpg"/>
+  <img src="comic/page-3.jpg"/>
+  <img src="comic/page-4.jpg"/>
+  <img src="comic/page-5.jpg"/>
+  <img src="comic/page-6.jpg"/>
+  <img src="comic/page-7.jpg"/>
+  <img src="comic/page-8.jpg"/>
+</div>
+```
+
 ### Experimental HTML
 
-Hasn't been heavily test in IE, yet, but this will work in Chrome and Firefox.
+You can also use the (currently considered experimental) `flipbook` tag:
 
 ```html
 <flipbook title="My Comic" author="Me">
   <img src="comics/1.jpg"/>
   <img src="comics/2.jpg"/>
   <img src="comics/3.jpg"/>
-  <noscript>
-    Please enable JavaScript, or upgrade to 
-    a modern browser to read this comic.
-  </noscript>
 </flipbook>
 ```
 
 This won't pass an HTML validator -- but that doesn't really matter because it
 works fine in modern browsers.
+
+*Note:* This hasn't been heavily test in IE, yet, but this will work in Chrome 
+and Firefox.
 
 
 ### Technical Questions
@@ -189,12 +196,10 @@ For use with modern browsers. Tested on later versions of:
 
 ## Things Coming Sooner Than Version 2
 
-- Support for reading images inside the div and pulling those out instead of 
-  generating img tags via the path/pages options.
 - Hash urls. (#/page/N -- allowing bookmarks or links to specific page)
 - A `stretchedZoom` option to stretch the image to fit, as best as possible,
   within the zoomed screen area even if it's larger than the original image
-  size.
+  size. (Currently it will shrink the image to fit, but won't stretch it.)
 - A `beginReadingAt` option to start on a screen other than the first.
 - Allow reading after a specific percentage of images have loaded, instead of
   100%. Good for really large comics.
