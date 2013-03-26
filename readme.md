@@ -6,8 +6,9 @@ Cine Comics... Storyboard Comics... Slideshow Comics? I'm not sure what to call
 Comics." I just call them "awesome." I want everyone to be able to make them 
 -- and *show* them.
 
-You can see an example of it here:
+You can see an example of the Flipbook viewer here:
 
+> URL SOON
 
 The FlipBook viewer is not for everybody, it's meant for showing multiple 
 page/screen comics WITHOUT reloading the page. Here are/were my goals for version 1:
@@ -18,7 +19,7 @@ page/screen comics WITHOUT reloading the page. Here are/were my goals for versio
 - Fairly configurable, but won't include the kitchen sink
 - Easy to use and easy to embed in your site
 - Regarding dependencies and styles, "Batteries included"
-- Small-ish
+- Small-ish (currently ~15k min+gzip - css and themes included)
 
 **Intentionally** missing non-features:
 
@@ -112,6 +113,25 @@ $('.comic').flipbook({
 
 Will try and load five images: `/images/comic-001.jpg` `/images/comic-002.jpg`
 `/images/comic-003.jpg` `/images/comic-004.jpg` `/images/comic-005.jpg`
+
+### Experimental HTML
+
+Hasn't been heavily test in IE, yet, but this will work in Chrome and Firefox.
+
+```html
+<flipbook title="My Comic" author="Me">
+  <img src="comics/1.jpg"/>
+  <img src="comics/2.jpg"/>
+  <img src="comics/3.jpg"/>
+  <noscript>
+    Please enable JavaScript, or upgrade to 
+    a modern browser to read this comic.
+  </noscript>
+</flipbook>
+```
+
+This won't pass an HTML validator -- but that doesn't really matter because it
+works fine in modern browsers.
 
 
 ### Technical Questions

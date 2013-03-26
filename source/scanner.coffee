@@ -26,7 +26,7 @@ module.exports= api=
         unless $(item).is('.flipbook-container')
           # log.info "Creating view element!"
           view= new Viewer model
-          view.appendTo( $(item).empty() )
+          view.appendTo( $(item) )
           $(item).addClass('flipbook-container')
       else
         log.info "! Invalid model:", validate.errors(), model
@@ -82,6 +82,24 @@ api.define ->
         safeName = name.replace hyphenParser, (g)-> g[1].toUpperCase()
         # log.info "munged", name, "to", safeName
         model[safeName]= att.value ? att.nodeValue
+    # log.info model
+    results.push item:item, model:model
+  results
+
+# <flipbook> tag  scanner
+api.define ->
+  results=[]
+  hyphenParser= /-([a-z])/g
+  $('flipbook').each (i,item)->
+    i= $(item)
+    model= {}
+    for att in item.attributes
+      name= String(att.name ? att.nodeName)
+      # if name.indexOf('flipbook-') is 0
+      #   name = name.replace('flipbook-', '')
+      safeName = name.replace hyphenParser, (g)-> g[1].toUpperCase()
+      # log.info "munged", name, "to", safeName
+      model[safeName]= att.value ? att.nodeValue
     # log.info model
     results.push item:item, model:model
   results

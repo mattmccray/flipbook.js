@@ -85,9 +85,9 @@ class View
     @model.toJSON?() ? @model
 
   appendTo: (elem)->
+    @containingElem= elem
     @render()
     elem.append(@elem)
-    @containingElem= elem
     @onDomActive?()
     @
 

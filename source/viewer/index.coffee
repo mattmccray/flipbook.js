@@ -89,10 +89,10 @@ class FlipBookViewer extends CogView
     @screenCountIdx= @screenCount - 1
     @current= 0
     @elem
-      .attr( 'tabindex', "0" )
-      .addClass( 'inactive' ) # Allows for focus and blur events
-      .toggleClass( 'isMobile', env.mobile)
-      .toggleClass( 'isDesktop', (not env.mobile))
+      .attr( 'tabindex', "0" ) # Allows for focus and blur events
+      .addClass( 'inactive' ) 
+      .toggleClass( 'isMobile', env.mobile )
+      .toggleClass( 'isDesktop', (not env.mobile) )
     # log.debug "State", @state
     lifecycle.fire 'created', this
   
@@ -169,28 +169,43 @@ class FlipBookViewer extends CogView
 
   getData: ->
     screens= []
-    from= @model.start
-    to= @model.start + @screenCountIdx
-    for i in [from..to]
-      mdl= src:build_url(@model.path, i)
-      # log.info "state", mdl
-      screens.push mdl
-    data= defaults {}, @model
+    unless @state.scanForImages
+      from= @model.start
+      to= @model.start + @screenCountIdx
+      for i in [from..to]
+        mdl= src:build_url(@model.path, i)
+        # log.info "state", mdl
+        screens.push mdl
+    data= defaults {}, @state
     data.screens= screens
     data.id= @id
     data.tapOrClick= ->
       if env.mobile then "tap" else "click"
     data.isMobile= env.mobile
+    # log.info "Rendering data", data
     data
 
+  beforeRender: ->
+    if @state.scanForImages
+      @imageList= @containingElem.find('img').remove()
+      @state.pages= @imageList.length
+      # @stack.find('img').wrap '<div class="screen"/>'
+      # log.info "(beforeRender) pages", @state.pages
+    @containingElem.empty()
+
   onRender: ->
+    if @imageList?
+      @stack.prepend @imageList
+      @stack.find('img').wrap '<div class="screen"/>'
+      # @state.pages= @stack.find('img').length
+      # log.info "pages", @state.pages
+    # @containingElem.empty()
     @stack.find('.screen').hide()
     @stack.css backgroundColor:@state.background
     # log.info "Setting bg to ", @state.background
     for ctrlName in require.modules('viewer/concerns/')
       # log.debug "applying module:", ctrlName
       require(ctrlName).call @, @elem, @state
-
 
   onDomActive: ->
     if @state.animated is false

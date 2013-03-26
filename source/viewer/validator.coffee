@@ -25,7 +25,7 @@ strProp= (o, prop, defaultVal)-> o[prop]= string o[prop], defaultVal
 
 
 fixupTypes= (o)->
-  intProp o, 'pages'
+  intProp o, 'pages', 0
   intProp o, 'start', 1
   boolProp o, 'animated', true
   boolProp o, 'autofocus', false
@@ -48,8 +48,12 @@ module.exports= validator= (options, fixup=false)->
   # Need to do more, later... but for now this will do.
   errors= []
 
-  errors.push "path is missing" unless options?.path?
-  errors.push "pages is missing" unless options?.pages?
+  (options ?= {}).scanForImages= if options?.path? and options?.pages?
+      # errors.push "path is missing" unless 
+      # errors.push "pages is missing" unless 
+      false
+    else
+      true
 
   if errors.length is 0
     fixupTypes(options) if fixup
