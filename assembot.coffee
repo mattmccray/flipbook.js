@@ -3,13 +3,19 @@ console.log "Flipbook!"
 
 isDebug= String(process.argv[2]) is 'serve'
 
+build_path= if isDebug
+    "public/flipbook.js"
+  else
+    "flipbox.js"
+
 onLoad= (assembot)->
   console.log "Startup! (debug:#{isDebug})"
   #, process.argv
 
-module.exports=
+configuration=
   assembot:
-    options:
+    targets: {}
+    options: 
       callback: onLoad
       header: "/* FlipBook v{%- package.version -%} */"
       addHeader: yes
@@ -30,38 +36,17 @@ module.exports=
           max: 1000
           rules:
             ".(jpg|png|jpeg)": 100
-    
-    targets:
-      "public/flipbook.js":
-        source: "./source"
-        ident: "flipbook"
-        main: "start"
-        autoload: true
-        debug: isDebug
-        test: false
-        prune: true
-        embedded: true
-        minify: (if isDebug then 0 else 2)
-        exclude: "test/*"
 
-      # "public/flipbook.core.js":
-      #   source: "./source"
-      #   ident: "flipbook"
-      #   main: "main"
-      #   autoload: true
-      #   debug: isDebug
-      #   test: false
-      #   prune: true
-      #   embedded: false
-      #   minify: (if isDebug then 0 else 2)
-      #   exclude: "test/*"
+configuration.assembot.targets[ build_path ]=
+  source: "./source"
+  ident: "flipbook"
+  main: "start"
+  autoload: true
+  debug: isDebug
+  test: false
+  prune: true
+  embedded: true
+  minify: (if isDebug then 0 else 2)
+  exclude: "test/*"
 
-      # "public/flipbook.core.css":
-      #   source: "./source"
-      #   stylus:
-      #     compress: yes
-
-      # "public/flextest.css":
-      #   source: "./source"
-      #   stylus:
-      #     compress: yes
+module.exports= configuration

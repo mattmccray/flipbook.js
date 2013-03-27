@@ -1,8 +1,6 @@
 
-Events= require './controller'
-CogApp= require './app'
-CogModel= require './model'
+Events= require './events'
 CogView= require './view'
-CogController= require './controller'
+Cog= require './object'
 
-module.exports= {Events, CogModel, CogView, CogController}
+module.exports= {Cog, Events, CogView}

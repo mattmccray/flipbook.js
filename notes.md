@@ -1,6 +1,6 @@
 # FlipBook Ideas
 
-.- Think about adding: https://github.com/benbarnett/jQuery-Animate-Enhanced
+- Think about adding: https://github.com/benbarnett/jQuery-Animate-Enhanced
 
 ## Brainstormed Ideas
 

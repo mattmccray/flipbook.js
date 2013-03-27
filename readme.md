@@ -46,7 +46,7 @@ You can create a FlipBook viewer using HTML:
 
 ```html
 <div 
-  data-flipbook-title="l33tville"
+  data-flipbook-title="My Comic"
   data-flipbook-path="comics/chapter-1/page-##.jpg" 
   data-flipbook-pages="25">
   <div>
@@ -110,7 +110,7 @@ The other way is to manually put the `<img src=""/>` tags yourself within the
 flipbook container tag, like this:
 
 ```html
-<div data-flipbook-title="l33tville">
+<div data-flipbook-title="My Comic">
   <img src="comic/page-1.jpg"/>
   <img src="comic/page-2.jpg"/>
   <img src="comic/page-3.jpg"/>
@@ -141,7 +141,7 @@ works fine in modern browsers.
 and Firefox.
 
 
-### Technical Questions
+### Technical questions
 
 **What do I need to include on my page?**
 
@@ -173,8 +173,9 @@ $('#container').flipbook({
   background: "", // The background color to use for the comic area of the control
   copyright: "", // Text to show in the copyright bar under the comic
   greedyKeys: false, // Capture keyboard events even when the control isn't focused
-  loadingErrorMsg: "There was a problem loading the images, please refresh your browser." // Message to display if any of the images through an error while loading
-  pages: 10, // Number of pages (or screens) in this comic
+  loadingErrorMsg: "There was a problem loading the images, please refresh your browser." // Message to display if any of the images throw an error while loading
+  pages: 10, // Number of pages (or screens) in this comic (used with path option, below)
+  path: "path/to/comic/images-##.jpg", // Path to images to generate img tags for (if page option is set above)
   showHelpButton: true, // Toggle help button in title bar
   showLocation: true, // Toggle location display (the X / Y label)
   showProgress: true, // Toggle the progress bar
@@ -185,7 +186,7 @@ $('#container').flipbook({
 })
 ```
 
-## Supported Platforms
+## Supported platforms
 
 For use with modern browsers. Tested on later versions of:
 
@@ -194,7 +195,7 @@ For use with modern browsers. Tested on later versions of:
 - Safari (Mac and iOS)
 - Internet Explorer (9)
 
-## Things Coming Sooner Than Version 2
+## Probable upcoming features
 
 - Hash urls. (#/page/N -- allowing bookmarks or links to specific page)
 - A `stretchedZoom` option to stretch the image to fit, as best as possible,
@@ -203,9 +204,6 @@ For use with modern browsers. Tested on later versions of:
 - A `beginReadingAt` option to start on a screen other than the first.
 - Allow reading after a specific percentage of images have loaded, instead of
   100%. Good for really large comics.
-
-## Probable Features for Version 2
-
 - Support for comics with variable sized images (different size per screen).
 - Configurable/customizable end screen content.
 - Comic meta data in the info/help screen (or perhaps a new screen).
@@ -217,14 +215,15 @@ For use with modern browsers. Tested on later versions of:
   of img tags?
 - Add a NSFW flag that will show a warning before the first page?
 
-## Ideas or Things That Would Be Cool
+*Note:* There's not a timetable for any of these features yet.
+
+## Things that would be cool
 
 - A sharing button/screen for Twitter/Facebook/Tumblr
 - Tumblr integration -- embed a comic in a blog entry. (How would this work?
   Is this even possible? I don't know yet.)
 
-
-## I Want Your Feedback
+## I want your feedback
 
 Have a cool idea? Think something isn't working how it *should*? Please let me
 know! 
