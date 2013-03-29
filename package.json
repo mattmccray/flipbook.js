@@ -1,7 +1,7 @@
 {
   "name": "FlipBook",
-  "version": "1.0.0-162",
-  "license": "MIT",
+  "version": "1.0.0-163",
+  "license": "WTFPL",
   "description": "An embeddable comic viewer.",
   "author": "Matt McCray <matt@inkwellian.com>",
   "devDependencies": {

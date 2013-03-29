@@ -6,8 +6,8 @@ module.exports= progressCtrl= (elem, state)->
 
   progressBar= elem.find('.progress')
   progBars= elem.find('.bar').not('.position')
-  locationBar= elem.find('.progress .location').hide()
-  positionBar= elem.find('.progress .position')
+  locationBar= progressBar.find('.location').hide()
+  positionBar= progressBar.find('.position')
 
   updateWidth= ->
     percent= state.getPercentageRead()
@@ -37,6 +37,7 @@ module.exports= progressCtrl= (elem, state)->
 
   didTapScrubber= (e)->
     isDragging= e.type is 'mousemove' or e.type is 'drag'
+    log.info "didTapScrubber", isDragging, e.type
     x= getX(e)
     l= null
     w= progressBar.width()
@@ -58,24 +59,29 @@ module.exports= progressCtrl= (elem, state)->
 
   startScrubbing= (e)->
     return unless state.ready
+    return unless state.showProgress
+    # log.info progressBar.length
+    # log.info elem.length
     progressBar
+      .on('mousemove', didTapScrubber)
       .find('span')
       .hide()
-      .end()
-      .on('mousemove', didTapScrubber)
+      # .end()
     elem
       .on('mouseleave', stopScrubbing)
       # .removeClass('animated')
     $(document)
       .on('mouseup', stopScrubbing)
+    log.info "Finished binding..."
     didTapScrubber(e)
   
   stopScrubbing= (e)->
+    log.info "stopScrubbing", e.type
     progressBar
+      .off('mousemove', didTapScrubber)
       .find('span')
       .show()
-      .end()
-      .off('mousemove', didTapScrubber)
+      # .end()
     elem
       .off('mouseleave', stopScrubbing)
       # .toggleClass('animated', state.animated)
