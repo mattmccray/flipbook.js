@@ -62,7 +62,7 @@ class FlipBookViewer extends CogView
     @elem
       .hide()
       .data 'controller', @
-    @screenCount= @model.pages
+    @screenCount= @model.pages or @model.images.length or 0
     @state= new ViewState @model
     @state.set 
       controller: @
@@ -169,12 +169,17 @@ class FlipBookViewer extends CogView
 
   getData: ->
     screens= []
-    unless @state.scanForImages
+    unless @state.scanForImages or @state.images?
       from= @model.start
       to= @model.start + @screenCountIdx
       for i in [from..to]
         mdl= src:build_url(@model.path, i)
         # log.info "state", mdl
+        screens.push mdl
+    if @state.images?
+      @state.pages= @state.images.length
+      for img_src in @state.images
+        mdl= src:img_src
         screens.push mdl
     data= defaults {}, @state
     data.screens= screens
@@ -187,10 +192,10 @@ class FlipBookViewer extends CogView
 
   beforeRender: ->
     if @state.scanForImages
+      log.info "Scanning for images..."
       @imageList= @containingElem.find('img').remove()
-      @state.pages= @imageList.length
-      # @stack.find('img').wrap '<div class="screen"/>'
-      # log.info "(beforeRender) pages", @state.pages
+      @screenCount= @state.pages= @imageList.length
+      @screenCountIdx= @screenCount - 1
     @containingElem.empty()
 
   onRender: ->

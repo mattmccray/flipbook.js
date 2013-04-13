@@ -10,7 +10,7 @@ class Preloader
 
   start: ->
     # log.debug "START!", @elem
-    images= @elem.find('img')
+    @imageList= images= @elem.find('img')
     @total= images.length
     # log.info "total:", @total
     # console.dir images.get(0)
@@ -46,18 +46,26 @@ class Preloader
     @progressCallback?(percent)
     if @count >= @total
       @progressCallback?(100)
-      @elem.find('img').off()
-      delete @elem
+      try
+        @loadCallback?(e)
+      finally
+        # @elem.find('img').off()
+        @imageList?.off?()
+        delete @imageList
+        delete @elem
       # log.debug "Calling loadCallback"
-      @loadCallback?(e)
 
   didError: (e)=>
     # log.info "--> err!"
     @progressCallback?(100)
-    @elem.find('img').off()
-    delete @elem
+    try
+      @errorCallback?(e)
+    finally
+      # @elem.find('img').off()
+      @imageList?.off?()
+      delete @elem
+      delete @imageList
     # log.debug "Calling errorCallback"
-    @errorCallback?(e)
 
 
 module.exports= (root)->

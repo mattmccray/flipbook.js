@@ -1,4 +1,5 @@
 log= require('util/log').prefix('validator:')
+type= require('util/type')
 
 errors= []
 
@@ -48,12 +49,15 @@ module.exports= validator= (options, fixup=false)->
   # Need to do more, later... but for now this will do.
   errors= []
 
-  (options ?= {}).scanForImages= if options?.path? and options?.pages?
+  (options ?= {}).scanForImages= if options.path? and options.pages?
       # errors.push "path is missing" unless 
       # errors.push "pages is missing" unless 
       false
     else
-      true
+      if options.images? and type(options.images) is 'array'
+        false
+      else
+        true
 
   if errors.length is 0
     fixupTypes(options) if fixup

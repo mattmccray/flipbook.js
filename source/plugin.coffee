@@ -20,7 +20,8 @@ fb_builder= (options, value)->
       view= new Viewer options
       unless this is window
         # TODO: Need to make sure the flipbook isn't already created on this element!
-        view.appendTo( $(this).empty() )
+        # view.appendTo( $(this).empty() )
+        view.appendTo $(this)
       # return view
       return this
     else

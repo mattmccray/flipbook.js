@@ -1,5 +1,6 @@
 events= require './events'
 uid= require 'util/uid'
+log= require('util/log').prefix 'cog.view:'
 
 class View
   events.mixin @, @::
@@ -100,11 +101,13 @@ class View
     @beforeRender?()
     @fire 'before:render', @
     data = @getData()
+    # log.info "Rendering data", data
     html = @template(data)
+    # log.info "OUTPUT", html
     @elem.html(html)
     @assignOutlets()
-    @fire 'render', @
     @onRender?()
+    @fire 'render', @
     @
 
 
