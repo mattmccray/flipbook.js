@@ -16,7 +16,7 @@ Usage in your page:
     start="0"
     preload="all"
   ></flip-screens>
-  <flip-screen position="first" >
+  <flip-screen position="first">
     <h1>Welcome</h1>
     <p>This can be html, as you can tell, or it can be another image.
   </flip-screen>
@@ -32,5 +32,21 @@ Usage in your page:
 Then, anywhere else in your page include:
 
 ```html
+<script src="/path/to/flipbook.js"></script>
+```
+
+Perhaps it will look for a global var containing default configuration:
+
+```html
+<script>
+  var FLIPBOOK = {
+    author: 'Matt McCray',
+    authorLink: 'http://www.mattmccray.com',
+    copyright: '© 2015 Matt McCray, all rights reserved.',
+    showCopyright: true,
+    greedyKeys: false,
+    preload: 0.25 // Start after a quarter of the images have preloaded.
+  }
+</script>
 <script src="/path/to/flipbook.js"></script>
 ```
