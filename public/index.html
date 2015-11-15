@@ -6,9 +6,9 @@
   </head>
   <body>
     <p>TODO: Add a comic to the repo for testing...</p>
-      <div 
-        data-flipbook-pages="49" 
-        data-flipbook-start="65" 
+      <div
+        data-flipbook-pages="12"
+        data-flipbook-start="1"
         data-flipbook-theme="light-shiny"
         data-flipbook-autofocus="true"
         data-flipbook-autofit="yes"
@@ -17,8 +17,8 @@
         data-flipbook-greedy-keys="yes"
         data-flipbook-show-progress="yes"
         data-flipbook-show-location="yes"
-        data-flipbook-path="media/comics2/comic-paxarena-eng###.jpg" 
-        data-flipbook-copyright="Created by and copyright &copy; Mast, Geoffo &amp; Balak" 
+        data-flipbook-path="media/comics/#.jpg"
+        data-flipbook-copyright="Created by and copyright &copy; Mast, Geoffo &amp; Balak"
         data-flipbook-author="by ThrillBent"
         data-flipbook-title="PAX ARENA">
         <div>
@@ -31,7 +31,7 @@
 
 
 
-<!-- 
+<!--
   The following is just stuff for this page, has nothing to do with FlipBook itself:
 -->
 
@@ -60,9 +60,9 @@
     </style>
 
       <div class="main column">
-        
+
         <div id="options" style="display:none">
-  
+
           <fieldset>
             <legend>Options</legend>
             <form>
@@ -74,7 +74,7 @@
                   <option value="gray">Gray</option>
                   <option value="dark">Dark</option>
                   <option value="minimal">Minimal</option>
-                </select>            
+                </select>
               </div>
               <div>
                 <label>Show Location:</label>
@@ -93,7 +93,7 @@
                 <input id="animated" checked type="checkbox">
               </div>
             </form>
-          </fieldset>      
+          </fieldset>
         </div>
 
       </div>
@@ -104,7 +104,7 @@
     // })
     flipbook('lifecycle').on('created', function(viewer){
       $('#options').fadeIn()
-      
+
       $('#themes').on('change', function(){
         var theme= $('#themes').val();
         viewer.set('theme', theme)
